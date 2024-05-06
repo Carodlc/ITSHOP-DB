@@ -1,0 +1,356 @@
+:root {
+    --default-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Ubuntu, "Helvetica Neue", Helvetica, Arial, "PingFang SC",
+      "Hiragino Sans GB", "Microsoft Yahei UI", "Microsoft Yahei",
+      "Source Han Sans CN", sans-serif;
+  }
+  
+  .main-container {
+    overflow: hidden;
+  }
+  
+  .main-container,
+  .main-container * {
+    box-sizing: border-box;
+  }
+  
+  input,
+  select,
+  textarea,
+  button {
+    outline: 0;
+  }
+  
+  .main-container {
+    position: relative;
+    width: 1440px;
+    height: 759px;
+    margin: 0 auto;
+    background: #f5e5e3;
+    overflow: hidden;
+  }
+  .flex-row-d {
+    position: relative;
+    width: 1440px;
+    height: 76px;
+    margin: -1px 0 0 0;
+    z-index: 8;
+  }
+  .rectangle {
+    position: absolute;
+    width: 1440px;
+    height: 60px;
+    top: 0;
+    left: 0;
+    background: #721918;
+    z-index: 1;
+  }
+  .cart {
+    position: absolute;
+    width: 32.022px;
+    height: 32px;
+    top: 13px;
+    left: 1105px;
+    z-index: 2;
+    overflow: hidden;
+  }
+  .icon {
+    position: relative;
+    width: 25.685px;
+    height: 25px;
+    margin: 4.333px 0 0 3.002px;
+    background: url(./assets/images/402b02f9-2b17-47fc-aa00-f94c34ba06c8.png)
+      no-repeat center;
+    background-size: 100% 100%;
+    z-index: 3;
+  }
+  .home {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 15px;
+    left: 1038px;
+    z-index: 6;
+    overflow: hidden;
+  }
+  .icon-1 {
+    position: relative;
+    width: 24.592px;
+    height: 23.597px;
+    margin: 3.903px 0 0 2.704px;
+    background: url(./assets/images/9bb6188d-4b11-48f0-937d-5b18d5fb215c.png)
+      no-repeat center;
+    background-size: 100% 100%;
+    z-index: 7;
+  }
+  .notification {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 15px;
+    left: 1174px;
+    z-index: 9;
+    overflow: hidden;
+  }
+  .icon-2 {
+    position: relative;
+    width: 20.617px;
+    height: 25px;
+    margin: 2.5px 0 0 4.85px;
+    background: url(./assets/images/c5c1ddc7-5537-40c6-ad1a-6fcba7ec694a.png)
+      no-repeat center;
+    background-size: 100% 100%;
+    z-index: 10;
+  }
+  .user {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 17px;
+    left: 1241px;
+    z-index: 4;
+    overflow: hidden;
+  }
+  .icon-3 {
+    position: relative;
+    width: 20px;
+    height: 25px;
+    margin: 2.5px 0 0 5px;
+    background: url(./assets/images/d913f0c4-4d60-4870-96aa-765797828573.png)
+      no-repeat center;
+    background-size: 100% 100%;
+    z-index: 5;
+  }
+  .itshop {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    position: absolute;
+    height: 70px;
+    bottom: 0;
+    left: 188px;
+    color: #f5e5e3;
+    font-family: Readex Pro, var(--default-font-family);
+    font-size: 70px;
+    font-weight: 500;
+    line-height: 90px;
+    text-align: left;
+    white-space: nowrap;
+    letter-spacing: -10.24px;
+    z-index: 8;
+  }
+  .mi-cuenta {
+    position: relative;
+    width: 155px;
+    height: 18px;
+    margin: 8px 0 0 191px;
+    font-family: Outfit, var(--default-font-family);
+    font-size: 20px;
+    font-weight: 200;
+    line-height: 18px;
+    text-align: left;
+    text-overflow: initial;
+    white-space: nowrap;
+    z-index: 57;
+  }
+  .inicio {
+    position: relative;
+    color: #000000;
+    font-family: Outfit, var(--default-font-family);
+    font-size: 20px;
+    font-weight: 200;
+    line-height: 25.2px;
+    text-align: left;
+  }
+  .mi-cuenta-4 {
+    position: relative;
+    color: #000000;
+    font-family: Outfit, var(--default-font-family);
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 25.2px;
+    text-align: left;
+  }
+  .flex-row {
+    position: relative;
+    width: 1083px;
+    height: 629px;
+    margin: 29px 0 0 188px;
+    z-index: 22;
+  }
+  .rectangle-5 {
+    position: absolute;
+    width: 270px;
+    height: 629px;
+    top: 0;
+    left: 0;
+    font-size: 0px;
+    background: #fff5f4;
+    z-index: 12;
+    border-radius: 30px;
+  }
+  .mi-cuenta-6 {
+    display: block;
+    position: relative;
+    height: 30px;
+    margin: 15px 0 0 25px;
+    color: #8d2d2c;
+    font-family: Outfit, var(--default-font-family);
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 30px;
+    text-align: left;
+    text-transform: capitalize;
+    white-space: nowrap;
+    letter-spacing: 0.72px;
+    z-index: 13;
+  }
+  .general {
+    display: block;
+    position: relative;
+    height: 29px;
+    margin: 30px 0 0 25px;
+    color: #000000;
+    font-family: Outfit, var(--default-font-family);
+    font-size: 23px;
+    font-weight: 200;
+    line-height: 28.98px;
+    text-align: left;
+    white-space: nowrap;
+    letter-spacing: 0.46px;
+    z-index: 14;
+  }
+  .productos {
+    display: block;
+    position: relative;
+    height: 29px;
+    margin: 52px 0 0 25px;
+    color: #000000;
+    font-family: Outfit, var(--default-font-family);
+    font-size: 23px;
+    font-weight: 200;
+    line-height: 28.98px;
+    text-align: left;
+    white-space: nowrap;
+    letter-spacing: 0.46px;
+    z-index: 17;
+  }
+  .inventario {
+    display: block;
+    position: relative;
+    height: 29px;
+    margin: 52px 0 0 25px;
+    color: #000000;
+    font-family: Outfit, var(--default-font-family);
+    font-size: 23px;
+    font-weight: 200;
+    line-height: 28.98px;
+    text-align: left;
+    white-space: nowrap;
+    letter-spacing: 0.46px;
+    z-index: 18;
+  }
+  .ajustes {
+    display: block;
+    position: relative;
+    height: 29px;
+    margin: 133px 0 0 25px;
+    color: #000000;
+    font-family: Outfit, var(--default-font-family);
+    font-size: 23px;
+    font-weight: 200;
+    line-height: 28.98px;
+    text-align: left;
+    white-space: nowrap;
+    letter-spacing: 0.46px;
+    z-index: 20;
+  }
+  .rectangle-7 {
+    position: absolute;
+    width: 705px;
+    height: 629px;
+    bottom: 20px;
+    right: 20px;
+    font-size: 0px;
+    background: #fff5f4;
+    z-index: 22;
+    border-radius: 30px;
+    padding: 20px; /* Añadido para espacio interior */
+}
+
+.rectangle-7 .ventas-title {
+    font-size: 24px;
+    color: #800000; /* Color guinda */
+    margin-bottom: 80px; /* Ajustar según sea necesario */
+    margin-right: 800px; /* Ajustar según sea necesario */
+    text-align: right;
+    font-family: 'Inter', sans-serif; /* Fuente */
+
+    font-family: Outfit;
+    font-weight: 400;
+    margin-bottom: 10px; /* Ajustar según sea necesario */
+}
+.reporte-venta {
+    color: #8D2D2C; 
+    font-size: 17px; 
+    font-family: Outfit; 
+    font-weight: 400; 
+    word-wrap: break-word; 
+    margin-bottom: 10px; /* Ajustar según sea necesario */
+}
+  .ventas {
+    display: block;
+    position: relative;
+    height: 30px;
+    margin: 15px 0 0 9.349px;
+    color: #8d2d2c;
+    font-family: Outfit, var(--default-font-family);
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 30px;
+    text-align: left;
+    text-transform: capitalize;
+    white-space: nowrap;
+    letter-spacing: 0.72px;
+    z-index: 38;
+/*________________________________________________________________*/
+    color: #ad2f2f; /* Color del texto */
+    font-size: 30px; /* Tamaño de fuente */
+    font-weight: 500; /* Grosor de la fuente */
+    padding: 10px 20px; /* Espaciado interno */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el elemento */
+  }
+  .ventas:hover {
+    background-color: #F5E5E3; /* Cambia el color de fondo al pasar sobre el elemento */
+  }
+/*_____________________________________________________________*/
+/* Estilo para el botón "Crear reporte de venta" */
+.crear-reporte-venta {
+    display: block;
+    position: relative;
+    height: 21px;
+    margin: 9px 0 0 46px;
+    color: #8d2d2c;
+}
+
+/* Estilo para el botón del menú */
+.menu-btn {
+    background-color: transparent; /* Fondo transparente */
+    border: none; /* Sin borde */
+    cursor: pointer; /* Cursor de tipo puntero */
+    padding: 20px 100px; /* Espaciado interno */
+    font-size:10px; /* Tamaño de fuente */
+    font-family: 'Inter', sans-serif; /* Fuente */
+    color: #333; /* Color del texto */
+    transition: background-color 0.3s ease; /* Transición suave del color de fondo */
+}
+
+/* Estilo para el botón del menú cuando se pasa el cursor o está activo */
+.menu-btn:hover,
+.menu-btn.active {
+    background-color: #F5E5E3; /* Color de fondo al pasar el cursor o cuando está activo */
+}
+
+
+
+  

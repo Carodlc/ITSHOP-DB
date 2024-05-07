@@ -51,7 +51,7 @@
           <a href="registrarse.php" id="registerBtn"><span class="menu_despliegue">Registrarse</span></a>
         </div>
         <div class="dropdown-content" id="dropdownContent">
-          <a href="GeneralCliente.html" id="profileLink"><span class="menu_despliegue">Ver perfil</span></a>
+          <a  id="profileLink"><span class="menu_despliegue">Ver perfil</span></a>
           <a href="#" id="logoutBtn"><span class="menu_despliegue">Cerrar sesión</span></a>
         </div>
 
@@ -90,7 +90,7 @@
           // Aquí puedes generar las estrellas para el producto
 
           echo "<div class='estrellas'></div>";
-          echo "<div class='estrellas'></div>";
+          
 
           echo "</div>";
           echo "<span class='reviews'>(# reviews)</span>";
@@ -150,8 +150,24 @@
       logoutBtn.style.display = "none";
       console.log("No se ha guardado el ID del usuario.");
     }
+    
 
-    // Obtener el botón y el dropdown de categorías
+    function redireccionarVerPerfil() {
+        // Verificar si tenemos un ID de usuario
+        if (idUsuario) {
+            // Redirigir al usuario a la página de perfil con el ID de usuario como parámetro
+            window.location.href = "GeneralCliente.php?idUsuario=" + idUsuario;
+        } else {
+            // Si no hay ID de usuario, redirigir sin parámetro
+            window.location.href = "GeneralCliente.html";
+       
+          }
+    }
+   
+    
+    
+    
+
   </script>
 
 </body>

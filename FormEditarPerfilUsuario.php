@@ -1,13 +1,149 @@
+<?php include 'conexion.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Editar Usuario</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&display=swap" />
+    <title>Editar perfil</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;800&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@500&display=swap" />
     <style>
+        /* Estilos adicionales para el nuevo código */
+        body {
+            font-family: Outfit, var(--default-font-family);
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            position: absolute;
+            width: 100%;
+            /* Set width to 100% to span across the entire page */
+            height: 38px;
+            top: 0;
+            left: 0;
+            background: #721918;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .flex-container {
+            display: flex;
+            justify-content: center;
+            align-items: start;
+        }
+
+        .left-section {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .right-section {
+            flex: 2;
+            padding: 20px;
+        }
+
+        .profile-pic-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile-pic-label {
+            margin-top: 10px;
+            cursor: pointer;
+            background-color: #722121;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+        }
+
+        .form-section {
+            margin-bottom: 20px;
+        }
+
+        /* Aplicando la fuente Outfit a los labels */
+        .form-section label {
+            font-family: 'Outfit', var(--default-font-family);
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .form-section input[type="text"],
+        .form-section input[type="date"],
+        .form-section input[type="password"],
+        .form-section input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .form-section select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .form-buttons {
+            font-family: 'Outfit', var(--default-font-family);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            width: 556px;
+            height: 33px;
+            margin: 53px 0 0 78px;
+            z-index: 4;
+        }
+
+        .form-buttons button {
+            font-family: 'Outfit', var(--default-font-family);
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .cancelar-button {
+            font-family: 'Outfit', var(--default-font-family);
+            background-color: #8d2d2c;
+            color: white;
+        }
+
+        .registrarse-button {
+            background-color: #721918;
+            color: white;
+        }
+
+        .letra {
+            display: flex;
+            color: #721918;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 20px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
         :root {
             --default-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
                 Ubuntu, "Helvetica Neue", Helvetica, Arial, "PingFang SC",
@@ -15,584 +151,190 @@
                 "Source Han Sans CN", sans-serif;
         }
 
-        .main-container {
-            overflow: hidden;
-        }
-
-        .main-container,
-        .main-container * {
-            box-sizing: border-box;
-        }
-
-        input,
-        select,
-        textarea,
-        button {
-            outline: 0;
-        }
-
-        .main-container {
-            position: relative;
-            width: 705px;
-            height: 629px;
-            margin: 0 auto;
-            background: #fff5f4;
-            overflow: hidden;
-            border-radius: 30px;
-        }
-
-        .wrapper {
+        .itshop {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
             position: absolute;
-            width: 171px;
-            height: 352px;
-            top: 17px;
-            left: 29px;
-            font-size: 0px;
-            z-index: 13;
-        }
-
-        .text {
-            display: block;
-            position: relative;
-            height: 30px;
-            margin: 0 0 0 0;
-            color: #8d2d2c;
-            font-family: Outfit, var(--default-font-family);
-            font-size: 24px;
-            font-weight: 600;
-            line-height: 30px;
-            text-align: left;
-            text-transform: capitalize;
-            white-space: nowrap;
-            letter-spacing: 0.72px;
-        }
-
-        .text-2 {
-            display: block;
-            position: relative;
-            height: 21px;
-            margin: 201px 0 0 24px;
-            color: #311811;
-            font-family: Outfit, var(--default-font-family);
-            font-size: 17px;
-            font-weight: 400;
-            line-height: 21px;
+            height: 62px;
+            top: 0;
+            left: 69px;
+            color: #ffffff;
+            font-family: Readex Pro, var(--default-font-family);
+            font-size: 40px;
+            font-weight: 500;
+            line-height: 50px;
             text-align: left;
             white-space: nowrap;
-            z-index: 6;
+            letter-spacing: -6.4px;
+            z-index: 29;
         }
 
-        .text-3 {
-            display: block;
-            position: relative;
-            height: 21px;
-            margin: 60px 0 0 10px;
+        a {
+            color: inherit;
+            /* Heredar el color del texto de su contenedor */
+            text-decoration: none;
+            /* Eliminar subrayado predeterminado */
+        }
+
+        .registro-itshop {
+            display: flex;
+            color: #721918;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 20px;
+            margin-top: 30px;
+            font-weight: 800;
+            white-space: nowrap;
+            z-index: 30;
+            margin-bottom: 50px;
             /* Ajusta este valor según sea necesario */
-            color: #311811;
-            font-family: Outfit, var(--default-font-family);
-            font-size: 17px;
-            font-weight: 400;
-            line-height: 21px;
-            text-align: left;
-            white-space: nowrap;
-            z-index: 1;
         }
 
-        .text-30 {
-            display: block;
-            position: relative;
-            height: 21px;
-            margin: 60px 0 0 10px;
-            /* Ajusta este valor según sea necesario */
-            color: #311811;
-            font-family: Outfit, var(--default-font-family);
-            font-size: 17px;
-            font-weight: 400;
-            line-height: 21px;
-            text-align: left;
-            white-space: nowrap;
-            z-index: 1;
-        }
-
-        .text-4 {
-            display: block;
-            position: relative;
-            height: 21px;
-            margin: 50px 0 0 60px;
-            /* He aumentado el margen superior a 50px */
-            color: #311811;
-            font-family: Outfit, var(--default-font-family);
-            font-size: 17px;
-            font-weight: 400;
-            line-height: 21px;
-            text-align: left;
-            white-space: nowrap;
-            z-index: 1;
-        }
-
-        .box {
-            position: absolute;
-            width: 451px;
-            height: 516px;
-            top: 74px;
-            left: 202px;
-            z-index: 14;
-        }
-
-        .box-2 {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: nowrap;
-            gap: 10px;
-            position: relative;
-            width: 177px;
-            margin: 90px 0 0 400px;
-            /* Ajusta este margen según sea necesario */
-            padding: 6px 25px 6px 25px;
-            background: #8d2d2c;
-            z-index: 14;
-            overflow: hidden;
-            border-radius: 30px;
-        }
-
-        .upload-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: nowrap;
-            gap: 10px;
-            position: relative;
-            width: 177px;
-            margin: 90px 0 0 400px;
-            /* Ajusta este margen según sea necesario */
-            padding: 6px 25px 6px 25px;
-            background: #8d2d2c;
-            z-index: 14;
-            overflow: hidden;
-            border-radius: 30px;
-        }
-
-        .text-5 {
-            flex-shrink: 0;
-            flex-basis: auto;
-            position: relative;
-            height: 21px;
-            color: #ffffff;
-            font-family: Outfit, var(--default-font-family);
-            font-size: 17px;
-            font-weight: 500;
-            line-height: 21px;
-            text-align: left;
-            white-space: nowrap;
-            z-index: 15;
-        }
-
-        .group {
-            position: relative;
-            width: 24px;
-            height: 24px;
-            margin: 61px 0 0 209px;
-            z-index: 2;
-            overflow: hidden;
-        }
-
-        .pic {
-            position: relative;
-            width: 15px;
-            height: 8px;
-            margin: 8px 0 0 3px;
-            background: url(./assets/images/aa2d3cad-7f8e-438a-9c6f-3aa866d6f708.png) no-repeat center;
-            background-size: 100% 100%;
-            z-index: 3;
-        }
-
-        .img {
-            position: relative;
-            width: 401px;
-            height: 32px;
-            margin: 48px 0 0 0;
-            background: url(./assets/images/fbf711fa-d0a2-45ca-9e06-b78d19a8b8d1.png) no-repeat center;
-            background-size: cover;
-            z-index: 7;
-        }
-
-        .box-3 {
-            display: flex;
-            align-items: center;
-            flex-wrap: nowrap;
-            gap: 9px;
-            position: relative;
-            width: 121px;
-            height: 30px;
-            margin: 21px 0 0 0;
-            padding: 10px 12px 10px 12px;
-            background: #ffffff;
-            border: 1px solid #8d2d2c;
-            z-index: 9;
-            overflow: hidden;
-            border-radius: 8px;
-            box-shadow: 0 1px 2px 0 rgba(16, 24, 40, 0.05);
-        }
-
-        .box {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: nowrap;
-            flex-shrink: 0;
-            gap: 40px;
-            position: relative;
-            width: 119px;
-            padding: 6px 25px 6px 30px;
-            background: #8d2d2c;
-            z-index: 4;
-            overflow: hidden;
-            border-radius: 30px;
-        }
-
-        .text-6 {
-            flex-shrink: 0;
-            flex-basis: auto;
-            position: relative;
-            height: 21px;
-            color: #ffffff;
-            font-family: Outfit, var(--default-font-family);
-            font-size: 17px;
-            font-weight: 500;
-            line-height: 21px;
-            text-align: left;
-            white-space: nowrap;
-            z-index: 5;
-        }
-
-        .group-2 {
-            flex-shrink: 0;
-            position: relative;
-            width: 20px;
-            height: 20px;
-            z-index: 11;
-            overflow: hidden;
-        }
-
-        .img-2 {
-            position: relative;
-            width: 16.667px;
-            height: 18.333px;
-            margin: 0.83px 0 0 1.667px;
-            background: url(./assets/images/0cb8da7d-fd6e-4329-8ccb-a97f7bd2f739.png) no-repeat center;
-            background-size: 100% 100%;
-            z-index: 12;
-        }
-
-        .pic-2 {
-            position: relative;
-            width: 401px;
-            height: 32px;
-            margin: 20px 0 0 0;
-            background: url(./assets/images/c8bafee0-38d9-4cfb-b6c7-5b5b9f8f80c5.png) no-repeat center;
-            background-size: cover;
-            z-index: 8;
-        }
-
-        .wrapper-2 {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: nowrap;
-            gap: 10px;
-            position: relative;
-            width: 120px;
-            margin: 182px 0 0 331px;
-            padding: 6px 25px 6px 25px;
-            background: #8d2d2c;
-            z-index: 4;
-            overflow: hidden;
-            border-radius: 30px;
-        }
-
-        .text-7 {
-            flex-shrink: 0;
-            flex-basis: auto;
-            position: relative;
-            height: 21px;
-            color: #ffffff;
-            font-family: Outfit, var(--default-font-family);
-            font-size: 17px;
-            font-weight: 500;
-            line-height: 21px;
-            text-align: left;
-            white-space: nowrap;
-            z-index: 5;
-        }
-
-        .user-number-container {
-            display: inline-block;
-            margin-left: 190px;
-            /* Ajusta este margen según sea necesario */
-            margin-top: -55px;
-            /* Ajusta este margen según sea necesario */
-            padding: 5px 10px;
-            background-color: #f5f5f5;
-            border: 1px solid #8d2d2c;
-            border-radius: 5px;
-            width: 180px;
-            /* Ancho del contenedor */
-            height: 38px;
-            /* Altura del contenedor */
-        }
-
-        .user-number-input {
-            margin-left: 0;
-            margin-top: 0;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 3px;
-            font-family: Outfit, var(--default-font-family);
-            font-size: 16px;
-            color: #311811;
-            width: calc(100% - 40px);
-        }
-
-
-        .date-container {
-            display: inline-block;
-            margin-left: 190px;
-            margin-top: -80px;
-            padding: 5px 10px;
-            background-color: #f5f5f5;
-            border: 1px solid #8d2d2c;
-            border-radius: 5px;
-        }
-
-        .date-input {
-            padding: 5px;
-            border: none;
-            border-radius: 3px;
-            font-family: Outfit, var(--default-font-family);
-            font-size: 16px;
-            color: #311811;
-        }
-
-        .rectangle-3 {
-            width: 290px;
-            /* Ancho del rectángulo */
-            margin: 0px auto 20px 190px;
-            /* Margen superior, derecho e inferior ajustados y margen izquierdo */
-            background-color: #fff5f4;
-            /* Color de fondo */
-            padding: 8px;
-            /* Relleno */
-            border-radius: 8px;
-            /* Redondeo de las esquinas */
-            box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.3);
-            /* Sombra */
-        }
-
-        .rectangle-2 {
-            width: 290px;
-            /* Ancho del rectángulo */
-            margin: -50px auto 30px 190px;
-            /* He disminuido el margen superior a -50px */
-            background-color: #fff5f4;
-            /* Color de fondo */
-            padding: 8px;
-            /* Relleno */
-            border-radius: 8px;
-            /* Redondeo de las esquinas */
-            box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.3);
-            /* Sombra */
-        }
-
-
-        .role {
-            display: block;
-            margin: 0 0 10px auto;
-            /* Margen izquierdo ajustado */
-            font-family: Outfit, var(--default-font-family);
-            color: #321811;
-        }
-
-        .role-input {
-            width: calc(100% - 80px);
-            /* Ancho del campo de entrada */
-            padding: 4px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 14px;
-        }
-
-        .text-10 {
-            display: block;
-            position: relative;
-            height: 21px;
-            margin: 30px 0 0 10px;
-            color: #311811;
-            font-family: Outfit, var(--default-font-family);
-            font-size: 17px;
-            font-weight: 400;
-            line-height: 21px;
-            text-align: left;
-            white-space: nowrap;
-            z-index: 1;
-        }
-
-        .espe {
-            display: block;
-            margin: -10 0 10px auto;
-            /* Margen izquierdo ajustado */
-            font-family: Outfit, var(--default-font-family);
-            color: #321811;
-        }
-
-        .espe-input {
-            width: calc(100% - 80px);
-            /* Ancho del campo de entrada */
-            padding: 4px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 14px;
-        }
-
-        .add-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 130px;
-            height: 40px;
-            background-color: #8d2d2c;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            margin-top: 50px;
-            /* Ajuste para bajar el botón */
-            margin-left: 40px;
-        }
-
-        .add-button:hover {
-            background-color: #a33b39;
-        }
-
-
-        .cancel-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 130px;
-            height: 40px;
-            background-color: #8d2d2c;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            margin-top: 40px;
-        }
-
-        .cancel-button:hover {
-
-            background-color: #a33b39;
-        }
-
-        .wrapper-4 {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: absolute;
-            width: 309px;
-            height: 33px;
-            top: 400px;
-            left: -100;
-            z-index: 6;
-            gap: 100px;
-            margin-top: 60px;
-        }
-
-        /* Ajustes para posicionar los botones */
-        .wrapper-4 .cancel-button {
-            margin-right: auto;
-            /* Mover el botón a la izquierda */
-        }
-
-        .wrapper-4 .add-button {
-            margin-left: auto;
-            /* Mover el botón a la derecha */
-            margin-top: -20px;
-            /* Ajustar el margen superior para subir el botón */
+        #tienda-name-section {
+            display: none;
         }
     </style>
 </head>
 
 <body>
-    <form action="Editar_perfil_usuario.php" method="POST" enctype="multipart/form-data">
-        <div class="main-container">
-            <div class="wrapper">
-                <span class="text">Editar Perfil</span>
-                <!-- Cambié la clase box-2 por upload-button para mayor claridad -->
-                <div class="upload-button" style="margin-top: 150px;">
-                    <!-- Agregamos un input de tipo file oculto -->
-                    <input type="file" id="fileInput" style="display: none;" accept="image/*">
-                    <span class="text-5" onclick="document.getElementById('fileInput').click();">Cambiar imagen</span>
-                </div>
 
-                <span class="text-30" style="margin-top: 120px;">Nombre de usuario:</span>
-                <!-- Tu input para el número de usuario -->
-                <div class="rectangle-3" style="margin-top: -30px;">
-                    <input type="text" class="role-input" placeholder="Ingresar nuevo nombre " />
+    <form id="form" action="Editar_perfil_usuario.php" method="post" enctype="multipart/form-data">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@500&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;800&display=swap" />
+        <div class="navbar">
+            <!-- Aquí puedes agregar el contenido de tu barra de navegación -->
+            <span class="itshop">ITSHOP</span>
+        </div>
+        <div class="container">
+            <div class="flex-container">
+                <div class="left-section">
+                    <div class="form-section">
+                        <span class="registro-itshop">Editar perfil | ITSHOP</span>
+                    </div>
+
+                    <div class="profile-pic-container">
+                        <img src="/fotos/default-profile-pic.jpg" alt="Profile Picture" class="profile-pic" id="profilePreview">
+                        <label for="imagen" class="profile-pic-label">Cambiar imagen</label>
+                        <input type="file" id="imagen" name="imagen" accept="image/*" style="display: none;" required>
+                    </div>
                 </div>
-                <span class="text-10">Fecha de nacimiento:</span>
-                <!-- Tu input para la fecha de nacimiento -->
-                <div class="date-container">
-                    <input type="date" class="date-input" />
-                </div>
+                <div class="right-section">
+                    <div class="form-section">
+                        <label for="Vacio"></label>
+                    </div>
+                    <?php
+                    $IDUSUARIO = 4;
+                    $dbh = new PDO($dsn, $username, $password);
+                    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    $query = "SELECT * FROM DATOS_USUARIO WHERE IDUSUARIO = ?";
+
+                    $stmt = $dbh->prepare($query);
+
+                    // Ejecutar la consulta pasando el IDUSUARIO como parámetro
+                    $stmt->execute([$IDUSUARIO]);
+
+                    // Obtener los resultados como un arreglo asociativo
+                    $datos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    // Retornar los resultados
+
+                    // Obtener productos desde la base de datos
+                    echo "<div class='form-section'>";
+                    echo "<label for='nombre' class='letra'>Nombre:</label>";
+                    echo "<input type='text' id='nombre' name='nombre' value='" . $datos[0]['NOMBRE_USUARIO'] . "' required>";
+                    echo "</div>";
+                    echo "<div class='form-section'>";
+
+                    // Convertir el formato de la fecha de DD/MM/AA a YYYY-MM-DD
+                    $fecha_nacimiento_formateada = date('Y-m-d', strtotime(str_replace('/', '-', $datos[0]['FECHA_NACIMIENTO'])));
 
 
-                <div class="wrapper-4">
-                    <!-- Botón de compra -->
-                    <button class="add-button box"><span class="text-6">Editar</span></button>
-                    <!-- Botón de comentar -->
+                    // Mostrar el input con la fecha formateada
+                    echo "<div class='form-section'>";
+                    echo "<label for='fecha-nacimiento' class='letra'>Fecha de nacimiento:</label>";
+                    echo "<input type='date' id='fecha-nacimiento' name='fecha-nacimiento' value='" . $fecha_nacimiento_formateada . "' required>";
+                    echo "</div>";
+                    
+                    $IDESPECIALIDAD = $datos[0]['ESPECIALIDADES_IDESPECIALIDAD'] ;
+                    $stmt_especialidad = $dbh->prepare("SELECT NOMBREESPECIALIDAD FROM ESPECIALIDADES WHERE IDESPECIALIDAD = ?");
+            $stmt_especialidad->execute([$IDESPECIALIDAD]);
+            $especialidad_row = $stmt_especialidad->fetch(PDO::FETCH_ASSOC);
+            $ESPECIALIDADES_IDESPECIALIDAD = $especialidad_row['NOMBREESPECIALIDAD'] ?? null;
+
+                    echo "<div class='form-section'>";
+                    echo "<label for='especialidad' class='letra'>Especialidad:</label>";
+                    echo "<select name='especialidad' id='especialidad' required>";
+                    echo "<option>". $ESPECIALIDADES_IDESPECIALIDAD."</option>";
+
+                    $especialidades = getEspecialidades($dbh);
+                    foreach ($especialidades as $especialidad) {
+                        echo "<option value=\"$especialidad\">$especialidad</option>";
+                    }
+
+                    echo "</select>";
+                    echo "</div>";
+                    echo "<div class='form-section'>";
+                    echo "<label for='password' class='letra'>Contraseña:</label>";
+                    echo "<input type='password' id='password' name='password' required>";
+                    echo "</div>";
+                    echo "<div class='form-section'>";
+                    echo "<label for='confirm-password' class='letra'>Confirmar contraseña:</label>";
+                    echo "<input type='password' id='confirm-password' name='confirm-password'>";
+                    echo "</div>";
+                    echo "<div class='form-section'>";
+                    echo "<label for='email' class='letra'>Correo Electrónico:</label>";
+                    echo "<input type='email' id='email' name='email'  value='" . $datos[0]['CORREO'] . "' required>";
+                    echo "</div>";
+                    echo "<div class='form-section' id='tienda-name-section'>";
+                    echo "<label for='tienda-name' class='letra'>Nombre de la tienda:</label>";
+                    echo "<input type='text' id='tienda-name' name='tienda-name' value='Nombre por defecto' required>";
+                    echo "</div>";
+                    ?>
+                    <div class="form-buttons">
+                        <button class="cancelar-button" class="letra"><a href="index.html" id="atrasBtn">Atrás</button></a>
+                        <button type="submit" class="registrarse-button" id="registrarse-button">Actualizar datos</button>
+                    </div>
                 </div>
             </div>
-            <!-- Añade un elemento img para mostrar la imagen -->
-            <img id="previewImage" src="#" alt="Preview" style="display: none; max-width: 200px; margin-top: 20px;">
-    </form>
-    <script>
-        // Función para manejar la carga de archivos
-        function handleFileSelect(event) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
+        </div>
 
-            reader.onload = function(e) {
-                // Asigna la URL de la imagen al atributo src del elemento img
-                document.getElementById('previewImage').src = e.target.result;
-                // Muestra la imagen
-                document.getElementById('previewImage').style.display = 'block';
+        <script>
+            function openFileExplorer() {
+                document.getElementById('imagen').click();
             }
 
-            reader.readAsDataURL(file);
-        }
+            const inputImagen = document.getElementById('imagen');
+            const profilePreview = document.getElementById('profilePreview');
 
-        // Asigna la función handleFileSelect al evento onchange del input file
-        document.getElementById('fileInput').addEventListener('change', handleFileSelect);
-        // Función para guardar los datos
-        function guardarDatos() {
-            // Captura los valores de los campos de entrada
-            const userNumber = document.getElementById('userNumber').value;
-            const dateOfBirth = document.getElementById('dateOfBirth').value;
-  
+            inputImagen.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function() {
+                        profilePreview.src = reader.result;
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    profilePreview.src = '/fotos/default-profile-pic.jpg';
+                }
+            });
 
-            // Aquí puedes realizar las operaciones para guardar los datos
-            // Por ejemplo, podrías enviarlos a un servidor a través de una solicitud HTTP (POST)
-            // o guardarlos localmente en el navegador utilizando localStorage o IndexedDB
 
-            // Por ahora, solo los mostraremos en la consola para propósitos de demostración
-            console.log("Número de usuario:", userNumber);
-            console.log("Fecha de nacimiento:", dateOfBirth);
-            
 
-            // Aquí podrías agregar más lógica según tus necesidades
-        }
-    </script>
+
+            function toggleTiendaSection() {
+                var rolesDropdown = document.getElementById("roles");
+                var tiendaSection = document.getElementById("tienda-name-section");
+
+                if (rolesDropdown.value === "vendedor") {
+                    tiendaSection.style.display = "block";
+                } else {
+                    tiendaSection.style.display = "none";
+                }
+            }
+        </script>
+
+    </form>
 </body>
 
 </html>

@@ -3,7 +3,7 @@ require_once 'conexion.php';
 
 // Verificar si se recibieron datos del formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
+
     // Recuperar los datos del formulario
     $NOMBRE_USUARIO = $_POST['nombre'] ?? '';
     $ESPECIALIDAD_NOMBRE = $_POST['especialidad'] ?? '';
@@ -14,48 +14,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $FECHA_NACIMIENTO = $_POST['fecha-nacimiento'] ?? '';
     $fecha_formateada = date('d-m-y', strtotime(str_replace('/', '-', $FECHA_NACIMIENTO)));
     // Manejar la carga de la imagen
-    
-    $IMAGENUSUARIO = null;
-    if(isset($_FILES['profilePic']) && $_FILES['profilePic']['error'] === UPLOAD_ERR_OK) {
-        // Obtener el contenido de la imagen
-        $imagen_temp = $_FILES['profilePic']['tmp_name'];
-        $IMAGENUSUARIO = file_get_contents($imagen_temp);
-    } else {
-        echo "Error al cargar la imagen: ";
-        switch ($_FILES['profilePic']['error']) {
-            case UPLOAD_ERR_INI_SIZE:
-                echo "El archivo subido excede la directiva upload_max_filesize en php.ini.";
-                break;
-            case UPLOAD_ERR_FORM_SIZE:
-                echo "El archivo subido excede la directiva MAX_FILE_SIZE especificada en el formulario HTML.";
-                break;
-            case UPLOAD_ERR_PARTIAL:
-                echo "El archivo subido fue solo parcialmente cargado.";
-                break;
-            case UPLOAD_ERR_NO_FILE:
-                echo "Ningún archivo fue subido.";
-                break;
-            case UPLOAD_ERR_NO_TMP_DIR:
-                echo "Falta la carpeta temporal.";
-                break;
-            case UPLOAD_ERR_CANT_WRITE:
-                echo "Error al escribir el archivo en el disco.";
-                break;
-            case UPLOAD_ERR_EXTENSION:
-                echo "Una extensión de PHP detuvo la carga de archivos.";
-                break;
-            default:
-                echo "Error desconocido al cargar la imagen.";
-                break;
+
+    function insertImage($dbh, $productId, $imageName)
+    {
+        try {
+            // Prepare the query to insert into PRODUCTS_IMG
+            $query = "
+                DECLARE 
+                    V_TEMP BLOB;
+                    V_BFILE BFILE;
+                    V_NOMBRE_FOTO VARCHAR2(100);
+                BEGIN 
+                    INSERT INTO USUARIOS_IMG (ID, FOTO) VALUES (:productId, EMPTY_BLOB()) RETURNING FOTO INTO V_TEMP;
+                    
+                    V_NOMBRE_FOTO := :imageName;
+                    V_BFILE := BFILENAME('OBJETOS_LOB', V_NOMBRE_FOTO);
+                    DBMS_LOB.OPEN(V_BFILE, DBMS_LOB.LOB_READONLY);
+                    DBMS_LOB.LOADFROMFILE(V_TEMP, V_BFILE, DBMS_LOB.GETLENGTH(V_BFILE));
+                    DBMS_LOB.CLOSE(V_BFILE);
+                    COMMIT;
+                END;
+            ";
+
+            // Prepare the statement
+            $stmt = $dbh->prepare($query);
+
+            // Bind parameters
+            $stmt->bindParam(':productId', $productId, PDO::PARAM_INT);
+            $stmt->bindParam(':imageName', $imageName, PDO::PARAM_STR);
+
+            // Execute the statement
+            $stmt->execute();
+
+            // Return success
+            return true;
+        } catch (PDOException $e) {
+            // If an error occurs, rollback the transaction and return false
+            echo "Error: " . $e->getMessage();
+            return false;
         }
     }
+
+    // Ruta de la carpeta donde se guardarán las imágenes
+
 
     try {
         // Verificar si el correo electrónico ya existe en la base de datos
         $stmt_check_email = $dbh->prepare("SELECT COUNT(*) FROM DATOS_USUARIO WHERE CORREO = ?");
         $stmt_check_email->execute([$CORREO]);
         $email_exists = $stmt_check_email->fetchColumn();
-        
+
         if ($email_exists) {
             // El correo electrónico ya está registrado
             echo "El correo electrónico ya está registrado. Por favor, utilice otro correo electrónico.";
@@ -78,24 +86,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt = $dbh->query($query);
             $totalRow = $stmt->fetch(PDO::FETCH_ASSOC);
             $total = $totalRow['COUNT(IDUSUARIO)'] ?? 0;
-            echo "El total de usuarios existentes: " . $IMAGENUSUARIO;
             // Generar el nuevo ID de usuario sumando 1 al último ID
             $IDUSUARIO = $total;
+
+
 
             // Asignar el valor del campo "Nombre Tienda" solo si el rol del usuario es "vendedor"
             $NOMBRE_TIENDA = null; // Valor predeterminado
             if ($ROL_NOMBRE === "vendedor") {
                 $NOMBRE_TIENDA = $_POST['tienda-name'] ?? null;
             }
-            echo "el valor es ". $IDUSUARIO;
+            echo "el valor es " . $IDUSUARIO;
 
             // Insertar datos en la tabla de usuarios
-            $rowCount = insertData($dbh, 'DATOS_USUARIO', ['IDUSUARIO', 'NOMBRE_USUARIO', 'ESPECIALIDADES_IDESPECIALIDAD', 'ROL_IDROL', 'IMAGEN_USUARIO', 'NOMBRE_TIENDA', 'FECHA_NACIMIENTO', 'CORREO', 'CONTRASENA'], [$IDUSUARIO+1, $NOMBRE_USUARIO, $ESPECIALIDADES_IDESPECIALIDAD, $ROL_IDROL, $IMAGENUSUARIO, $NOMBRE_TIENDA, $fecha_formateada, $CORREO, $CONTRASENA_ENCRYPTADA]);
+            $rowCount = insertData($dbh, 'DATOS_USUARIO', ['IDUSUARIO', 'NOMBRE_USUARIO', 'ESPECIALIDADES_IDESPECIALIDAD', 'ROL_IDROL', 'NOMBRE_TIENDA', 'FECHA_NACIMIENTO', 'CORREO', 'CONTRASENA'], [$IDUSUARIO + 1, $NOMBRE_USUARIO, $ESPECIALIDADES_IDESPECIALIDAD, $ROL_IDROL,  $NOMBRE_TIENDA, $fecha_formateada, $CORREO, $CONTRASENA_ENCRYPTADA]);
 
             // Verificar si la inserción fue exitosa
             if ($rowCount > 0) {
-                echo "<script>alert('Usuario registrado exitosamente!'); window.location.href = 'inicio_sesion.html';</script>";
+                $directorioDestino = 'D:/8tavo/INGENIERIA DE SOFTWARE/ITSHOP DB/ImagenesPrueba/';
 
+                // Verifica si se ha enviado un archivo
+                if (isset($_FILES['imagen'])) {
+                    $archivo = $_FILES['imagen'];
+
+                    // Obtiene información del archivo
+                    $nombreArchivo = $archivo['name'];
+                    $nombreTempArchivo = $archivo['tmp_name'];
+
+                    // Mueve el archivo a la carpeta destino
+                    if (move_uploaded_file($nombreTempArchivo, $directorioDestino . $nombreArchivo)) {
+                        echo 'Imagen subida correctamente.';
+
+                        // Después de la inserción de la imagen en la carpeta local, inserta la información en la base de datos
+                        insertImage($dbh, $IDUSUARIO, $nombreArchivo);
+                    } else {
+                        echo 'Error al subir la imagen.';
+                    }
+                }
+                echo "<script>alert('Usuario registrado exitosamente!'); window.location.href = 'inicio_sesion.html';</script>";
             } else {
                 echo "<script>alert('Hubo un problema al registrar el usuario.'); window.location.href='registrarse.php';</script>";
             }
@@ -105,4 +133,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error al registrar el usuario: " . $e->getMessage();
     }
 }
-?>

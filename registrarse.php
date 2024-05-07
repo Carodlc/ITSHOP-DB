@@ -214,8 +214,8 @@
 
           <div class="profile-pic-container">
             <img src="/fotos/default-profile-pic.jpg" alt="Profile Picture" class="profile-pic" id="profilePreview">
-            <label for="profilePic" class="profile-pic-label">Seleccionar imagen</label>
-            <input type="file" id="profilePic" style="display: none;" required>
+            <label for="imagen" class="profile-pic-label">Seleccionar imagen</label>
+            <input type="file" id="imagen" name="imagen" accept="image/*" style="display: none;" required>
           </div>
         </div>
         <div class="right-section">
@@ -270,57 +270,35 @@
 
           <div class="form-buttons">
             <button class="cancelar-button" class="letra"><a href="index.html" id="atrasBtn">Atrás</button></a>
-            <button class="registrarse-button" id="registrarse-button">Registrarse</button>
+            <button type="submit" class="registrarse-button" id="registrarse-button">Registrarse</button>
           </div>
         </div>
       </div>
     </div>
 
     <script>
-      $(document).ready(function() {
-        $("#profilePic").click(); // Aquí se estaba desencadenando el evento dos veces
+      function openFileExplorer() {
+      document.getElementById('imagen').click();
+    }
 
+    const inputImagen = document.getElementById('imagen');
+    const profilePreview = document.getElementById('profilePreview');
 
-        $("#profilePic").change(function() {
-          readURL(this);
-        });
-
-        function readURL(input) {
-          if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-              $('#profilePreview').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(input.files[0]);
-          }
+    inputImagen.addEventListener('change', function() {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function() {
+          profilePreview.src = reader.result;
         }
-      });
+        reader.readAsDataURL(file);
+      } else {
+        profilePreview.src = '/fotos/default-profile-pic.jpg';
+      }
+    });
 
 
-      const registrarseButton = document.querySelector('.registrarse-button'); // Selecciona el botón de registro
-      const form = document.querySelector('form'); // Selecciona el formulario
-
-      // Función para manejar el evento de clic en el botón de registro
-      registrarseButton.addEventListener('click', (event) => {
-        event.preventDefault(); // Evita que el formulario se envíe de forma predeterminada
-
-        // Obtén los datos del formulario
-        const formData = new FormData(form);
-
-        // Realiza una solicitud AJAX para enviar los datos del formulario a insertar.php
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'insertar_usuario.php');
-
-        xhr.onload = function() {
-          if (xhr.status === 200) {
-            // Si la inserción es exitosa, muestra la respuesta en la consola (o haz lo que necesites)
-            console.log(xhr.responseText);
-          } else {
-            console.error('Error al enviar los datos del formulario');
-          }
-        };
-        xhr.send(formData); // Envía los datos del formulario
-      });
+     
 
       function toggleTiendaSection() {
         var rolesDropdown = document.getElementById("roles");

@@ -70,6 +70,21 @@ function getProductos($dbh) {
     $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $productos;
 }
+function getUsuario($dbh, $IDUSUARIO) {
+    $query = "SELECT * FROM DATOS_USUARIO WHERE IDUSUARIO = ?";
+
+    $stmt = $dbh->prepare($query);
+    
+    // Ejecutar la consulta pasando el IDUSUARIO como parámetro
+    $stmt->execute([$IDUSUARIO]);
+    
+    // Obtener los resultados como un arreglo asociativo
+    $datos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Retornar los resultados
+    return $datos;
+}
+
 
 function getPedidos($dbh, $IDUSUARIO) {
     // Consulta SQL para obtener los pedidos asociados al IDUSUARIO

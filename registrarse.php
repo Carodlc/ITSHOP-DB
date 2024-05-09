@@ -269,7 +269,7 @@
           </div>
 
           <div class="form-buttons">
-            <button class="cancelar-button" class="letra"><a href="index.html" id="atrasBtn">Atrás</button></a>
+            <button onclick="window.location.href = 'index.php'" class="cancelar-button" class="letra" id="atrasBtn">Atrás</button>
             <button type="submit" class="registrarse-button" id="registrarse-button">Registrarse</button>
           </div>
         </div>

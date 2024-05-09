@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $query = $dbh->prepare("SELECT ROL_IDROL FROM DATOS_USUARIO WHERE IDUSUARIO = ?");
                 $query->execute([$IDUSUARIO]);
                 $rol = $query->fetch(PDO::FETCH_ASSOC);
-                $rolUsuario= $rol['ROL_IDROL'] ?? '';
+                $rolUsuario = $rol['ROL_IDROL'] ?? '';
                 echo "Rol del usuario: " . $rolUsuario;
 
                 // Redirigir a otra página donde se establecerá el ID del usuario
@@ -45,7 +45,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 exit; // Detener la ejecución del script después del redireccionamiento
 
             } else {
-                echo "La contraseña no coincide. Acceso denegado.";
+                echo "<script>alert('La contraseña no coincide');</script>";
+                echo "<script>history.back();</script>";
+                exit; // Salir del script PHP para evitar que se imprima más contenido HTML
             }
         } else {
             // Correo o contraseña incorrectos

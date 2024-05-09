@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fecha_formateada = date('d-m-y', strtotime(str_replace('/', '-', $FECHA_NACIMIENTO)));
     // Manejar la carga de la imagen
 
-    function insertImage($dbh, $productId, $imageName)
+    function insertImage($dbh, $productId, $imageName, $newColumnValue)
     {
         try {
             // Prepare the query to insert into PRODUCTS_IMG
@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     V_BFILE BFILE;
                     V_NOMBRE_FOTO VARCHAR2(100);
                 BEGIN 
-                    INSERT INTO USUARIOS_IMG (ID, FOTO) VALUES (:productId, EMPTY_BLOB()) RETURNING FOTO INTO V_TEMP;
+                    INSERT INTO USUARIOS_IMG (ID, FOTO, RUTA_USUARIO) VALUES (:productId, EMPTY_BLOB(), :newColumnValue) RETURNING FOTO INTO V_TEMP;
                     
                     V_NOMBRE_FOTO := :imageName;
                     V_BFILE := BFILENAME('OBJETOS_LOB', V_NOMBRE_FOTO);
@@ -42,6 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Bind parameters
             $stmt->bindParam(':productId', $productId, PDO::PARAM_INT);
             $stmt->bindParam(':imageName', $imageName, PDO::PARAM_STR);
+            $stmt->bindParam(':newColumnValue', $newColumnValue, PDO::PARAM_STR); // Assuming the type of NEW_COLUMN is string, adjust if needed
 
             // Execute the statement
             $stmt->execute();
@@ -55,6 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
+
     // Ruta de la carpeta donde se guardarán las imágenes
 
 
@@ -66,7 +68,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($email_exists) {
             // El correo electrónico ya está registrado
-            echo "El correo electrónico ya está registrado. Por favor, utilice otro correo electrónico.";
+            echo "<script>alert('El correo electrónico ya está registrado. Por favor, utilice otro correo electrónico.');</script>";
+            echo "<script>history.back();</script>";
+            exit; // Salir del script PHP para evitar que se imprima más contenido HTML
         } else {
             // Consultar el ID de la especialidad
             $stmt_especialidad = $dbh->prepare("SELECT IDESPECIALIDAD FROM ESPECIALIDADES WHERE NOMBREESPECIALIDAD = ?");
@@ -114,11 +118,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $nombreTempArchivo = $archivo['tmp_name'];
 
                     // Mueve el archivo a la carpeta destino
-                    if (move_uploaded_file($nombreTempArchivo, $directorioDestino . $nombreArchivo)) {
+                    if (move_uploaded_file($nombreTempArchivo, $directorioDestino . $nombreArchivo,)) {
                         echo 'Imagen subida correctamente.';
 
                         // Después de la inserción de la imagen en la carpeta local, inserta la información en la base de datos
-                        insertImage($dbh, $IDUSUARIO, $nombreArchivo);
+                        insertImage($dbh, $IDUSUARIO, $nombreArchivo, $directorioDestino . $nombreArchivo);
                     } else {
                         echo 'Error al subir la imagen.';
                     }

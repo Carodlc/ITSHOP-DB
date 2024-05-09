@@ -239,7 +239,7 @@
                     <div class="profile-pic-container">
                         <img src="<?php echo $imagen_src; ?>" alt="Profile Picture" class="profile-pic" id="profilePreview">
                         <label for="imagen" class="profile-pic-label">Cambiar imagen</label>
-                        <input type="file" id="imagen" name="imagen" accept="image/*" style="display: none;" >
+                        <input type="file" id="imagen" name="imagen" accept="image/*" style="display: none;" required>
                     </div>
                 </div>
                 <div class="right-section">
@@ -313,19 +313,19 @@
                     echo "</div>";
                     echo "<div class='form-section'>";
                     echo "<label for='confirm-password' class='letra'>Confirmar contraseña:</label>";
-                    echo "<input type='password' id='confirm-password' name='confirm-password' placeholder='Repite la contraseña'>";
+                    echo "<input type='password' id='confirm-password' name='confirm-password'>";
                     echo "</div>";
                     echo "<div class='form-section'>";
                     echo "<label for='email' class='letra'>Correo Electrónico:</label>";
                     echo "<input type='email' id='email' name='email'  value='" . $datos[0]['CORREO'] . "' required>";
                     echo "</div>";
-               
+                    echo "<div class='form-section' id='tienda-name-section'>";
+                    echo "<label for='tienda-name' class='letra'>Nombre de la tienda:</label>";
+                    echo "<input type='text' id='tienda-name' name='tienda-name' value='Nombre por defecto' required>";
+                    echo "</div>";
                     ?>
-                    <!-- Dentro de tu formulario HTML -->
-                    <input type="hidden" name="idUsuario" value="<?php echo $IDUSUARIO; ?>" required>
-
                     <div class="form-buttons">
-                        <button class="cancelar-button letra" onclick="window.history.back();" id="atrasBtn">Atrás</button>
+                    <button class="cancelar-button letra" onclick="window.history.back();" id="atrasBtn">Atrás</button>
                         <button type="submit" class="registrarse-button" id="registrarse-button">Actualizar datos</button>
                     </div>
                 </div>
@@ -353,29 +353,19 @@
                 }
             });
 
-            function updateImageInput(input) {
-                // Verifica si se seleccionó un archivo
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
 
-                    reader.onload = function(e) {
-                        // Establece la imagen seleccionada como valor del input
-                        input.setAttribute('value', e.target.result);
-                    };
 
-                    reader.readAsDataURL(input.files[0]);
+
+            function toggleTiendaSection() {
+                var rolesDropdown = document.getElementById("roles");
+                var tiendaSection = document.getElementById("tienda-name-section");
+
+                if (rolesDropdown.value === "vendedor") {
+                    tiendaSection.style.display = "block";
+                } else {
+                    tiendaSection.style.display = "none";
                 }
             }
-
-            // Función para cargar la imagen previamente guardada
-            window.onload = function() {
-                var imgElement = document.getElementById('profilePreview');
-                var imagenInput = document.getElementById('imagen');
-                imgElement.src = "<?php echo $imagen_src; ?>";
-                imagenInput.setAttribute('value', imgElement.src); // Establece el valor del input con la imagen previamente cargada
-            };
-
-
         </script>
 
     </form>

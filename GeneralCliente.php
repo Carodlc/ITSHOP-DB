@@ -508,7 +508,9 @@
             font-size: 24px;
             font-weight: 600;
             line-height: 30px;
-            text-align: left;
+            margin-left: 180px;
+            top: 20px;
+            text-align: center;
             text-transform: capitalize;
             white-space: nowrap;
             letter-spacing: 0.72px;
@@ -1165,6 +1167,17 @@
             background-color: #8d2d2c;
             order: -1;
         }
+
+        img {
+            width: 100px;
+            height: 100px;
+        }
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
     </style>
 </head>
 
@@ -1200,7 +1213,7 @@
             <div class="group-3"></div>
             <span class="text">ITSHOP</span><span class="text-2">ITSHOP</span>
             <div class="section-4">
-                <span class="text-3">Inicio > </span><span class="text-4">Mi Cuenta </span>
+                <span onclick="window.location.href = 'index.php?idUsuario=' + idUsuario" class="text-3">Inicio > </span><span class="text-4">Mi Cuenta </span>
             </div>
         </div>
         <div class="box-4">
@@ -1216,40 +1229,69 @@
             <div class="wrapper-4" id="tablaWrapper">
                 <div class="section-6">
                     <span class="text-c">Perfil</span>
-                    
+
 
                 </div>
                 <div class="group-5">
                     <div class="section-8">
-                        <div class="pic-4"></div>
+
+
+                        <div class="pic-4">
+                            <?php
+                            include 'conexion.php';
+                            if (isset($_GET['idUsuario'])) {
+                                // Obtener el valor de 'idUsuario'
+                                $idUsuario = $_GET['idUsuario'];
+
+                                // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
+                            } else {
+                                // Si no se pasó el parámetro 'idUsuario' en la URL
+                                echo "No se ha especificado un ID de usuario.";
+                            }
+
+
+
+                            $stmt = $dbh->prepare("SELECT RUTA_USUARIO FROM USUARIOS_IMG WHERE ID = ?");
+                            $stmt->execute([$idUsuario]);
+                            $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
+                            $ruta_imagen = $rol_row['RUTA_USUARIO'] ?? '';
+
+                            // Obtener el tipo de contenido de la imagen
+                            $info = getimagesize($ruta_imagen);
+                            $tipo_contenido = $info['mime'];
+
+                            // Obtener el contenido de la imagen como base64
+                            $imagen_codificada = base64_encode(file_get_contents($ruta_imagen));
+                            $imagen_src = 'data:' . $tipo_contenido . ';base64,' . $imagen_codificada;
+
+                            ?>
+                            <img src="<?php echo $imagen_src; ?>" alt="Imagen" class="profile-pic">
+
+                        </div>
+
                         <?php
-                    include 'conexion.php';
-                    if (isset($_GET['idUsuario'])) {
-                        // Obtener el valor de 'idUsuario'
-                        $idUsuario = $_GET['idUsuario'];
-                        
-                        // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
-                    } else {
-                        // Si no se pasó el parámetro 'idUsuario' en la URL
-                        echo "No se ha especificado un ID de usuario.";
-                    }
-                    $stmt_rol = $dbh->prepare("SELECT NOMBRE_USUARIO FROM DATOS_USUARIO WHERE IDUSUARIO = ?");
-                    $stmt_rol->execute([$idUsuario]);
-                    $rol_row = $stmt_rol->fetch(PDO::FETCH_ASSOC);
-                    $NOMBREUSUARIO = $rol_row['NOMBRE_USUARIO'] ?? '';
-                    echo  "<span class='text-NOMBRE'>",$NOMBREUSUARIO ,"</span>";
-                    ?>
+
+                        $stmt_rol = $dbh->prepare("SELECT NOMBRE_USUARIO FROM DATOS_USUARIO WHERE IDUSUARIO = ?");
+                        $stmt_rol->execute([$idUsuario]);
+                        $rol_row = $stmt_rol->fetch(PDO::FETCH_ASSOC);
+                        $NOMBREUSUARIO = $rol_row['NOMBRE_USUARIO'] ?? '';
+                        echo  "<span class='text-NOMBRE'>", $NOMBREUSUARIO, "</span>";
+
+
+                        ?>
                         <div class="section-9">
-                            <button id="editarPerfilButton" class="text-10">Editar</button>
+                            <button onclick="window.location.href = 'FormEditarPerfilUsuario.php?idUsuario= + idUsuario'" id="editarPerfilButton" class="text-10">Editar</button>
                         </div>
 
                     </div>
                 </div>
+
                 <span class="text-12">Compras</span>
                 <div class="section-b">
                     <div class="box-5">
 
                     </div>
+
 
                     <div class="button-container">
                         <button id="compraButton" class="text-15">Detalles</button>
@@ -1259,8 +1301,19 @@
                 </div>
 
                 <script>
+                    var queryString = window.location.search;
+
+                    // Crear un objeto URLSearchParams para analizar la cadena de consulta
+                    var urlParams = new URLSearchParams(queryString);
+
+                    // Obtener el valor del parámetro 'idUsuario' de la URL
+                    var idUsuario = urlParams.get('idUsuario');
+
+                    // Hacer algo con el valor de idUsuario
+                    console.log('ID del usuario:', idUsuario);
+
                     document.getElementById("editarPerfilButton").addEventListener("click", function() {
-                        window.location.href = "FormEditarPerfilUsuario.php?idUsuario=" + idUsuario";
+                        window.location.href = "FormEditarPerfilUsuario.php?idUsuario=" + idUsuario;
                     });
 
                     // Agregar evento de clic al botón de detalles

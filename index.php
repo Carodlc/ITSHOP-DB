@@ -127,7 +127,7 @@
 
       // Si el rol es 1, muestra el enlace de "Ver perfil" para cliente
       if (rolUsuario === "1") {
-        profileLink.href = "GeneralCliente.html"; // Cambia el href al perfil del cliente
+        profileLink.href = "GeneralCliente.php?idUsuario=" + idUsuario; // Cambia el href al perfil del cliente
         profileLink.style.display = "block";
         logoutBtn.style.display = "block";
         console.log("El usuario tiene rol 1 (cliente)");
@@ -159,7 +159,7 @@
             window.location.href = "GeneralCliente.php?idUsuario=" + idUsuario;
         } else {
             // Si no hay ID de usuario, redirigir sin parámetro
-            window.location.href = "GeneralCliente.html";
+            window.location.href = "GeneralCliente.php";
        
           }
     }

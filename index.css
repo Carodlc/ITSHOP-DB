@@ -2,6 +2,7 @@
     .dropdown {
         position: relative;
         display: inline-block;
+        z-index: 1000;
     }
 
     .dropdown-content {
@@ -11,7 +12,7 @@
         /* Cambia el color de fondo aquí si deseas */
         min-width: 160px;
         box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-        z-index: 1;
+        z-index: 1001;
         border-radius: 20px;
         /* Agrega bordes redondos al menú */
     }
@@ -23,16 +24,22 @@
         text-decoration: none;
         display: block;
         border-radius: 20px;
+        z-index: 1001;
+
         /* Agrega bordes redondos a los elementos del menú */
     }
 
     .dropdown-content a:hover {
         background-color: #ddd;
+        z-index: 1001;
+
         /* Cambia el color de fondo al pasar el cursor aquí si deseas */
     }
 
     .dropdown:hover .dropdown-content {
         display: block;
+        z-index: 1001;
+
     }
 
     :root {
@@ -97,6 +104,8 @@
         /* Ajuste el padding para espaciar el contenido */
         background: #721918;
         justify-content: center;
+        z-index: 1001;
+
         /* Centra los elementos horizontalmente */
     }
 
@@ -305,7 +314,7 @@
         line-height: 21px;
         text-align: left;
         white-space: nowrap;
-        z-index: 7;
+        z-index: 1000;
     }
 
     .cart {
@@ -379,6 +388,8 @@
         /* Define el tamaño base del producto para que quepan 4 en una fila */
         margin-bottom: 20px;
         /* Espacio entre filas */
+        z-index: 1;
+
     }
 
 
@@ -390,7 +401,7 @@
         width: 255px;
         height: 247px;
         background: #d9c7c7;
-        z-index: 18;
+        z-index: 7;
         border-radius: 10px;
     }
 

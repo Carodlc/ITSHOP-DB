@@ -1438,7 +1438,7 @@
                     <span class="mi-cuenta-5">mi cuenta</span><span class="general">General</span>
                     <div class="rectangle-6">
                         <div class="rectangle-7"></div>
-                        <span class="productos">Productos</span>
+                        <span onclick="window.location.href = 'GestionProductos.php?idUsuario=<?php echo $idUsuario; ?>'"  class="productos">Productos</span>
                     </div>
                     <span class="inventario">Inventario</span><span class="ventas">Ventas</span><span class="ajustes">Ajustes</span>
                 </div>

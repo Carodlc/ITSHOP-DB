@@ -100,8 +100,8 @@
         <span class="add-product">Agregar producto</span>
         <span class="publish">Publicar</span>
         <label class="switch">
-          <input type="hidden" id="switchInput" value="0">
-          <input type="checkbox" id="switchDisplay" required>
+          <input type="hidden" name="switchDisplay" value="off">
+          <input type="checkbox" id="switchDisplay" name="switchDisplay" value="on">
           <span class="slider"></span>
         </label>
       </div>
@@ -109,19 +109,19 @@
       <div class="flex-row-de">
         <span class="nombre">Nombre:</span>
         <div class="input">
-          <input type="text" id="nombreInput" placeholder="Introduce el nombre" style="border: none !important" required/>
+          <input type="text" id="nombreInput" name="nombre" placeholder="Introduce el nombre" style="border: none !important" required />
         </div>
         <div class="rectangle"></div> <!-- Este recuadro se ocultará -->
         <span class="precio">Precio:</span>
         <div class="input-1">
-          <input type="number" id="precioInput" placeholder="Introduce Precio" style="border: none !important" min="0" required/>
+          <input type="number" id="precioInput" name="precio" placeholder="Introduce Precio" style="border: none !important" min="0" required />
         </div>
 
         <span class="stock-0">Stock: 0</span>
         <span class="categoria-label">Categoría:</span>
         <!-- Cambio el botón por un combobox -->
         <div class="custom-select categoria-select">
-          <select id="categoria" required>
+          <select id="categoria" name="categoria" required>
             <option value="Default">Selecciona categoria</option>
             <?php
             $categorias = getcategorias($dbh);
@@ -140,11 +140,12 @@
       <span class="description">Descripción:</span>
 
       <div class="rectangle-4">
-        <textarea id="descripcion" placeholder="Agrega una descripción.." style="border: none !important;" required></textarea>
+        <textarea id="descripcion" name="descripcion" placeholder="Agrega una descripción.." style="border: none !important;" required></textarea>
       </div>
 
       <!-- Vista previa de la imagen -->
       <img id="preview" src="#" alt="Vista previa" style="display: none;">
+      <input type="hidden" name="idUsuario" value="<?php echo $IDUSUARIO; ?>" >
 
       <div class="flex-row-dc">
         <button class="frame-5"><span class="return">Regresar</span></button>

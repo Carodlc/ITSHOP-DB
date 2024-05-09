@@ -855,8 +855,8 @@
       <div class="rectangle-8">
         <div class="flex-row-df">
           <span class="productos-9">Productos</span><button class="frame"
-            onclick="window.location.href='AgregarProduto.html'">
-            <span class="agregar-producto">Agregar producto</span>
+            onclick="window.location.href='AgregarProduto.php?idUsuario=<?php echo $idUsuario; ?>'">
+            <span onclick="window.location.href = 'AgregarProducto.php?idUsuario=<?php echo $idUsuario; ?>'" class="agregar-producto">Agregar producto</span>
           </button>
         </div>
         <div class="rectangle-a">

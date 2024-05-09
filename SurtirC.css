@@ -26,6 +26,8 @@ button {
   width: 1440px;
   height: 759px;
   margin: 0 auto;
+  top: -10px;
+  left: -10px;
   background: #f5e5e3;
   overflow: hidden;
 }
@@ -718,4 +720,23 @@ button {
 .dropdown button.dropbtn {
   background-color: #721918;
   color: white;
+}
+
+/* Estilo inicial para los elementos */
+.mi-cuenta-18,
+.general,
+.productos,
+.ventas,
+.ajustes {
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+    transition: color 0.3s ease; /* Añade transición suave */
+}
+
+/* Estilo al pasar el cursor por encima */
+.mi-cuenta-18:hover,
+.general:hover,
+.productos:hover,
+.ventas:hover,
+.ajustes:hover {
+    color: #560202; /* Cambia el color al pasar el cursor por encima */
 }

@@ -251,11 +251,11 @@
             justify-content: flex-start;
             position: absolute;
             height: 64px;
-            bottom: 34px;
+            bottom: 37px;
             left: 188px;
             color: #f5e5e3;
             font-family: Readex Pro, var(--default-font-family);
-            font-size: 64px;
+            font-size: 54px;
             font-weight: 500;
             line-height: 64px;
             text-align: left;
@@ -1211,7 +1211,7 @@
                 </div>
             </div>
             <div class="group-3"></div>
-            <span class="text">ITSHOP</span><span class="text-2">ITSHOP</span>
+            <span class="text-2">ITSHOP</span>
             <div class="section-4">
                 <span onclick="window.location.href = 'index.php?idUsuario=' + idUsuario" class="text-3">Inicio > </span><span class="text-4">Mi Cuenta </span>
             </div>

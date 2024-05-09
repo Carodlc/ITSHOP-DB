@@ -134,14 +134,15 @@
       }
       // Si el rol es 2, muestra el enlace de "Ver perfil" para vendedor
       else if (rolUsuario === "2") {
-        profileLink.href = "Vendedor_perfil.html"; // Cambia el href al perfil del vendedor
+        profileLink.href = "Vendedor_perfil.php?idUsuario=" + idUsuario; // Cambia el href al perfil del vendedor
         profileLink.style.display = "block";
         logoutBtn.style.display = "block";
         console.log("El usuario tiene rol 2 (vendedor)");
       } else {
         // Si el rol no es 1 ni 2, oculta ambos enlaces
-        profileLink.style.display = "none";
-        logoutBtn.style.display = "none";
+        profileLink.href = "Perfil_admi.php?idUsuario=" + idUsuario;
+        profileLink.style.display = "block";
+        logoutBtn.style.display = "block";
         console.log("El usuario no tiene rol 1 ni 2");
       }
     } else {

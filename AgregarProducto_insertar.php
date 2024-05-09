@@ -4,10 +4,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Obtener los datos del formulario
     $nombre = $_POST["nombre"];
     $precio = $_POST["precio"];
-    $stock = $_POST["stock"];
+    $stock = 0;
     $categoria = $_POST["categoria"];
     $descripcion = $_POST["descripcion"];
-    $imagen = $_FILES["imagen"]["tmp_name"]; // Obtener la ruta temporal del archivo de imagen
     $publicado = isset($_POST["publicado"]) ? "1" : "0"; // Verificar si está publicado
 
     // Preparar la consulta SQL para la inserción

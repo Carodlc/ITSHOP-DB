@@ -86,12 +86,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "El ROLESSSSSSSSSSSSS: " . $ROL_NOMBRE;
 
             // Obtener el último ID insertado
-            $query = "SELECT COUNT(IDUSUARIO) FROM DATOS_USUARIO";
+            // Obtener el último ID de usuario de la base de datos
+            $query = "SELECT MAX(IDUSUARIO) FROM DATOS_USUARIO";
             $stmt = $dbh->query($query);
-            $totalRow = $stmt->fetch(PDO::FETCH_ASSOC);
-            $total = $totalRow['COUNT(IDUSUARIO)'] ?? 0;
-            // Generar el nuevo ID de usuario sumando 1 al último ID
-            $IDUSUARIO = $total;
+            $maxRow = $stmt->fetch(PDO::FETCH_ASSOC);
+            $lastID = $maxRow['MAX(IDUSUARIO)'] ?? 0;
+
+            // Generar el nuevo ID sumando 1 al último ID
+            $newID = $lastID + 1;
+
+            // Verificar si el nuevo ID ya existe en la base de datos
+            $query_check = "SELECT COUNT(IDUSUARIO) FROM DATOS_USUARIO WHERE IDUSUARIO = ?";
+            $stmt_check = $dbh->prepare($query_check);
+            $stmt_check->execute([$newID]);
+            $countRow = $stmt_check->fetch(PDO::FETCH_ASSOC);
+            $count = $countRow['COUNT(IDUSUARIO)'] ?? 0;
+
+            // Si el nuevo ID ya existe, seguir incrementando hasta encontrar un ID único
+            while ($count > 0) {
+                $newID++;
+                $stmt_check->execute([$newID]);
+                $countRow = $stmt_check->fetch(PDO::FETCH_ASSOC);
+                $count = $countRow['count'] ?? 0;
+            }
+
+            // El nuevo ID es único y seguro para usar
+            $IDUSUARIO = $newID;
+
 
 
 
@@ -103,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "el valor es " . $IDUSUARIO;
 
             // Insertar datos en la tabla de usuarios
-            $rowCount = insertData($dbh, 'DATOS_USUARIO', ['IDUSUARIO', 'NOMBRE_USUARIO', 'ESPECIALIDADES_IDESPECIALIDAD', 'ROL_IDROL', 'NOMBRE_TIENDA', 'FECHA_NACIMIENTO', 'CORREO', 'CONTRASENA'], [$IDUSUARIO + 1, $NOMBRE_USUARIO, $ESPECIALIDADES_IDESPECIALIDAD, $ROL_IDROL,  $NOMBRE_TIENDA, $fecha_formateada, $CORREO, $CONTRASENA_ENCRYPTADA]);
+            $rowCount = insertData($dbh, 'DATOS_USUARIO', ['IDUSUARIO', 'NOMBRE_USUARIO', 'ESPECIALIDADES_IDESPECIALIDAD', 'ROL_IDROL', 'NOMBRE_TIENDA', 'FECHA_NACIMIENTO', 'CORREO', 'CONTRASENA'], [$IDUSUARIO , $NOMBRE_USUARIO, $ESPECIALIDADES_IDESPECIALIDAD, $ROL_IDROL,  $NOMBRE_TIENDA, $fecha_formateada, $CORREO, $CONTRASENA_ENCRYPTADA]);
 
             // Verificar si la inserción fue exitosa
             if ($rowCount > 0) {

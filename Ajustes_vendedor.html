@@ -343,9 +343,7 @@
             position: relative;
             width: 270px;
             height: 69px;
-            margin: 150px 0 0 0;
-            /* Ajusta este valor para bajar la sección */
-            background: #f5e5e3;
+            margin: 10px 0 0 0;
             z-index: 15;
         }
 
@@ -353,7 +351,7 @@
             position: absolute;
             width: 7px;
             height: 69px;
-            top: 95px;
+            top: 325px;
             /* Cambia el valor para mover hacia abajo */
             left: 0;
             background: #721918;
@@ -982,38 +980,25 @@
             transition: background-color 0.3s ease;
         }
 
+       
+
+        /* Estilo específico para el botón "General" */
         .menu-button.general {
-            background-color: #fff5f4;
-            color: #000000;
-            /* Cambia el color del texto a negro */
-            margin-top: -150px;
-            /* Mueve hacia arriba solo el botón "General" */
-            margin-left: 1px;
-            /* Mueve el botón "General" hacia la izquierda */
-            border: 27.5px solid #fff5f4;
-            ;
-            /* Agrega un borde blanco */
-        }
-
-
-        .menu-button.ajuste {
             background-color: #f5e5e3;
-            color: #000000;
-            /* Cambia el color del texto a negro */
-            padding: 15px 100px;
-            /* Aumenta el padding horizontal para hacer el elemento más ancho */
-            margin-top: -30px;
-            margin-left: -6px;
-            border: 5px solid #f5e5e3;
-            /* Aumenta el ancho del borde */
-            /* Centra el texto dentro del botón */
+            color: #ffffff;
+            /* Cambia el color de fondo solo para el botón "General" */
         }
 
+        /*PARA AJUSTE DE COLOR DEL CLICK */
 
-        /* PARA AJUSTE DE COLOR DEL CLICK */
         .menu-button:hover {
             background-color: #f5e5e3;
             color: #ffffff;
+        }
+
+        /* Ajuste para mover los botones hacia la derecha */
+        .menu-button-container {
+            text-align: right;
         }
 
         /* Ajuste para mover los botones hacia la derecha */
@@ -1223,8 +1208,12 @@
                 <span class="text-5">mi cuenta</span>
                 <div class="section-5">
                     <div class="group-4"></div>
-                    <button class="menu-button general">General</button>
-                    <button class="menu-button ajuste">Ajustes</button>
+                    <!-- Botones del menú con redirecciones -->
+                    <button class="menu-button"onclick="window.location.href='Vendedor_perfil.php'">General</button>
+                    <button class="menu-button" onclick="window.location.href='ReporteDeInventario.html'">Inventario</button>
+                    <button class="menu-button" onclick="window.location.href='reporteVenta.php'">Ventas</button>
+                    <button class="menu-button general" onclick="window.location.href='Ajustes_vendedor.html'">Ajustes</button>
+                    <button class="menu-button" onclick="window.location.href='GestionProductos.html'">Productos</button>
                 </div>
             </div>
 

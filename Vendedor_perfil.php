@@ -251,11 +251,11 @@
             justify-content: flex-start;
             position: absolute;
             height: 64px;
-            bottom: 34px;
+            bottom: 37px;
             left: 188px;
             color: #f5e5e3;
             font-family: Readex Pro, var(--default-font-family);
-            font-size: 64px;
+            font-size: 54px;
             font-weight: 500;
             line-height: 64px;
             text-align: left;
@@ -1227,6 +1227,173 @@
         #agregarEspecialidadButton:hover {
             background-color: #8d2d2c;
         }
+
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .text-NOMBRE {
+            flex-shrink: 0;
+            position: relative;
+            height: 30px;
+            color: #000000;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 30px;
+            margin-left: 180px;
+            top: 20px;
+            text-align: center;
+            text-transform: capitalize;
+            white-space: nowrap;
+            letter-spacing: 0.72px;
+            z-index: 25;
+        }
+
+        .rectangle-4 {
+            flex-shrink: 0;
+            position: relative;
+            width: 270px;
+            height: 629px;
+            font-size: 0px;
+            background: #fff5f4;
+            z-index: 12;
+            border-radius: 30px;
+        }
+
+        .mi-cuenta-5 {
+            display: block;
+            position: relative;
+            height: 30px;
+            margin: 15px 0 0 25px;
+            color: #8d2d2c;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 30px;
+            text-align: left;
+            text-transform: capitalize;
+            white-space: nowrap;
+            letter-spacing: 0.72px;
+            z-index: 13;
+        }
+
+        .general {
+            display: block;
+            position: relative;
+            height: 29px;
+            margin: 30px 0 0 25px;
+            color: #000000;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 23px;
+            font-weight: 200;
+            line-height: 28.98px;
+            text-align: left;
+            white-space: nowrap;
+            letter-spacing: 0.46px;
+            z-index: 14;
+        }
+
+        .rectangle-6 {
+            position: relative;
+            width: 270px;
+            height: 69px;
+            margin: 31px 0 0 0;
+            background: #f5e5e3;
+            z-index: 15;
+        }
+
+        .rectangle-7 {
+            position: absolute;
+            width: 7px;
+            height: 69px;
+            top: 0;
+            left: 0;
+            background: #721918;
+            z-index: 16;
+        }
+
+        .productos {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            position: absolute;
+            height: 29px;
+            top: 21px;
+            left: 25px;
+            color: #000000;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 23px;
+            font-weight: 200;
+            line-height: 28.98px;
+            text-align: left;
+            white-space: nowrap;
+            letter-spacing: 0.46px;
+            z-index: 17;
+        }
+
+        .inventario {
+            display: block;
+            position: relative;
+            height: 29px;
+            margin: 33px 0 0 25px;
+            color: #000000;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 23px;
+            font-weight: 200;
+            line-height: 28.98px;
+            text-align: left;
+            white-space: nowrap;
+            letter-spacing: 0.46px;
+            z-index: 18;
+        }
+
+        .ventas {
+            display: block;
+            position: relative;
+            height: 29px;
+            margin: 52px 0 0 25px;
+            color: #000000;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 23px;
+            font-weight: 200;
+            line-height: 28.98px;
+            text-align: left;
+            white-space: nowrap;
+            letter-spacing: 0.46px;
+            z-index: 19;
+        }
+
+        .ajustes {
+            display: block;
+            position: relative;
+            height: 29px;
+            margin: 52px 0 0 25px;
+            color: #000000;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 23px;
+            font-weight: 200;
+            line-height: 28.98px;
+            text-align: left;
+            white-space: nowrap;
+            letter-spacing: 0.46px;
+            z-index: 20;
+        }
+
+        /* Estilo para el efecto hover en los elementos */
+        .rectangle-6:hover,
+        .general:hover,
+        .productos:hover,
+        .inventario:hover,
+        .ventas:hover,
+        .ajustes:hover {
+            color: rgb(175, 107, 107);
+            /* Cambia el color de fondo cuando se hace hover */
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -1260,73 +1427,104 @@
                 </div>
             </div>
             <div class="group-3"></div>
-            <span class="text">ITSHOP</span><span class="text-2">ITSHOP</span>
+            <span onclick="window.location.href = 'index.php?idUsuario=<?php echo $idUsuario = $_GET['idUsuario']; ?>'" class="text-2">ITSHOP</span>
             <div class="section-4">
                 <span class="text-3">Inicio > </span><span class="text-4">Mi Cuenta </span>
             </div>
         </div>
         <div class="box-4">
-            <div class="wrapper-3 menu-container">
-                <span class="text-5">mi cuenta</span>
-                <div class="section-5">
-                    <div class="group-4"></div>
-
-                    <!-- Botones del menú con redirecciones -->
-                    <button class="menu-button general">General</button>
-                    <button class="menu-button" onclick="window.location.href='ReporteDeInventario.html'">Inventario</button>
-                    <button class="menu-button" onclick="window.location.href='reporteVenta.php'">Ventas</button>
-                    <button class="menu-button" onclick="window.location.href='Ajustes.html'">Ajustes</button>
-                    <button class="menu-button" onclick="window.location.href='GestionProductos.html'">Productos</button>
-
+            <div class="flex-row-d">
+                <div class="rectangle-4">
+                    <span class="mi-cuenta-5">mi cuenta</span><span class="general">General</span>
+                    <div class="rectangle-6">
+                        <div class="rectangle-7"></div>
+                        <span class="productos">Productos</span>
+                    </div>
+                    <span class="inventario">Inventario</span><span class="ventas">Ventas</span><span class="ajustes">Ajustes</span>
                 </div>
-            </div>
-
-            <div class="wrapper-4" id="tablaWrapper">
-                <div class="section-6">
-                    <span class="text-c">perfil de vendedor</span>
-                    <div ">
+                <div class="wrapper-4" id="tablaWrapper">
+                    <div class="section-6">
+                        <span class="text-c">perfil de vendedor</span>
+                        <div ">
                           
                           <table id=" tablaContenido">
 
-                        </table>
-                    </div>
-
-                </div>
-                <div class="group-5">
-                    <div class="section-8">
-                        <div class="pic-4"></div>
-
-                        <div class="section-9">
-                            <button id="editarPerfilButton" class="text-10">Editar</button>
+                            </table>
                         </div>
 
                     </div>
-                </div>
+                    <div class="group-5">
+                        <div class="section-8">
+                            <div class="pic-4">
+                                <?php
+                                include 'conexion.php';
+                                if (isset($_GET['idUsuario'])) {
+                                    // Obtener el valor de 'idUsuario'
+                                    $idUsuario = $_GET['idUsuario'];
+
+                                    // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
+                                } else {
+                                    // Si no se pasó el parámetro 'idUsuario' en la URL
+                                    echo "No se ha especificado un ID de usuario.";
+                                }
+
+
+
+                                $stmt = $dbh->prepare("SELECT RUTA_USUARIO FROM USUARIOS_IMG WHERE ID = ?");
+                                $stmt->execute([$idUsuario]);
+                                $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
+                                $ruta_imagen = $rol_row['RUTA_USUARIO'] ?? '';
+
+                                // Obtener el tipo de contenido de la imagen
+                                $info = getimagesize($ruta_imagen);
+                                $tipo_contenido = $info['mime'];
+
+                                // Obtener el contenido de la imagen como base64
+                                $imagen_codificada = base64_encode(file_get_contents($ruta_imagen));
+                                $imagen_src = 'data:' . $tipo_contenido . ';base64,' . $imagen_codificada;
+
+                                ?>
+                                <img src="<?php echo $imagen_src; ?>" alt="Imagen" class="profile-pic">
+
+                            </div>
+
+                            <?php
+
+                            $stmt_rol = $dbh->prepare("SELECT NOMBRE_USUARIO FROM DATOS_USUARIO WHERE IDUSUARIO = ?");
+                            $stmt_rol->execute([$idUsuario]);
+                            $rol_row = $stmt_rol->fetch(PDO::FETCH_ASSOC);
+                            $NOMBREUSUARIO = $rol_row['NOMBRE_USUARIO'] ?? '';
+                            echo  "<span class='text-NOMBRE'>", $NOMBREUSUARIO, "</span>";
+
+
+                            ?>
+                            <div class="section-9">
+                                <button onclick="window.location.href = 'FormEditarPerfilVendedor.php?idUsuario=<?php echo $idUsuario; ?>'" id="editarPerfilButton" class="text-10">Editar</button>
+                            </div>
+
+                        </div>
+                    </div>
 
 
 
 
-                <script>
-                    document.getElementById("gestionarUsuariosButton").addEventListener("click", function () {
-                        window.location.href = "FormGestionarUsuarios.html";
-                    });
+                    <script>
+                        document.getElementById("gestionarUsuariosButton").addEventListener("click", function() {
+                            window.location.href = "FormGestionarUsuarios.html";
+                        });
 
-                    document.getElementById("editarPerfilButton").addEventListener("click", function () {
-                        window.location.href = "FormEditarPerfilVendedor.php";
-                    });
+                        document.getElementById("editarPerfilButton").addEventListener("click", function() {
+                            window.location.href = "FormEditarPerfilVendedor.php";
+                        });
 
-                    document.getElementById("agregarRolesButton").addEventListener("click", function () {
-                        window.location.href = "FormGestionarRoles.html";
-                    });
+                        document.getElementById("agregarRolesButton").addEventListener("click", function() {
+                            window.location.href = "FormGestionarRoles.html";
+                        });
 
-                    // Cargar el contenido de FormGestionarRoles.html
+                        // Cargar el contenido de FormGestionarRoles.html
+                    </script>
 
-
-
-
-                </script>
-
-                <!-- Generated by Codia AI - https://codia.ai/ -->
+                    <!-- Generated by Codia AI - https://codia.ai/ -->
 </body>
 
 </html>

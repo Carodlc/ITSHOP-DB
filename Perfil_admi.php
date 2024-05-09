@@ -1157,10 +1157,8 @@
                 <div class="section-5">
                     <div class="group-4"></div>
                     <button class="menu-button general">General</button>
-                    <button class="menu-button">Inventario</button>
-                    <button class="menu-button">Ventas</button>
+              
                     <button class="menu-button">Ajustes</button>
-                    <button class="menu-button">Productos</button>
                 </div>
             </div>
             

@@ -3,6 +3,7 @@
     Ubuntu, "Helvetica Neue", Helvetica, Arial, "PingFang SC",
     "Hiragino Sans GB", "Microsoft Yahei UI", "Microsoft Yahei",
     "Source Han Sans CN", sans-serif;
+    background: #fff5f4;
 }
 
 .main-container {
@@ -23,7 +24,9 @@ button {
   outline: 0;
 }
 
+
 .main-container {
+  top: 20px;
   position: relative;
   width: 705px;
   height: 629px;
@@ -462,3 +465,32 @@ button {
     transform: translateX(26px);
   }
   
+  .navbar {
+    position: absolute;
+    width: 100%;
+    /* Set width to 100% to span across the entire page */
+    height: 38px;
+    top: 0;
+    left: 0;
+    background: #721918;
+    z-index: 28;
+  }
+
+  .itshop {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    position: absolute;
+    height: 62px;
+    top: 0;
+    left: 69px;
+    color: #ffffff;
+    font-family: Readex Pro, var(--default-font-family);
+    font-size: 40px;
+    font-weight: 500;
+    line-height: 50px;
+    text-align: left;
+    white-space: nowrap;
+    letter-spacing: -6.4px;
+    z-index: 29;
+  }

@@ -198,7 +198,7 @@
 
 <body>
 
-    <form id="form" action="Editar_perfil_usuario.php" method="post" enctype="multipart/form-data">
+    <form id="form" action="Editar_perfil_usuario_vendedor.php" method="post" enctype="multipart/form-data">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@500&display=swap" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;800&display=swap" />
         <div class="navbar">
@@ -239,7 +239,7 @@
                     <div class="profile-pic-container">
                         <img src="<?php echo $imagen_src; ?>" alt="Profile Picture" class="profile-pic" id="profilePreview">
                         <label for="imagen" class="profile-pic-label">Cambiar imagen</label>
-                        <input type="file" id="imagen" name="imagen" accept="image/*" style="display: none;" required>
+                        <input type="file" id="imagen" name="imagen" accept="image/*" style="display: none;">
                     </div>
                 </div>
                 <div class="right-section">
@@ -319,13 +319,15 @@
                     echo "<label for='email' class='letra'>Correo Electrónico:</label>";
                     echo "<input type='email' id='email' name='email'  value='" . $datos[0]['CORREO'] . "' required>";
                     echo "</div>";
-                    echo "<div class='form-section' id='tienda-name-section'>";
+                    echo "<div class='form-section'>";
                     echo "<label for='tienda-name' class='letra'>Nombre de la tienda:</label>";
-                    echo "<input type='text' id='tienda-name' name='tienda-name' value='Nombre por defecto' required>";
+                    echo "<input type='text' id='tienda-name' name='tienda-name' value='" . $datos[0]['NOMBRE_TIENDA'] . "' required>";
                     echo "</div>";
                     ?>
+                    <input type="hidden" name="idUsuario" value="<?php echo $IDUSUARIO; ?>" required>
+
                     <div class="form-buttons">
-                    <button class="cancelar-button letra" onclick="window.history.back();" id="atrasBtn">Atrás</button>
+                        <button class="cancelar-button letra" onclick="window.history.back();" id="atrasBtn">Atrás</button>
                         <button type="submit" class="registrarse-button" id="registrarse-button">Actualizar datos</button>
                     </div>
                 </div>
@@ -352,20 +354,6 @@
                     profilePreview.src = '/fotos/default-profile-pic.jpg';
                 }
             });
-
-
-
-
-            function toggleTiendaSection() {
-                var rolesDropdown = document.getElementById("roles");
-                var tiendaSection = document.getElementById("tienda-name-section");
-
-                if (rolesDropdown.value === "vendedor") {
-                    tiendaSection.style.display = "block";
-                } else {
-                    tiendaSection.style.display = "none";
-                }
-            }
         </script>
 
     </form>

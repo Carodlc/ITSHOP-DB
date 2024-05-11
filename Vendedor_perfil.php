@@ -1435,11 +1435,13 @@
         <div class="box-4">
             <div class="flex-row-d">
                 <div class="rectangle-4">
-                    <span class="mi-cuenta-5">mi cuenta</span><span class="general">General</span>
+                    <span class="mi-cuenta-5">mi cuenta</span>
                     <div class="rectangle-6">
                         <div class="rectangle-7"></div>
-                        <span onclick="window.location.href = 'GestionProductos.php?idUsuario=<?php echo $idUsuario; ?>'"  class="productos">Productos</span>
+                        <span class="productos">General</span>
                     </div>
+                    <span onclick="window.location.href = 'GestionProductos.php?idUsuario=<?php echo $idUsuario; ?>'"  class="general">Productos</span>
+
                     <span class="inventario">Inventario</span><span class="ventas">Ventas</span><span class="ajustes">Ajustes</span>
                 </div>
                 <div class="wrapper-4" id="tablaWrapper">

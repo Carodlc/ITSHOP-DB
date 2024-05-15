@@ -410,7 +410,7 @@
         </table>
         <div class="wrapper-4">
             <button class="add-button box"><span class="text-6">Agregar</span></button>
-            <div class="box cancel-button"><span class="text-6"><a href="Perfil_admi.html">Cancelar</span></div></a>
+            <div class="box cancel-button"><span class="text-6"><a href="Perfil_admi.php">Cancelar</span></div></a>
             <div class="box-2"><span class="text-7">Borrar</span></div>
         </div>
 

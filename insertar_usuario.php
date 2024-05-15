@@ -118,13 +118,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Asignar el valor del campo "Nombre Tienda" solo si el rol del usuario es "vendedor"
             $NOMBRE_TIENDA = null; // Valor predeterminado
+            $TELEFONO = null;
             if ($ROL_NOMBRE === "vendedor") {
                 $NOMBRE_TIENDA = $_POST['tienda-name'] ?? null;
+                $TELEFONO = $_POST['telefono'] ?? null;
+
             }
             echo "el valor es " . $IDUSUARIO;
 
             // Insertar datos en la tabla de usuarios
-            $rowCount = insertData($dbh, 'DATOS_USUARIO', ['IDUSUARIO', 'NOMBRE_USUARIO', 'ESPECIALIDADES_IDESPECIALIDAD', 'ROL_IDROL', 'NOMBRE_TIENDA', 'FECHA_NACIMIENTO', 'CORREO', 'CONTRASENA'], [$IDUSUARIO , $NOMBRE_USUARIO, $ESPECIALIDADES_IDESPECIALIDAD, $ROL_IDROL,  $NOMBRE_TIENDA, $fecha_formateada, $CORREO, $CONTRASENA_ENCRYPTADA]);
+            $rowCount = insertData($dbh, 'DATOS_USUARIO', ['IDUSUARIO', 'NOMBRE_USUARIO', 'ESPECIALIDADES_IDESPECIALIDAD', 'ROL_IDROL', 'NOMBRE_TIENDA', 'FECHA_NACIMIENTO', 'CORREO', 'CONTRASENA','TELEFONO'], [$IDUSUARIO , $NOMBRE_USUARIO, $ESPECIALIDADES_IDESPECIALIDAD, $ROL_IDROL,  $NOMBRE_TIENDA, $fecha_formateada, $CORREO, $CONTRASENA_ENCRYPTADA,$TELEFONO]);
 
             // Verificar si la inserción fue exitosa
             if ($rowCount > 0) {

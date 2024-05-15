@@ -11,13 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $publicado = ($_POST["switchDisplay"] == "on") ? 1 : 0;
     $ID_USUARIO = $_POST['idUsuario'] ?? '';
 
-    echo "Nombre: " . $nombre . "<br>";
-    echo "Precio: " . $precio . "<br>";
-    echo "Stock: " . $stock . "<br>";
-    echo "Categoría: " . $CATEGORIA_NOMBRE . "<br>";
-    echo "Descripción: " . $descripcion . "<br>";
-    echo "Publicado: " . $publicado . "<br>";
-    echo "IDUSUARIO: " . $ID_USUARIO. "<br>";
+    
 
     function insertImage($dbh, $productId, $imageName, $newColumnValue)
     {
@@ -116,7 +110,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     // Mueve el archivo a la carpeta destino
                     if (move_uploaded_file($nombreTempArchivo, $directorioDestino . $nombreArchivo,)) {
-                        echo 'Imagen subida correctamente.';
 
                         // Después de la inserción de la imagen en la carpeta local, inserta la información en la base de datos
                         insertImage($dbh, $IDPRODUCTO, $nombreArchivo, $directorioDestino . $nombreArchivo);
@@ -124,7 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         echo 'Error al subir la imagen.';
                     }
                 }
-                echo "<script>alert('Producto registrado exitosamente!'); window.location.href = 'Vendedor_perfil?idUsuario=$ID_USUARIO';</script>";
+                echo "<script>alert('Producto registrado exitosamente!'); window.location.href = 'GestionProductos.php?idUsuario=$ID_USUARIO';</script>";
             } else {
                 echo "<script>alert('Hubo un problema al registrar el producto.'); window.location.href='AgregarProducto.php?idUsuario=$ID_USUARIO';</script>";
             }

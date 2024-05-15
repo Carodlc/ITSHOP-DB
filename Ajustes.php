@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Perfil Cliente</title>
+    <title>Ajustes</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@500&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;500;600&display=swap" />
     <style>
@@ -308,6 +308,7 @@
             z-index: 52;
         }
 
+        /* AQUIIII*/
         .wrapper-3 {
             position: absolute;
             width: 270px;
@@ -337,11 +338,13 @@
             z-index: 14;
         }
 
+        /*AQUI EL CONTORNO DE EL BOTON */
         .section-5 {
             position: relative;
             width: 270px;
             height: 69px;
-            margin: 10px 0 0 0;
+            margin: 150px 0 0 0;
+            /* Ajusta este valor para bajar la sección */
             background: #f5e5e3;
             z-index: 15;
         }
@@ -350,7 +353,8 @@
             position: absolute;
             width: 7px;
             height: 69px;
-            top: 0;
+            top: 95px;
+            /* Cambia el valor para mover hacia abajo */
             left: 0;
             background: #721918;
             z-index: 16;
@@ -379,7 +383,8 @@
             display: block;
             position: relative;
             height: 29px;
-            margin: 113px 0 0 25px;
+            margin: 30px 0 0 25px;
+            /* Aumentado el margen superior */
             color: #000000;
             font-family: Outfit, var(--default-font-family);
             font-size: 23px;
@@ -395,7 +400,8 @@
             display: block;
             position: relative;
             height: 29px;
-            margin: 52px 0 0 25px;
+            margin: 82px 0 0 25px;
+            /* Aumentado el margen superior */
             color: #000000;
             font-family: Outfit, var(--default-font-family);
             font-size: 23px;
@@ -464,7 +470,7 @@
         .wrapper-4 {
             position: absolute;
             width: 705px;
-            height: 895px;
+            height: 300px;
             top: 0;
             left: 360px;
             background: #fff5f4;
@@ -493,24 +499,6 @@
             font-weight: 600;
             line-height: 30px;
             text-align: left;
-            text-transform: capitalize;
-            white-space: nowrap;
-            letter-spacing: 0.72px;
-            z-index: 25;
-        }
-
-        .text-NOMBRE {
-            flex-shrink: 0;
-            position: relative;
-            height: 30px;
-            color: #000000;
-            font-family: Outfit, var(--default-font-family);
-            font-size: 24px;
-            font-weight: 600;
-            line-height: 30px;
-            margin-left: 180px;
-            top: 20px;
-            text-align: center;
             text-transform: capitalize;
             white-space: nowrap;
             letter-spacing: 0.72px;
@@ -551,7 +539,8 @@
         .group-5 {
             position: relative;
             width: 628px;
-            height: 194px;
+            height: 200px;
+            /* Ajusta la altura según sea necesario */
             margin: 18px 0 0 38px;
             background: #f5e5e3;
             z-index: 28;
@@ -624,10 +613,11 @@
             flex-wrap: nowrap;
             gap: 10px;
             position: absolute;
-            width: 98px;
+            width: 158px;
+            /* Cambiado de 98px a 148px */
             height: 33px;
-            top: 138px;
-            left: 496px;
+            top: 250px;
+            left: 270px;
             padding: 6px 25px 6px 25px;
             background: #8d2d2c;
             z-index: 31;
@@ -985,21 +975,42 @@
             letter-spacing: 0.46px;
             border: none;
             padding: 20px 65px;
-            margin: 2px 0 2px 25px;
+            margin: 40px 0 2px 25px;
+            /* Ajusta este valor según sea necesario */
             cursor: pointer;
             border-radius: 5px;
             transition: background-color 0.3s ease;
         }
 
-        /* Estilo específico para el botón "General" */
         .menu-button.general {
-            background-color: #f5e5e3;
-            color: #ffffff;
-            /* Cambia el color de fondo solo para el botón "General" */
+            background-color: #fff5f4;
+            color: #000000;
+            /* Cambia el color del texto a negro */
+            margin-top: -150px;
+            /* Mueve hacia arriba solo el botón "General" */
+            margin-left: 1px;
+            /* Mueve el botón "General" hacia la izquierda */
+            border: 27.5px solid #fff5f4;
+            ;
+            /* Agrega un borde blanco */
         }
 
-        /*PARA AJUSTE DE COLOR DEL CLICK */
 
+        .menu-button.ajuste {
+            background-color: #f5e5e3;
+            color: #000000;
+            /* Cambia el color del texto a negro */
+            padding: 15px 100px;
+            /* Aumenta el padding horizontal para hacer el elemento más ancho */
+            margin-top: -30px;
+            margin-left: -6px;
+            border: 5px solid #f5e5e3;
+            /* Aumenta el ancho del borde */
+            /* Centra el texto dentro del botón */
+        }
+
+
+        /* PARA AJUSTE DE COLOR DEL CLICK */
         .menu-button:hover {
             background-color: #f5e5e3;
             color: #ffffff;
@@ -1009,8 +1020,10 @@
         .button-container {
             display: flex;
             justify-content: flex-end;
-            gap: 10px;
+            gap: 50px;
             /* Espacio entre los botones */
+            margin: 50px 0 0 0;
+            /* Ajusta este valor según sea necesario */
         }
 
         #gestionarUsuariosButton {
@@ -1167,17 +1180,6 @@
             background-color: #8d2d2c;
             order: -1;
         }
-
-        img {
-            width: 100px;
-            height: 100px;
-        }
-        .profile-pic {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
     </style>
 </head>
 
@@ -1222,157 +1224,64 @@
                 <div class="section-5">
                     <div class="group-4"></div>
                     <button class="menu-button general">General</button>
-                    <button class="menu-button" onclick="window.location.href='Ajustes.php?idUsuario=' + idUsuario">Ajustes</button>
+                    <button class="menu-button ajuste">Ajustes</button>
                 </div>
             </div>
+            <?php
+            include 'conexion.php';
+            if (isset($_GET['idUsuario'])) {
+                // Obtener el valor de 'idUsuario'
+                $idUsuario = $_GET['idUsuario'];
 
+                $query = "SELECT * FROM DATOS_USUARIO WHERE IDUSUARIO = " . $idUsuario . "";
+
+                $stmt = $dbh->query($query);
+                $datos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
+            } else {
+                // Si no se pasó el parámetro 'idUsuario' en la URL
+                echo "No se ha especificado un ID de usuario.";
+            }
+            ?>
             <div class="wrapper-4" id="tablaWrapper">
                 <div class="section-6">
-                    <span class="text-c">Perfil</span>
+                    <span class="text-c">Mi Perfil</span>
 
 
                 </div>
                 <div class="group-5">
                     <div class="section-8">
-
-
-                        <div class="pic-4">
-                            <?php
-                            include 'conexion.php';
-                            if (isset($_GET['idUsuario'])) {
-                                // Obtener el valor de 'idUsuario'
-                                $idUsuario = $_GET['idUsuario'];
-
-                                // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
-                            } else {
-                                // Si no se pasó el parámetro 'idUsuario' en la URL
-                                echo "No se ha especificado un ID de usuario.";
-                            }
-
-
-
-                            $stmt = $dbh->prepare("SELECT RUTA_USUARIO FROM USUARIOS_IMG WHERE ID = ?");
-                            $stmt->execute([$idUsuario]);
-                            $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
-                            $ruta_imagen = $rol_row['RUTA_USUARIO'] ?? '';
-
-                            // Obtener el tipo de contenido de la imagen
-                            $info = getimagesize($ruta_imagen);
-                            $tipo_contenido = $info['mime'];
-
-                            // Obtener el contenido de la imagen como base64
-                            $imagen_codificada = base64_encode(file_get_contents($ruta_imagen));
-                            $imagen_src = 'data:' . $tipo_contenido . ';base64,' . $imagen_codificada;
-
-                            ?>
-                            <img src="<?php echo $imagen_src; ?>" alt="Imagen" class="profile-pic">
-
-                        </div>
-
-                        <?php
-
-                        $stmt_rol = $dbh->prepare("SELECT NOMBRE_USUARIO FROM DATOS_USUARIO WHERE IDUSUARIO = ?");
-                        $stmt_rol->execute([$idUsuario]);
-                        $rol_row = $stmt_rol->fetch(PDO::FETCH_ASSOC);
-                        $NOMBREUSUARIO = $rol_row['NOMBRE_USUARIO'] ?? '';
-                        echo  "<span class='text-NOMBRE'>", $NOMBREUSUARIO, "</span>";
-
-
-                        ?>
+                        <span class="text-7">Nombre:<?php echo $datos[0]['NOMBRE_USUARIO']; ?></span>
+                        <span class="text-8">Correo:<?php echo $datos[0]['CORREO']; ?></span>
                         <div class="section-9">
-                            <button onclick="window.location.href = 'FormEditarPerfilUsuario.php?idUsuario= + idUsuario'" id="editarPerfilButton" class="text-10">Editar</button>
+                            <button id="editarPerfilButton" class="text-10">Eliminar Cuenta</button>
                         </div>
 
                     </div>
                 </div>
 
-                <span class="text-12">Compras</span>
-                <div class="section-b">
-                    <div class="box-5">
 
-                    </div>
+            </div>
 
 
-                    <div class="button-container">
-                        <button id="compraButton" class="text-15">Detalles</button>
-                        <button id="agregarRolesButton" class="text-15">Comentar</button>
-                    </div>
 
-                </div>
+            <script>
+                var idUsuario = <?php echo $idUsuario; ?>;
 
-                <script>
-                    var queryString = window.location.search;
+               
 
-                    // Crear un objeto URLSearchParams para analizar la cadena de consulta
-                    var urlParams = new URLSearchParams(queryString);
+                // Obtener el botón de "General"
+                var botonGeneral = document.querySelector('.menu-button.general');
 
-                    // Obtener el valor del parámetro 'idUsuario' de la URL
-                    var idUsuario = urlParams.get('idUsuario');
+                // Agregar un evento de clic al botón
+                botonGeneral.addEventListener('click', function() {
+                    // Redirigir a la página "GeneralCliente.html"
+                    window.location.href = 'GeneralCliente.php?idUsuario=' + idUsuario;
+                });
+            </script>
 
-                    // Hacer algo con el valor de idUsuario
-                    console.log('ID del usuario:', idUsuario);
-
-                    document.getElementById("editarPerfilButton").addEventListener("click", function() {
-                        window.location.href = "FormEditarPerfilUsuario.php?idUsuario=" + idUsuario;
-                    });
-
-                    // Agregar evento de clic al botón de detalles
-                    document.getElementById("compraButton").addEventListener("click", function() {
-                        // Redirigir a la página FormDetallesCompra.html
-                        window.location.href = "FormDetallesCompra.html";
-                    });
-
-                    document.getElementById("agregarRolesButton").addEventListener("click", function() {
-                        window.location.href = "Comentarios.html";
-                    });
-
-                    // Cargar el contenido de FormCategorias.html
-                    fetch("FormCategorias.html")
-                        .then(response => response.text())
-                        .then(html => {
-                            // Insertar el contenido en la tablaCategorias
-                            document.getElementById("tablaCategorias").innerHTML = html;
-                        })
-                        .catch(error => console.log("Error al cargar el contenido de categorías:", error));
-
-                    document.getElementById("agregarCategoriasButton").addEventListener("click", function() {
-                        window.location.href = "FormCategorias.html";
-                    });
-                    document.getElementById("agregarEspecialidadButton").addEventListener("click", function() {
-                        window.location.href = "FormEspecialidades.html";
-                    });
-
-                    // Cargar el contenido de FormEspecialidades.html
-                    fetch("FormEspecialidades.html")
-                        .then(response => response.text())
-                        .then(html => {
-                            // Supongamos que los datos de las especialidades están almacenados en la variable especialidades
-                            const especialidades = obtenerEspecialidadesDesdeHTML(html);
-                            // Luego, inserta las especialidades en la tabla
-                            mostrarEspecialidadesEnTabla(especialidades);
-                        })
-                        .catch(error => console.log("Error al cargar el contenido de especialidades:", error));
-
-                    function mostrarEspecialidadesEnTabla(especialidades) {
-                        const tabla = document.getElementById("tablaEspecialidades");
-                        const tbody = tabla.getElementsByTagName("tbody")[0];
-                        // Limpiar el contenido existente de la tabla
-                        tbody.innerHTML = "";
-
-                        // Iterar sobre las especialidades y agregarlas como filas en la tabla
-                        especialidades.forEach(especialidad => {
-                            const fila = `
-            <tr>
-                <td>${especialidad.id}</td>
-                <td>${especialidad.nombre}</td>
-            </tr>
-        `;
-                            tbody.innerHTML += fila;
-                        });
-                    }
-                </script>
-
-                <!-- Generated by Codia AI - https://codia.ai/ -->
+            <!-- Generated by Codia AI - https://codia.ai/ -->
 </body>
 
 </html>

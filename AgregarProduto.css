@@ -494,3 +494,14 @@ button {
     letter-spacing: -6.4px;
     z-index: 29;
   }
+
+  
+  .warn {
+            
+    font-family: Outfit, var(--default-font-family);
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 21px;
+    text-align: left;
+    white-space: nowrap;
+}

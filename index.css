@@ -1,6 +1,7 @@
     /* Estilos para el menú desplegable */
     .dropdown {
         position: relative;
+        left: 50px;
         display: inline-block;
         z-index: 1000;
     }
@@ -150,7 +151,7 @@
     .rectangle {
         flex-shrink: 0;
         position: relative;
-        width: 435px;
+        width:380px;
         height: 35px;
         background: rgba(151, 56, 55, 0.3);
         z-index: 3;
@@ -170,7 +171,7 @@
         /* Asegurarse de que el input no tenga borde */
         background: transparent;
         /* Asegurarse de que el input tenga un fondo transparente */
-        width: 450px;
+        width: 380px;
         /* Ajustar el ancho del input al 100% */
         height: 100%;
         /* Ajustar la altura del input al 100% */
@@ -215,6 +216,8 @@
         /* Elimina el padding derecho e izquierdo para que se ajuste al texto */
         cursor: pointer;
         background: transparent;
+        left: 50px;
+
         border: 3px solid #7a1f1e;
         z-index: 4;
         border-radius: 10px;
@@ -320,6 +323,8 @@
     .cart {
         flex-shrink: 0;
         position: relative;
+        left: 60px;
+
         width: 32.022px;
         height: 32px;
         z-index: 8;
@@ -403,6 +408,8 @@
         background: #d9c7c7;
         z-index: 7;
         border-radius: 10px;
+        object-fit: cover;
+
     }
 
     .descripcion {

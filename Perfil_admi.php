@@ -1202,7 +1202,7 @@
       <span class="text-16">Categorias</span>
   </div>
   <div class="wrapper-5">
-    <button id="agregarCategoriasButton" class="text-18">Agregar</button>
+    <button onclick="window.location.href = 'FormCategorias.php'" id="agregarCategoriasButton" class="text-18">Agregar</button>
   </div>
 </div>
 <div>
@@ -1215,7 +1215,7 @@
         <span class="text-19">Especialidad</span>
     </div>
     <div class="wrapper-6">
-        <button id="agregarEspecialidadButton" class="text-1b">Agregar</button>
+        <button onclick="window.location.href = 'FormEspecialidades.php'" id="agregarEspecialidadButton" class="text-1b">Agregar</button>
     </div>
 </div>
 
@@ -1228,15 +1228,15 @@
     </table>
         <script>
           document.getElementById("gestionarUsuariosButton").addEventListener("click", function() {
-    window.location.href = "FormGestionarUsuarios.html";
+    window.location.href = "FormGestionarUsuarios.php";
 });
 
 document.getElementById("editarPerfilButton").addEventListener("click", function() {
-    window.location.href = "FormEditarPerfil.html";
+    window.location.href = "FormEditarPerfil.php";
 });
 
 document.getElementById("agregarRolesButton").addEventListener("click", function() {
-    window.location.href = "FormGestionarRoles.html";
+    window.location.href = "FormGestionarRoles.php";
 });
 
 // Cargar el contenido de FormGestionarRoles.html

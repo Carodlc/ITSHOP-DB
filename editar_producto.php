@@ -1,182 +1,109 @@
-<?php include 'conexion.php'; ?>
-<!DOCTYPE html>
-<html lang="en">
+<?php
+include 'conexion.php';
+// Verificar si se ha enviado el formulario
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Obtener los datos del formulario
+    $nombre = $_POST["nombre"] ?? '';
+    $precio = $_POST["precio"] ?? '';
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Agregar Producto</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&display=swap" />
-  <link rel="stylesheet" href="AgregarProduto.css" />
-  <style>
-    #preview {
-      position: absolute;
-      top: 70px;
-      /* Ajuste de la posición vertical */
-      left: 65px;
-      /* Ajuste de la posición horizontal */
-      width: 225px;
-      /* Ancho de la imagen previa */
-      height: auto;
-    }
+    $CATEGORIA_NOMBRE = $_POST["categoria"] ?? '';
+    $descripcion = $_POST["descripcion"] ?? '';
+    $publicado = ($_POST["switchDisplay"] == "on") ? 1 : 0;
+    $ID_USUARIO = $_POST['idUsuario'] ?? '';
+    $IDPRODUCTO = $_POST['idProducto'] ?? '';
 
-    .publish {
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
-      position: absolute;
-      height: 21px;
-      top: 20px;
-      left: 510px;
-      color: #311811;
-      font-family: Outfit, var(--default-font-family);
-      font-size: 17px;
-      font-weight: 400;
-      line-height: 21px;
-      text-align: left;
-      white-space: nowrap;
-      z-index: 4;
-    }
 
-    .rectangle {
-      display: none;
-      /* Ocultar el recuadro */
-    }
+    function insertImage($dbh, $productId, $imageName, $newColumnValue)
+    {
+        try {
+            // Prepare the query to insert into PRODUCTS_IMG
+            $query = "
+            DECLARE 
+            V_TEMP BLOB;
+            V_BFILE BFILE;
+            V_NOMBRE_FOTO VARCHAR2(100);
+        BEGIN 
 
-    .categoria-label {
-      position: absolute;
-      top: 115px;
-      /* Ajuste de la posición vertical */
-      left: 245px;
-      /* Ajuste de la posición horizontal */
-      color: black;
-      font-family: 'Outfit', var(--default-font-family);
-      /* Establecer el mismo tipo de letra */
-    }
+            UPDATE PRODUCTS_IMG
+            SET FOTO = EMPTY_BLOB(),
+                RUTA_PRODUCTO = :newColumnValue
+            WHERE ID = :productId
+            RETURNING FOTO INTO V_TEMP;
+            
+            -- Cargar la nueva imagen desde el archivo en la columna FOTO
+            V_NOMBRE_FOTO := :imageName;
+            V_BFILE := BFILENAME('OBJETOS_LOB2', V_NOMBRE_FOTO);
+            DBMS_LOB.OPEN(V_BFILE, DBMS_LOB.LOB_READONLY);
+            DBMS_LOB.LOADFROMFILE(V_TEMP, V_BFILE, DBMS_LOB.GETLENGTH(V_BFILE));
+            DBMS_LOB.CLOSE(V_BFILE);
+            COMMIT;
+        END;
+        
+            ";
 
-    .categoria-select {
-      position: absolute;
-      top: 115px;
-      /* Ajuste de la posición vertical */
-      left: 330px;
-      /* Ajuste de la posición horizontal */
-    }
+            // Prepare the statement
+            $stmt = $dbh->prepare($query);
 
-    /* Estilos para el combobox */
-    #categoria {
-      appearance: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      background-color: #800000;
-      /* Color guinda */
-      color: white;
-      /* Texto en color blanco */
-      padding: 5px 30px 5px 10px;
-      /* Espaciado interior */
-      border: none;
-      /* Borde */
-      border-radius: 5px;
-      /* Borde redondeado */
-    }
+            // Bind parameters
+            $stmt->bindParam(':productId', $productId, PDO::PARAM_INT);
+            $stmt->bindParam(':imageName', $imageName, PDO::PARAM_STR);
+            $stmt->bindParam(':newColumnValue', $newColumnValue, PDO::PARAM_STR); // Assuming the type of NEW_COLUMN is string, adjust if needed
 
-    /* Estilos para las opciones */
-    #categoria option {
-      background-color: #800000;
-      /* Color guinda */
-      color: white;
-      /* Texto en color blanco */
-    }
-  </style>
-</head>
+            // Execute the statement
+            $stmt->execute();
 
-<body>
-  <form id="form" action="AgregarProducto_insertar.php" method="post" enctype="multipart/form-data">
-    <div class="navbar">
-      <!-- Aquí puedes agregar el contenido de tu barra de navegación -->
-      <span class="itshop">ITSHOP</span>
-    </div>
-    <div class="main-container">
-      <div class="flex-row-acc">
-        <span class="add-product">Agregar producto</span>
-        <span class="publish">Publicar</span>
-        <label class="switch">
-          <input type="hidden" name="switchDisplay" value="off">
-          <input type="checkbox" id="switchDisplay" name="switchDisplay" value="on">
-          <span class="slider"></span>
-        </label>
-      </div>
-
-      <div class="flex-row-de">
-        <span class="nombre">Nombre:</span>
-        <div class="input">
-          <input type="text" id="nombreInput" name="nombre" placeholder="Introduce el nombre" style="border: none !important" required />
-        </div>
-        <div class="rectangle"></div> <!-- Este recuadro se ocultará -->
-        <span class="precio">Precio:</span>
-        <div class="input-1">
-          <input type="number" id="precioInput" name="precio" placeholder="Introduce Precio" style="border: none !important" min="0" required />
-        </div>
-
-        <span class="stock-0">Stock: 0</span>
-        <span class="categoria-label">Categoría:</span>
-        <!-- Cambio el botón por un combobox -->
-        <div class="custom-select categoria-select">
-          <select id="categoria" name="categoria" required>
-            <option value="Default">Selecciona categoria</option>
-            <?php
-            $categorias = getcategorias($dbh);
-            foreach ($categorias as $categoria) {
-              echo "<option value=\"$categoria\">$categoria</option>";
-            }
-            ?>
-          </select>
-        </div>
-        <label for="uploadBtn" class="frame-3">
-          <span class="upload-photo">Subir foto</span>
-        </label>
-        <input type="file" id="uploadBtn" style="display:none" name="imagen" required>
-      </div>
-
-      <span class="description">Descripción:</span>
-
-      <div class="rectangle-4">
-        <textarea id="descripcion" name="descripcion" placeholder="Agrega una descripción.." style="border: none !important;" required></textarea>
-      </div>
-
-      <!-- Vista previa de la imagen -->
-      <img id="preview" src="#" alt="Vista previa" style="display: none;">
-      <input type="hidden" name="idUsuario" value="<?php echo $idUsuario = $_GET['idUsuario']; ?>" >
-
-      <div class="flex-row-dc">
-        <button class="frame-5"><span class="return">Regresar</span></button>
-        <button type="submit" class="frame-6"><span class="save" id="guardar-button">Guardar</span></button>
-      </div>
-    </div>
-  </form>
-  <script>
-    document.getElementById('switchDisplay').addEventListener('change', function() {
-      var switchValue = this.checked ? 1 : 0;
-      console.log("Valor del interruptor:", switchValue);
-    });
-
-    function readURL(input) {
-      if (input.files && input.files[0]) {
-        var reader = new FileReader();
-
-        reader.onload = function(e) {
-          document.getElementById('preview').src = e.target.result;
-          document.getElementById('preview').style.display = 'block'; // Mostrar la imagen previa
+            // Return success
+            return true;
+        } catch (PDOException $e) {
+            // If an error occurs, rollback the transaction and return false
+            echo "Error: " . $e->getMessage();
+            return false;
         }
-
-        reader.readAsDataURL(input.files[0]); // convertir a base64
-      }
     }
 
+    // Preparar la consulta SQL para la inserción
+    try {
 
-    document.getElementById('uploadBtn').addEventListener('change', function() {
-      readURL(this);
-    });
-  </script>
-</body>
+        // Consultar el ID de la especialidad
+        $stmt_especialidad = $dbh->prepare("SELECT IDCATEGORIAS FROM CATEGORIAS WHERE NOMBRE_CATEGORIA = ?");
+        $stmt_especialidad->execute([$CATEGORIA_NOMBRE]);
+        $categorias = $stmt_especialidad->fetch(PDO::FETCH_ASSOC);
+        $IDCATEGORIA = $categorias['IDCATEGORIAS'] ?? null;
 
-</html>
+
+        // Insertar datos en la tabla de usuarios
+        $query_update = "UPDATE DATOS_PRODUCTO SET CATEGORIAS_IDCATEGORIAS = ?, PRECIO = ?, DESCRIPCION = ?, NOMBRE = ?, PUBLICADO = ? WHERE IDPRODUCTO = ?";
+        $stmt_update = $dbh->prepare($query_update);
+        $stmt_update->execute([$IDCATEGORIA,$precio, $descripcion, $nombre, $publicado,$IDPRODUCTO]);
+
+
+        // Verificar si la inserción fue exitosa
+        if ($stmt_update->rowCount() > 0) {
+            $directorioDestino = 'D:/8tavo/INGENIERIA DE SOFTWARE/ITSHOP DB/ImagenesProductos/';
+
+            // Verifica si se ha enviado un archivo
+            if (isset($_FILES['imagen'])) {
+                $archivo = $_FILES['imagen'];
+
+                // Obtiene información del archivo
+                $nombreArchivo = $archivo['name'];
+                $nombreTempArchivo = $archivo['tmp_name'];
+
+                // Mueve el archivo a la carpeta destino
+                if (move_uploaded_file($nombreTempArchivo, $directorioDestino . $nombreArchivo,)) {
+
+                    // Después de la inserción de la imagen en la carpeta local, inserta la información en la base de datos
+                    insertImage($dbh, $IDPRODUCTO, $nombreArchivo, $directorioDestino . $nombreArchivo);
+                } else {
+                    echo 'Error al subir la imagen.';
+                }
+            }
+            echo "<script>alert('Producto actualizado exitosamente!'); window.location.href = 'GestionProductos.php?idUsuario=$ID_USUARIO';</script>";
+        } else {
+            echo "<script>alert('Hubo un problema al actualizar el producto.'); window.location.href='FormEditar_producto.php?idUsuario=$ID_USUARIO&idProducto=$IDPRODUCTO';</script>";
+        }
+    } catch (PDOException $e) {
+        // Mostrar mensaje de error si ocurre una excepción
+        echo "Error al actualizar el producto" . $e->getMessage();
+    }
+}

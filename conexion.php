@@ -64,7 +64,7 @@ function getNombreProductos($dbh) {
     return $categorias;
 }
 function getProductos($dbh) {
-    $query = "SELECT NOMBRE, PRECIO FROM DATOS_PRODUCTO WHERE PUBLICADO = 1 ORDER BY IDPRODUCTO DESC";
+    $query = "SELECT NOMBRE, PRECIO,IDPRODUCTO FROM DATOS_PRODUCTO WHERE PUBLICADO = 1 ORDER BY IDPRODUCTO DESC";
 
     $stmt = $dbh->query($query);
     $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);

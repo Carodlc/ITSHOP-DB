@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Perfil Cliente</title>
+    <title>Carrito</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@500&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;500;600&display=swap" />
     <style>
@@ -16,20 +16,17 @@
         }
 
         .main-container {
-            position: relative;
-            width: calc(100% + 60px);
-            /* Modifica el ancho según tus necesidades */
-            max-width: 1950px;
-            /* Esto asegura que no se extienda más allá de 1440px */
-            height: auto;
-            /* Cambiado a 'auto' para adaptarse al contenido */
-            margin: -10px auto 0 -50px;
-            /* Ajustado el margen superior y el margen izquierdo */
-            background: #f5e5e3;
-            overflow: hidden;
+            display: flex;
+            justify-content: flex-start;
+            /* Alineación a la izquierda */
+            margin-left: -10px;
+            /* Extiende hacia la izquierda */
+            width: 101.3%;
+            /* Ancho al 100% */
+            height: 200vh;
+            background-color: #f5e5e3;
+            /* Color de fondo */
         }
-
-
 
         .main-container,
         .main-container * {
@@ -37,18 +34,23 @@
         }
 
 
+
         .box {
             position: relative;
             width: 1440px;
-            height: 110px;
+            height: 100px;
             margin: -9px 0 0 0;
             z-index: 67;
+            left: -90px;
+            /* Mueve la caja más hacia la izquierda */
+
         }
+
 
         .section {
             position: absolute;
             width: 1440px;
-            height: 60px;
+            height: 50px;
             top: 0;
             left: 0;
             background: #721918;
@@ -268,8 +270,9 @@
             position: absolute;
             width: 155px;
             height: 18px;
-            top: 92px;
-            left: 191px;
+            top: 80px;
+            left: 242px;
+            /* Ajusta este valor para moverlo hacia la izquierda */
             font-family: Outfit, var(--default-font-family);
             font-size: 20px;
             font-weight: 200;
@@ -304,9 +307,12 @@
             position: relative;
             width: 1065px;
             height: 897px;
-            margin: 29px 0 0 188px;
+            margin: 29px 0 0 -1500px;
+            /* Ajusta el margen izquierdo aquí */
             z-index: 52;
+            top: 70px;
         }
+
 
         .wrapper-3 {
             position: absolute;
@@ -464,8 +470,9 @@
         .wrapper-4 {
             position: absolute;
             width: 705px;
-            height: 895px;
+            height: auto;
             top: 0;
+            padding-bottom: 30px;
             left: 360px;
             background: #fff5f4;
             z-index: 24;
@@ -493,24 +500,6 @@
             font-weight: 600;
             line-height: 30px;
             text-align: left;
-            text-transform: capitalize;
-            white-space: nowrap;
-            letter-spacing: 0.72px;
-            z-index: 25;
-        }
-
-        .text-NOMBRE {
-            flex-shrink: 0;
-            position: relative;
-            height: 30px;
-            color: #000000;
-            font-family: Outfit, var(--default-font-family);
-            font-size: 24px;
-            font-weight: 600;
-            line-height: 30px;
-            margin-left: 180px;
-            top: 20px;
-            text-align: center;
             text-transform: capitalize;
             white-space: nowrap;
             letter-spacing: 0.72px;
@@ -763,15 +752,14 @@
             gap: 10px;
             position: relative;
             width: 210.53px;
-            margin: 0 0 10px 412.686px;
-            /* Cambia el margin-top a 0 */
-            padding: 6px 25px 6px 25px;
+            margin: 7px 0 0 412.686px;
+            /* Ajusta el margen superior e izquierdo según sea necesario */
+            padding: 3px 25px;
+            /* Reduce el relleno vertical */
             background: #8d2d2c;
             z-index: 42;
             overflow: hidden;
             border-radius: 30px;
-            display: flex;
-            flex-direction: column;
         }
 
         .text-15 {
@@ -798,7 +786,6 @@
             z-index: 47;
             overflow: visible auto;
             border-radius: 30px;
-
         }
 
         .group-7 {
@@ -991,26 +978,14 @@
             transition: background-color 0.3s ease;
         }
 
-        /* Estilo específico para el botón "General" */
-        .menu-button.general {
-            background-color: #f5e5e3;
-            color: #ffffff;
-            /* Cambia el color de fondo solo para el botón "General" */
-        }
-
-        /*PARA AJUSTE DE COLOR DEL CLICK */
-
         .menu-button:hover {
             background-color: #f5e5e3;
             color: #ffffff;
         }
 
         /* Ajuste para mover los botones hacia la derecha */
-        .button-container {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            /* Espacio entre los botones */
+        .menu-button-container {
+            text-align: right;
         }
 
         #gestionarUsuariosButton {
@@ -1126,16 +1101,105 @@
             border-radius: 2px;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            border-radius: 30px;
-
-
         }
 
         #agregarRolesButton:hover {
             background-color: #8d2d2c;
         }
 
-        #compraButton {
+        #tablaRoles {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #tablaRoles th,
+        #tablaRoles td {
+            border: 1px solid #ddd;
+            /* Borde de las celdas */
+            padding: 8px;
+            /* Espaciado interno de las celdas */
+            text-align: left;
+            /* Alineación del texto */
+        }
+
+        #tablaRoles th {
+            background-color: #f2f2f2;
+            /* Color de fondo para las celdas de encabezado */
+        }
+
+        #tablaRoles tr:nth-child(even) {
+            background-color: #f2f2f2;
+            /* Color de fondo para filas pares */
+        }
+
+        #tablaRoles tr:hover {
+            background-color: #ddd;
+            /* Color de fondo al pasar el ratón por encima de una fila */
+        }
+
+        #agregarCategoriasButton {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            flex-basis: auto;
+            position: relative;
+            width: auto;
+            /* Ancho automático */
+            height: 30px;
+            color: #ffffff;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 17px;
+            font-weight: 500;
+            line-height: 30px;
+            /* Ajustado a la altura del botón */
+            text-align: center;
+            padding: 0 15px;
+            /* Relleno horizontal */
+            background-color: #8d2d2c;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #agregarCategoriasButton:hover {
+            background-color: #8d2d2c;
+        }
+
+        #tablaCategorias {
+            width: 100%;
+            /* Ancho de la tabla */
+            border-collapse: collapse;
+            /* Fusionar los bordes de las celdas */
+        }
+
+        #tablaCategorias th,
+        #tablaCategorias td {
+            border: 1px solid #dddddd;
+            /* Borde de las celdas */
+            padding: 8px;
+            /* Espaciado interno de las celdas */
+            text-align: left;
+            /* Alineación del texto */
+        }
+
+        #tablaCategorias th {
+            background-color: #f2f2f2;
+            /* Color de fondo para las celdas de encabezado */
+        }
+
+        #tablaCategorias tr:nth-child(even) {
+            background-color: #f2f2f2;
+            /* Color de fondo para filas pares */
+        }
+
+        #tablaCategorias tr:hover {
+            background-color: #dddddd;
+            /* Color de fondo al pasar el ratón por encima de una fila */
+        }
+
+        #agregarEspecialidadButton {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1152,31 +1216,241 @@
             /* Ajustado a la altura del botón */
             text-align: center;
             padding: 0 15px;
+            /* Relleno horizontal */
             background-color: #8d2d2c;
             border: none;
             border-radius: 2px;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            margin-top: -50px;
-            margin-right: -110px;
-            /* Espacio entre el nuevo botón y el botón "Comentar" */
-            border-radius: 30px;
         }
 
-        #compraButton:hover {
+        #agregarEspecialidadButton:hover {
             background-color: #8d2d2c;
-            order: -1;
         }
 
-        img {
-            width: 100px;
-            height: 100px;
+        /* Estilos para el menú desplegable */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            margin-top: 10px;
         }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
         .profile-pic {
-            width: 150px;
-            height: 150px;
+            padding: 10px;
+            width: 190px;
+            height: 190px;
             border-radius: 50%;
             object-fit: cover;
+        }
+
+        input.quantity {
+            width: 50px;
+            position: absolute;
+            height: 21px;
+            top: 74px;
+            left: 370px;
+            text-align: center;
+            border: 1px solid #cccccc;
+            border-radius: 3px;
+            margin: 0 5px;
+            font-size: 14px;
+            padding: 5px;
+        }
+
+        input.sub {
+            width: auto;
+            max-width: 70px;
+            position: absolute;
+            height: 21px;
+            top: 94px;
+            left: 270px;
+            text-align: left;
+            border: 1px solid #cccccc;
+            font-family: Outfit, var(--default-font-family);
+
+            border-radius: 3px;
+            margin: 0 5px;
+            font-size: 14px;
+            padding: 5px;
+            border: none;
+            /* Quita el borde */
+            background-color: transparent;
+            /* Hace el fondo transparente */
+            outline: none;
+        }
+
+
+
+        .currency {
+            position: absolute;
+            top: 94px;
+            left: 243px;
+            font-family: Outfit, var(--default-font-family);
+
+            color: #333;
+            pointer-events: none;
+            /* Evita que el span sea seleccionable */
+        }
+
+        .sub {
+            width: 50px;
+            height: 21px;
+            text-align: center;
+            border: 1px solid #cccccc;
+            border-radius: 3px;
+            margin: 0 5px;
+            font-size: 14px;
+            padding: 5px 5px 5px 25px;
+            /* Ajusta el padding para dejar espacio al símbolo */
+            background: transparent;
+        }
+
+
+
+
+
+        .span-botellas-agua {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            position: absolute;
+            height: 21px;
+            top: 20px;
+            left: 200px;
+            color: #311811;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 21px;
+            text-align: left;
+            white-space: nowrap;
+            z-index: 38;
+        }
+
+        .span-cantidad {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            position: absolute;
+            height: 21px;
+            top: 70px;
+            left: 200px;
+            color: #311811;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 21px;
+            text-align: left;
+            white-space: nowrap;
+            z-index: 38;
+        }
+
+        .span-subtotal {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            position: absolute;
+            height: 21px;
+
+            top: 92px;
+            left: 200px;
+            color: #311811;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 21px;
+            text-align: left;
+            white-space: nowrap;
+            z-index: 38;
+        }
+
+        .cajita-cantidad {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            position: absolute;
+            height: 21px;
+            top: 70px;
+            left: 200px;
+            color: #311811;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 21px;
+            text-align: left;
+            white-space: nowrap;
+            z-index: 38;
+        }
+
+        .mx-15 {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            position: absolute;
+            height: 26px;
+            top: 41px;
+            left: 200px;
+            color: #311811;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 21px;
+            font-weight: 800;
+            line-height: 26px;
+            text-align: left;
+            white-space: nowrap;
+            z-index: 40;
+        }
+
+        .precio {
+            width: auto;
+            max-width: 100px;
+            position: absolute;
+            height: 26px;
+            font-family: Outfit, var(--default-font-family);
+            border: none;
+            /* Quita el borde */
+            background-color: transparent;
+            /* Hace el fondo transparente */
+            outline: none;
+            top: 41px;
+            left: 240px;
+            text-align: left;
+            margin: 0 5px;
+            font-size: 21px;
+            font-weight: 800;
+            line-height: 26px;
+            padding: 5px;
+        }
+
+        .mi-cuenta {
+            position: relative;
+            color: #000000;
+            padding-top: 30px;
+            padding-left: 30px;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 25.2px;
+            text-align: left;
         }
     </style>
 </head>
@@ -1213,166 +1487,146 @@
             <div class="group-3"></div>
             <span class="text-2" onclick="window.location.href = 'index.php?idUsuario=' + idUsuario">ITSHOP</span>
             <div class="section-4">
-                <span class="text-3">Inicio > </span><span class="text-4">Mi Cuenta </span>
+                <span class="text-3">Inicio > </span><span class="text-4">Carrito</span>
             </div>
         </div>
         <div class="box-4">
-            <div class="wrapper-3 menu-container">
-                <span class="text-5">mi cuenta</span>
-                <div class="section-5">
-                    <div class="group-4"></div>
-                    <button class="menu-button general">General</button>
-                    <button class="menu-button" onclick="window.location.href='Ajustes.php?idUsuario=' + idUsuario">Ajustes</button>
-                </div>
-            </div>
-
-            <div class="wrapper-4" id="tablaWrapper">
-                <div class="section-6">
-                    <span class="text-c">Perfil</span>
 
 
-                </div>
-                <div class="group-5">
-                    <div class="section-8">
+            <form id="form" action="Crear_Pedido.php" method="post" enctype="multipart/form-data">
 
-
-                        <div class="pic-4">
-                            <?php
-                            include 'conexion.php';
-                            if (isset($_GET['idUsuario'])) {
-                                // Obtener el valor de 'idUsuario'
-                                $idUsuario = $_GET['idUsuario'];
-
-                                // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
-                            } else {
-                                // Si no se pasó el parámetro 'idUsuario' en la URL
-                                echo "No se ha especificado un ID de usuario.";
-                            }
-
-
-
-                            $stmt = $dbh->prepare("SELECT RUTA_USUARIO FROM USUARIOS_IMG WHERE ID = ?");
-                            $stmt->execute([$idUsuario]);
-                            $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
-                            $ruta_imagen = $rol_row['RUTA_USUARIO'] ?? '';
-
-                            // Obtener el tipo de contenido de la imagen
-                            $info = getimagesize($ruta_imagen);
-                            $tipo_contenido = $info['mime'];
-
-                            // Obtener el contenido de la imagen como base64
-                            $imagen_codificada = base64_encode(file_get_contents($ruta_imagen));
-                            $imagen_src = 'data:' . $tipo_contenido . ';base64,' . $imagen_codificada;
-
-                            ?>
-                            <img src="<?php echo $imagen_src; ?>" alt="Imagen" class="profile-pic">
+                <div class="wrapper-4" id="tablaWrapper">
+                    <div class="section-6">
+                        <span class="text-c">Carrito</span>
+                        <div class="section-7">
+                            <button type="submit" id="gestionarUsuariosButton" class="text-d">Comprar</button>
 
                         </div>
-
-                        <?php
-
-                        $stmt_rol = $dbh->prepare("SELECT NOMBRE_USUARIO FROM DATOS_USUARIO WHERE IDUSUARIO = ?");
-                        $stmt_rol->execute([$idUsuario]);
-                        $rol_row = $stmt_rol->fetch(PDO::FETCH_ASSOC);
-                        $NOMBREUSUARIO = $rol_row['NOMBRE_USUARIO'] ?? '';
-                        echo  "<span class='text-NOMBRE'>", $NOMBREUSUARIO, "</span>";
-
-
-                        ?>
-                        <div class="section-9">
-                            <button onclick="window.location.href = 'FormEditarPerfilUsuario.php?idUsuario= + idUsuario'" id="editarPerfilButton" class="text-10">Editar</button>
-                        </div>
-
-                    </div>
-                </div>
-
-                <span class="text-12">Compras</span>
-                <div class="section-b">
-                    <div class="box-5">
-
                     </div>
 
+                    <?php
+                    include 'conexion.php';
+                    if (isset($_GET['idUsuario'])) {
+                        // Obtener el valor de 'idUsuario'
+                        $idUsuario = $_GET['idUsuario'];
 
-                    <div class="button-container">
-                        <button id="compraButton" class="text-15">Detalles</button>
-                        <button id="agregarRolesButton" class="text-15">Comentar</button>
-                    </div>
-
-                </div>
-
-                <script>
-                    var queryString = window.location.search;
-
-                    // Crear un objeto URLSearchParams para analizar la cadena de consulta
-                    var urlParams = new URLSearchParams(queryString);
-
-                    // Obtener el valor del parámetro 'idUsuario' de la URL
-                    var idUsuario = urlParams.get('idUsuario');
-
-                    // Hacer algo con el valor de idUsuario
-                    console.log('ID del usuario:', idUsuario);
-
-                    document.getElementById("editarPerfilButton").addEventListener("click", function() {
-                        window.location.href = "FormEditarPerfilUsuario.php?idUsuario=" + idUsuario;
-                    });
-
-                    // Agregar evento de clic al botón de detalles
-                    document.getElementById("compraButton").addEventListener("click", function() {
-                        // Redirigir a la página FormDetallesCompra.html
-                        window.location.href = "FormDetallesCompra.html";
-                    });
-
-                    document.getElementById("agregarRolesButton").addEventListener("click", function() {
-                        window.location.href = "Comentarios.html";
-                    });
-
-                    // Cargar el contenido de FormCategorias.html
-                    fetch("FormCategorias.html")
-                        .then(response => response.text())
-                        .then(html => {
-                            // Insertar el contenido en la tablaCategorias
-                            document.getElementById("tablaCategorias").innerHTML = html;
-                        })
-                        .catch(error => console.log("Error al cargar el contenido de categorías:", error));
-
-                    document.getElementById("agregarCategoriasButton").addEventListener("click", function() {
-                        window.location.href = "FormCategorias.html";
-                    });
-                    document.getElementById("agregarEspecialidadButton").addEventListener("click", function() {
-                        window.location.href = "FormEspecialidades.html";
-                    });
-
-                    // Cargar el contenido de FormEspecialidades.html
-                    fetch("FormEspecialidades.html")
-                        .then(response => response.text())
-                        .then(html => {
-                            // Supongamos que los datos de las especialidades están almacenados en la variable especialidades
-                            const especialidades = obtenerEspecialidadesDesdeHTML(html);
-                            // Luego, inserta las especialidades en la tabla
-                            mostrarEspecialidadesEnTabla(especialidades);
-                        })
-                        .catch(error => console.log("Error al cargar el contenido de especialidades:", error));
-
-                    function mostrarEspecialidadesEnTabla(especialidades) {
-                        const tabla = document.getElementById("tablaEspecialidades");
-                        const tbody = tabla.getElementsByTagName("tbody")[0];
-                        // Limpiar el contenido existente de la tabla
-                        tbody.innerHTML = "";
-
-                        // Iterar sobre las especialidades y agregarlas como filas en la tabla
-                        especialidades.forEach(especialidad => {
-                            const fila = `
-            <tr>
-                <td>${especialidad.id}</td>
-                <td>${especialidad.nombre}</td>
-            </tr>
-        `;
-                            tbody.innerHTML += fila;
-                        });
+                        // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
+                    } else {
+                        // Si no se pasó el parámetro 'idUsuario' en la URL
+                        echo "No se ha especificado un ID de usuario.";
                     }
-                </script>
 
-                <!-- Generated by Codia AI - https://codia.ai/ -->
+
+                    try {
+                        // Establecer conexión a la base de datos
+                        $query = "SELECT ID_PRODUCTO,CANTIDAD FROM CARRITO WHERE ID_USUARIO = " . $idUsuario . " ORDER BY ID_PRODUCTO DESC";
+
+                        $stmt = $dbh->query($query);
+                        $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                        // Si hay productos, generar instancias de producto
+                        if (!empty($productos)) {
+                            foreach ($productos as $producto) {
+                                $idProducto = $producto['ID_PRODUCTO'];
+                                $stmt = $dbh->prepare("SELECT RUTA_PRODUCTO FROM PRODUCTS_IMG WHERE ID = ?");
+                                $stmt->execute([$idProducto]);
+                                $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
+                                $ruta_imagen = $rol_row['RUTA_PRODUCTO'] ?? '';
+
+                                // Obtener el tipo de contenido de la imagen
+                                $info = getimagesize($ruta_imagen);
+                                $tipo_contenido = $info['mime'];
+
+                                // Obtener el contenido de la imagen como base64
+                                $imagen_codificada = base64_encode(file_get_contents($ruta_imagen));
+                                $imagen_src = 'data:' . $tipo_contenido . ';base64,' . $imagen_codificada;
+
+                                $query = "SELECT * FROM DATOS_PRODUCTO WHERE IDPRODUCTO = " . $idProducto . " ORDER BY IDPRODUCTO DESC";
+
+                                $stmt = $dbh->query($query);
+                                $datos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                                echo '<div class="group-5">';
+
+                                echo '<div class="section-8">';
+                                echo '    <div class="pic-4"></div>';
+                                echo '    <img src="' . $imagen_src . '" alt="Imagen" class="profile-pic">';
+                                echo '    <span class="span-botellas-agua">' . $datos[0]['NOMBRE'] . '</span>';
+                                // Calcula el precio total multiplicando el precio unitario por la cantidad
+                                $precio_unitario = $datos[0]['PRECIO'];
+                                echo '    <span class="mx-15">MX$</span>';
+                                echo '    <input type="number" class="precio" readonly id="precio" value="' . $precio_unitario . '" min="0" step="0.01"><br>';
+                                echo '    <span class="span-cantidad">Cantidad de producto:</span>';
+                                echo '    <span class="span-subtotal">Total:</span>';
+                                echo '<div class="input-container">';
+                                echo '   <span class="currency">MX$</span>';
+                                echo '   <input type="text" id="total" readonly class="sub" placeholder="0" required>';
+                                echo '</div>';
+
+
+                                echo '    <input type="number" name="cantidad' . $idProducto . '" id="cantidad" class="quantity" min="0" value="' . $producto['CANTIDAD'] . '" required>';
+                                echo '    <div class="section-9">';
+                                echo '    <span class="span-subtotal">Total:</span>';
+
+                                echo '        <button id="editarPerfilButton" class="text-10">Borrar</button>';
+                                echo '    </div>';
+                                echo '</div>';
+                                echo '</div>';
+                            }
+                        } else {
+                            echo "<div class='div-rectangle'>";
+                            echo "<span class='mi-cuenta'>No tienes productos agregados.</span>";
+                        }
+                    } catch (PDOException $e) {
+                        // Mostrar mensaje de error si la conexión falla
+                        echo "Error: " . $e->getMessage();
+                    }
+
+                    ?>
+                    <input type="hidden" value="<?php echo $idUsuario; ?>" name="idUsuario" required>
+
+
+
+            </form>
+
+
+
+
+
+
+        </div>
+
+
+
+
+    </div>
+    <script>
+        var idUsuario = <?php echo $idUsuario; ?>
+
+        // Obtener referencias a los elementos del DOM
+        const preciosInputs = document.querySelectorAll('.precio');
+        const cantidadesInputs = document.querySelectorAll('.quantity');
+        const totalesInputs = document.querySelectorAll('.sub');
+
+        // Función para calcular el total y actualizar los inputs correspondientes
+        function calcularTotales() {
+            preciosInputs.forEach((precioInput, index) => {
+                const precio = parseFloat(precioInput.value);
+                const cantidad = parseInt(cantidadesInputs[index].value);
+                const total = precio * cantidad;
+                totalesInputs[index].value = total.toFixed(2);
+            });
+        }
+
+        // Llamar a la función calcularTotales cuando cambie el valor de cantidad o precio
+        preciosInputs.forEach(precioInput => precioInput.addEventListener('input', calcularTotales));
+        cantidadesInputs.forEach(cantidadInput => cantidadInput.addEventListener('input', calcularTotales));
+
+        // Calcular los totales inicialmente
+        calcularTotales();
+    </script>
+
+
 </body>
 
 </html>

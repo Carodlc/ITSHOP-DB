@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function() {
         logoutBtn.addEventListener("click", function(event) {
             event.preventDefault();
             sessionStorage.removeItem('idUsuario');
-            location.reload();
+            window.location.href = "index.php";
         });
     }
     

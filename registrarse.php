@@ -83,6 +83,7 @@
     }
 
     .form-section input[type="text"],
+    .form-section input[type="number"],
     .form-section input[type="date"],
     .form-section input[type="password"],
     .form-section input[type="email"] {
@@ -193,6 +194,10 @@
     #tienda-name-section {
       display: none;
     }
+
+    #telefono-section {
+      display: none;
+    }
   </style>
 </head>
 
@@ -268,6 +273,11 @@
             <input type="text" id="tienda-name" name="tienda-name" value="Nombre por defecto" required>
           </div>
 
+          <div class="form-section" id="telefono-section">
+            <label for="telefono" class="letra">Telefono:</label>
+            <input type="number" id="telefono" name="telefono" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="Numero telefonico" required>
+          </div>
+
           <div class="form-buttons">
             <button onclick="window.location.href = 'index.php'" class="cancelar-button" class="letra" id="atrasBtn">Atrás</button>
             <button type="submit" class="registrarse-button" id="registrarse-button">Registrarse</button>
@@ -303,9 +313,12 @@
       function toggleTiendaSection() {
         var rolesDropdown = document.getElementById("roles");
         var tiendaSection = document.getElementById("tienda-name-section");
+        var telefono = document.getElementById("telefono-section");
 
         if (rolesDropdown.value === "vendedor") {
           tiendaSection.style.display = "block";
+          telefono.style.display = "block"
+
         } else {
           tiendaSection.style.display = "none";
         }

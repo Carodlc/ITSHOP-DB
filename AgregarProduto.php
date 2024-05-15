@@ -140,7 +140,9 @@
       <span class="description">Descripción:</span>
 
       <div class="rectangle-4">
-        <textarea id="descripcion" name="descripcion" placeholder="Agrega una descripción.." style="border: none !important;" required></textarea>
+        <textarea id="descripcion" name="descripcion" placeholder="Agrega una descripción.." style="border: none !important;" maxlength="100" required></textarea>
+        <div id="warningMessage" class="warn" style="display: none; color: red;">You have exceeded the maximum character limit.</div>
+
       </div>
 
       <!-- Vista previa de la imagen -->
@@ -176,6 +178,21 @@
     document.getElementById('uploadBtn').addEventListener('change', function() {
       readURL(this);
     });
+
+    function checkLength(textarea) {
+            var warningMessage = document.getElementById("warningMessage");
+            if (textarea.value.length >= 100) {
+                textarea.value = textarea.value.substring(0, 100); // Trim the text to 100 characters
+                warningMessage.style.display = "block"; // Show the warning message
+            } else {
+                warningMessage.style.display = "none"; // Hide the warning message if characters are within limit
+            }
+        }
+
+        // Add event listener to trigger checkLength() function when textarea content changes
+        document.getElementById('descripcion').addEventListener('input', function() {
+            checkLength(this);
+        });
   </script>
 </body>
 

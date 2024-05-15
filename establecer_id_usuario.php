@@ -19,7 +19,7 @@
         console.log("rol del usuario:", rolUsuario);
         alert('Inicio de sesión exitoso');
         // Redirecciona a otra página después de establecer el ID del usuario si es necesario
-        window.location.href = "index.php";
+        window.location.href = "index.php?idUsuario="+idUsuario+"&rolUsuario="+rolUsuario+"";
     </script>
 </body>
 </html>

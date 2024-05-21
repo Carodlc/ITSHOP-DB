@@ -865,7 +865,7 @@
           <div class="rectangle-7"></div>
           <span class="productos">Productos</span>
         </div>
-        <span onclick="window.location.href = 'FormInventario.php?idUsuario=<?php echo $idUsuario; ?>'" class="inventario">Inventario</span><span class="ventas" onclick="window.location.href = 'reporteVenta.php?idUsuario=<?php echo $idUsuario; ?>'">Ventas</span><span class="ajustes" onclick="window.location.href = 'Ajustes_vendedor.html?idUsuario=<?php echo $idUsuario; ?>'">Ajustes</span>
+        <span onclick="window.location.href = 'FormInventario.php?idUsuario=<?php echo $idUsuario; ?>'" class="inventario">Inventario</span><span class="ventas" onclick="window.location.href = 'FormVentas.php?idUsuario=<?php echo $idUsuario; ?>'">Ventas</span><span class="ajustes" onclick="window.location.href = 'Ajustes_vendedor.php?idUsuario=<?php echo $idUsuario; ?>'">Ajustes</span>
       </div>
       <div class="rectangle-8">
         <div class="flex-row-df">

@@ -15,6 +15,8 @@
                 Ubuntu, "Helvetica Neue", Helvetica, Arial, "PingFang SC",
                 "Hiragino Sans GB", "Microsoft Yahei UI", "Microsoft Yahei",
                 "Source Han Sans CN", sans-serif;
+                background: #fff5f4;
+
         }
 
         .main-container {

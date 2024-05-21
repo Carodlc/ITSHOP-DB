@@ -151,9 +151,9 @@
     .rectangle {
         flex-shrink: 0;
         position: relative;
-        width:380px;
-        height: 35px;
-        background: rgba(151, 56, 55, 0.3);
+        width: 380px;
+        height: 50px;
+        background: rgba(205, 89, 87, 0.3);
         z-index: 3;
         border-radius: 9px;
         box-shadow: 0 1px 2px 0 rgba(16, 24, 40, 0.05);
@@ -167,13 +167,15 @@
         /* Cambiar la fuente del texto */
         padding-left: 10px;
         /* Añadir relleno izquierdo */
-        border: none;
+        border: rgba(228, 169, 168, 0.3);
         /* Asegurarse de que el input no tenga borde */
-        background: transparent;
+      top: -2px;
         /* Asegurarse de que el input tenga un fondo transparente */
         width: 380px;
         /* Ajustar el ancho del input al 100% */
-        height: 100%;
+        height: 35px;
+        border-radius: 30px;
+
         /* Ajustar la altura del input al 100% */
         outline: none;
         /* Quitar el contorno al enfocar */
@@ -194,13 +196,16 @@
 
     .icon {
         position: relative;
-        width: 20.545px;
-        height: 20.531px;
-        top: -5px;
+        width: 26px;
+        height: 26px;
+        top: 3px;
         margin: 2.625px 0 0 2.627px;
         background: url(./assets/search.png) no-repeat center;
         background-size: 100% 100%;
         z-index: 15;
+        border: none;
+        outline: none;
+        cursor: pointer;
     }
 
     .frame-1 {
@@ -217,6 +222,7 @@
         cursor: pointer;
         background: transparent;
         left: 50px;
+        top: 5px;
 
         border: 3px solid #7a1f1e;
         z-index: 4;
@@ -363,6 +369,7 @@
     .user {
         flex-shrink: 0;
         position: relative;
+        top: 2px;
         width: 30px;
         height: 30px;
         z-index: 12;
@@ -425,30 +432,37 @@
     .cinturon-unisex-moda {
         flex-basis: auto;
         position: relative;
-        height: auto; /* Cambiar a auto para que se ajuste según el contenido */
-        margin-bottom: 10px; /* Aumentar el margen inferior */
+        height: auto;
+        /* Cambiar a auto para que se ajuste según el contenido */
+        margin-bottom: 10px;
+        /* Aumentar el margen inferior */
         color: #311811;
         font-family: Outfit, var(--default-font-family);
         font-size: 17px;
         font-weight: 400;
         line-height: 21px;
         text-align: left;
-        white-space: wrap; /* No es necesario, puedes eliminar esto */
+        white-space: wrap;
+        text-transform: capitalize;
+
+        /* No es necesario, puedes eliminar esto */
         z-index: 20;
-      }
-      
-      .descripcion {
-        display: block; /* Cambiar a block para que los elementos se muestren en bloques verticales */
-      }
-      
-      .descripcion > * {
-        margin-bottom: 5px; /* Ajustar el margen inferior de los elementos dentro de .descripcion */
-      }
-      
+    }
+
+    .descripcion {
+        display: block;
+        /* Cambiar a block para que los elementos se muestren en bloques verticales */
+    }
+
+    .descripcion>* {
+        margin-bottom: 5px;
+        /* Ajustar el margen inferior de los elementos dentro de .descripcion */
+    }
+
 
     .mx-150 {
         flex-basis: auto;
-        display: block; 
+        display: block;
         position: relative;
         height: 26px;
         color: #311811;
@@ -463,8 +477,9 @@
 
     .estrellas-container {
         display: flex;
-        align-items: center; /* Alinear las estrellas verticalmente */
-      }
+        align-items: center;
+        /* Alinear las estrellas verticalmente */
+    }
 
     .estrellas {
         display: flex;

@@ -13,6 +13,8 @@
                 Ubuntu, "Helvetica Neue", Helvetica, Arial, "PingFang SC",
                 "Hiragino Sans GB", "Microsoft Yahei UI", "Microsoft Yahei",
                 "Source Han Sans CN", sans-serif;
+            background: #f5e5e3;
+
         }
 
         .main-container {
@@ -26,7 +28,6 @@
             margin: -10px auto 0 -50px;
             /* Ajustado el margen superior y el margen izquierdo */
             background: #f5e5e3;
-            overflow: hidden;
         }
 
 
@@ -464,9 +465,10 @@
         .wrapper-4 {
             position: absolute;
             width: 705px;
-            height: 895px;
+            height: auto;
             top: 0;
             left: 360px;
+            padding-bottom: 20px;
             background: #fff5f4;
             z-index: 24;
             border-radius: 30px;
@@ -1172,11 +1174,306 @@
             width: 100px;
             height: 100px;
         }
+
         .profile-pic {
             width: 150px;
             height: 150px;
             border-radius: 50%;
             object-fit: cover;
+        }
+
+        .frame-button-e {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: nowrap;
+            gap: 10px;
+            position: absolute;
+            width: 185px;
+            height: 33px;
+            top: 20px;
+            left: 430px;
+            padding: 6px 25px 6px 25px;
+            cursor: pointer;
+            background: #8d2d2c;
+            border: none;
+            z-index: 41;
+            overflow: hidden;
+            border-radius: 30px;
+        }
+
+        .comentar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: nowrap;
+            gap: 10px;
+            position: absolute;
+            width: 185px;
+            height: 33px;
+            top: 60px;
+            left: 430px;
+            padding: 6px 25px 6px 25px;
+            cursor: pointer;
+            background: #8d2d2c;
+            border: none;
+            z-index: 41;
+            overflow: hidden;
+            border-radius: 30px;
+        }
+
+        .chat {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: nowrap;
+            gap: 10px;
+            position: absolute;
+            width: 185px;
+            height: 33px;
+            top: 100px;
+            left: 430px;
+            padding: 6px 25px 6px 25px;
+            cursor: pointer;
+            background: #8d2d2c;
+            border: none;
+            z-index: 41;
+            overflow: hidden;
+            border-radius: 30px;
+        }
+
+        .span-editar {
+            flex-shrink: 0;
+            flex-basis: auto;
+            position: relative;
+            height: 21px;
+            color: #ffffff;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 17px;
+            font-weight: 500;
+            line-height: 21px;
+            text-align: left;
+            white-space: nowrap;
+            z-index: 42;
+        }
+
+        .span-botellas-agua {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            position: absolute;
+            height: 21px;
+            top: 20px;
+            left: 30px;
+            color: #311811;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 21px;
+            text-align: left;
+            white-space: nowrap;
+            z-index: 38;
+        }
+
+        .mx-15 {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            position: absolute;
+            height: 26px;
+            top: 41px;
+            left: 30px;
+            color: #311811;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 21px;
+            font-weight: 800;
+            line-height: 26px;
+            text-align: left;
+            white-space: nowrap;
+            z-index: 40;
+        }
+
+        .frame-f {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: nowrap;
+            gap: 10px;
+            position: absolute;
+            width: auto;
+            height: 33px;
+            top: 62px;
+            left: 430px;
+            padding: 6px 25px 6px 25px;
+            cursor: pointer;
+            background: #8d2d2c;
+            border: none;
+            z-index: 43;
+            overflow: hidden;
+            border-radius: 30px;
+        }
+
+        .borrar {
+            flex-shrink: 0;
+            flex-basis: auto;
+            position: relative;
+            height: 21px;
+            color: #ffffff;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 17px;
+            font-weight: 500;
+            line-height: 21px;
+            text-align: left;
+            white-space: nowrap;
+            z-index: 44;
+        }
+
+        .stock {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            position: absolute;
+            height: 21px;
+            top: 78px;
+            left: 30px;
+            color: #311811;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 21px;
+            text-align: left;
+            white-space: nowrap;
+            z-index: 45;
+        }
+
+        .pedido {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            position: absolute;
+            height: 21px;
+            top: 102px;
+            left: 30px;
+            color: #311811;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 21px;
+            text-align: left;
+            white-space: nowrap;
+            z-index: 45;
+        }
+
+        .descripcion {
+            position: absolute;
+            width: 94px;
+            height: 21px;
+            top: 110px;
+            left: 30px;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 21px;
+            text-align: left;
+            text-overflow: initial;
+            white-space: nowrap;
+            z-index: 39;
+        }
+
+        .descripcion-10 {
+            position: relative;
+            color: #721918;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 17px;
+            font-weight: 600;
+            line-height: 21.42px;
+            text-align: left;
+        }
+
+        .colon {
+            position: relative;
+            color: #311811;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 21.42px;
+            text-align: left;
+        }
+
+        .botella-agua {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            position: absolute;
+            height: 21px;
+            top: 140px;
+            left: 30px;
+            color: #000000;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 21px;
+            text-align: left;
+            white-space: nowrap;
+            z-index: 48;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            font-family: Outfit, var(--default-font-family);
+            text-transform: capitalize;
+            background-color: rgba(0, 0, 0, 0.4);
+
+        }
+
+        .popup-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 20px;
+
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            /* Añadir margen inferior para espaciar los elementos */
+        }
+
+        .mi-cuenta {
+            position: relative;
+            color: #000000;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 20px;
+            font-weight: 400;
+            left: 40px;
+            line-height: 25.2px;
+            text-align: left;
         }
     </style>
 </head>
@@ -1287,18 +1584,74 @@
                 </div>
 
                 <span class="text-12">Compras</span>
-                <div class="section-b">
-                    <div class="box-5">
+                <?php
+                if (isset($_GET['idUsuario'])) {
+                    // Obtener el valor de 'idUsuario'
+                    $idUsuario = $_GET['idUsuario'];
 
-                    </div>
+                    // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
+                } else {
+                    // Si no se pasó el parámetro 'idUsuario' en la URL
+                    echo "No se ha especificado un ID de usuario.";
+                }
 
 
-                    <div class="button-container">
-                        <button id="compraButton" class="text-15">Detalles</button>
-                        <button id="agregarRolesButton" class="text-15">Comentar</button>
-                    </div>
+                try {
+                    // Establecer conexión a la base de datos
+                    $query = "SELECT * FROM PEDIDO WHERE IDUSUARIOCLIENTE = " . $idUsuario . " ORDER BY ESTADO ASC";
 
-                </div>
+                    $stmt = $dbh->query($query);
+                    $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    // Si hay productos, generar instancias de producto
+                    if (!empty($productos)) {
+                        foreach ($productos as $producto) {
+                            $idProducto = $producto['IDPEDIDO'];
+                            $idvendedor = $producto['IDUSUARIOVENDEDOR'];
+                            $query = "SELECT TELEFONO,IDUSUARIO FROM DATOS_USUARIO WHERE IDUSUARIO = " . $idvendedor . "";
+
+                            $stmt = $dbh->query($query);
+                            $telefono = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+                            echo "<div class='section-b'>";
+                            echo "<button class='frame-button-e' onclick=\"window.location.href='FormEditar_producto.php?idProducto=" . $producto['IDPEDIDO'] . "&idUsuario=" . $idUsuario . "'\">";
+
+                            echo "<span class='span-editar'>Ver detalles</span></button>";
+
+                            echo "<span class='span-botellas-agua'>IDPEDIDO: " . $producto['IDPEDIDO'] . "</span>";
+                            echo "<span class='mx-15'>MX$ " . $producto['TOTALPRECIO'] . "</span>";
+
+                            if ($producto['ESTADO'] == 0) {
+
+                                echo "<span class='pedido'>Pedido pendiente</span>";
+                                echo "<button class='chat'>";
+                                echo "<a  class='span-editar' href='https://wa.me/52" . $telefono['TELEFONO'] . "' target='_blank'>Chat</a></button>";
+                            } else {
+                                echo "<button class='comentar' onclick=\"openPopup(" . $producto['IDPEDIDO'] . ", " . $idUsuario . ")\">";
+                                echo "<span class='span-editar'>Comentar</span></button>";
+                                echo "<span class='pedido'>Pedido completado</span>";
+                            }
+
+
+                            echo "<span class='stock'>Fecha:  " . $producto['FECHA'] . "</span>";
+
+
+                            echo "</div>";
+                        }
+                    } else {
+                        echo "<div class='div-rectangle'>";
+                        echo "<span class='mi-cuenta'>No haz realizado ninguna compra.</span>";
+                    }
+                } catch (PDOException $e) {
+                    // Mostrar mensaje de error si la conexión falla
+                    echo "Error: " . $e->getMessage();
+                }
+
+                ?>
+
+
+
 
                 <script>
                     var queryString = window.location.search;
@@ -1342,37 +1695,85 @@
                         window.location.href = "FormEspecialidades.html";
                     });
 
-                    // Cargar el contenido de FormEspecialidades.html
-                    fetch("FormEspecialidades.html")
-                        .then(response => response.text())
-                        .then(html => {
-                            // Supongamos que los datos de las especialidades están almacenados en la variable especialidades
-                            const especialidades = obtenerEspecialidadesDesdeHTML(html);
-                            // Luego, inserta las especialidades en la tabla
-                            mostrarEspecialidadesEnTabla(especialidades);
-                        })
-                        .catch(error => console.log("Error al cargar el contenido de especialidades:", error));
+                    var queryString = window.location.search;
 
-                    function mostrarEspecialidadesEnTabla(especialidades) {
-                        const tabla = document.getElementById("tablaEspecialidades");
-                        const tbody = tabla.getElementsByTagName("tbody")[0];
-                        // Limpiar el contenido existente de la tabla
-                        tbody.innerHTML = "";
+                    // Crear un objeto URLSearchParams para analizar la cadena de consulta
+                    var urlParams = new URLSearchParams(queryString);
 
-                        // Iterar sobre las especialidades y agregarlas como filas en la tabla
-                        especialidades.forEach(especialidad => {
-                            const fila = `
-            <tr>
-                <td>${especialidad.id}</td>
-                <td>${especialidad.nombre}</td>
-            </tr>
-        `;
-                            tbody.innerHTML += fila;
-                        });
+                    // Obtener el valor del parámetro 'idUsuario' de la URL
+                    var idUsuario = urlParams.get('idUsuario');
+
+                    // Hacer algo con el valor de idUsuario
+                    console.log('ID del usuario:', idUsuario);
+
+                    document.getElementById("editarPerfilButton").addEventListener("click", function() {
+                        window.location.href = "FormEditarPerfilUsuario.php?idUsuario=" + idUsuario;
+                    });
+
+                    function openPopup(idPedido, idUsuario) {
+                        fetch(`getProductos.php?idPedido=${idPedido}&idUsuario=${idUsuario}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.error) {
+                                    console.error('Error del servidor:', data.error);
+                                    return;
+                                }
+
+                                const popupBody = document.getElementById('popup-body');
+                                popupBody.innerHTML = ''; // Limpiar contenido anterior
+
+                                data.productos.forEach(producto => {
+                                    const productDiv = document.createElement('div');
+                                    productDiv.classList.add('product-item');
+
+                                    const productName = document.createElement('span');
+                                    productName.textContent = producto.nombre;
+                                    productDiv.appendChild(productName);
+
+                                    const commentButton = document.createElement('button');
+                                    commentButton.textContent = 'Comentar';
+                                    commentButton.onclick = function() {
+                                        window.location.href = `FormComentarios.php?idProducto=${producto.id}&idUsuario=${idUsuario}`;
+                                    };
+                                    productDiv.appendChild(commentButton);
+
+                                    popupBody.appendChild(productDiv);
+                                });
+
+                                document.getElementById('popup').style.display = 'block';
+                            })
+                            .catch(error => console.error('Error al obtener los productos:', error));
                     }
+
+                    function closePopup() {
+                        document.getElementById('popup').style.display = 'none';
+                    }
+
+                    window.onclick = function(event) {
+                        if (event.target === document.getElementById('popup')) {
+                            closePopup();
+                        }
+                    }
+
+
+
+                    // Cargar el contenido de FormEspecialidades.html
                 </script>
 
                 <!-- Generated by Codia AI - https://codia.ai/ -->
+
+            </div>
+        </div>
+        <div id="popup" class="popup">
+            <div class="popup-content">
+                <span class="close" onclick="closePopup()">&times;</span>
+                <div id="popup-body"></div>
+            </div>
+        </div>
+
+    </div>
+
+
 </body>
 
 </html>

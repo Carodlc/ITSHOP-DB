@@ -13,6 +13,8 @@
                 Ubuntu, "Helvetica Neue", Helvetica, Arial, "PingFang SC",
                 "Hiragino Sans GB", "Microsoft Yahei UI", "Microsoft Yahei",
                 "Source Han Sans CN", sans-serif;
+            background: #f5e5e3;
+
         }
 
         .main-container {
@@ -26,7 +28,6 @@
             margin: -10px auto 0 -50px;
             /* Ajustado el margen superior y el margen izquierdo */
             background: #f5e5e3;
-            overflow: hidden;
         }
 
 
@@ -70,7 +71,6 @@
             width: 25.685px;
             height: 25px;
             margin: 4.333px 0 0 3.002px;
-            background: url(./assets/images/8962523e-f454-46c8-826c-3fe989ea8ade.png) no-repeat center;
             background-size: 100% 100%;
             z-index: 62;
         }
@@ -90,7 +90,6 @@
             width: 24.592px;
             height: 23.597px;
             margin: 3.903px 0 0 2.704px;
-            background: url(./assets/images/964ec5c4-30cb-4185-a3f1-a3a3dcd9fd58.png) no-repeat center;
             background-size: 100% 100%;
             z-index: 66;
         }
@@ -110,7 +109,6 @@
             width: 20.617px;
             height: 25px;
             margin: 2.5px 0 0 4.85px;
-            background: url(./assets/images/cd7068bf-90f1-4135-9e8a-29c81c960d13.png) no-repeat center;
             background-size: 100% 100%;
             z-index: 69;
         }
@@ -130,7 +128,6 @@
             width: 20px;
             height: 25px;
             margin: 2.5px 0 0 5px;
-            background: url(./assets/images/f4b52315-a948-45fc-bdef-ff18a2a9b519.png) no-repeat center;
             background-size: 100% 100%;
             z-index: 64;
         }
@@ -150,7 +147,6 @@
             width: 25.685px;
             height: 25px;
             margin: 4.333px 0 0 3.002px;
-            background: url(./assets/images/9c78af69-2fa3-4cf6-8857-79d35cde670e.png) no-repeat center;
             background-size: 100% 100%;
             z-index: 3;
         }
@@ -170,7 +166,6 @@
             width: 20.617px;
             height: 25px;
             margin: 2.5px 0 0 4.85px;
-            background: url(./assets/images/0082c817-bfe7-46d1-a89e-f50caec91abd.png) no-repeat center;
             background-size: 100% 100%;
             z-index: 10;
         }
@@ -190,7 +185,6 @@
             width: 20px;
             height: 25px;
             margin: 2.5px 0 0 5px;
-            background: url(./assets/images/8d388f54-828e-4919-8c33-3508be1f6a22.png) no-repeat center;
             background-size: 100% 100%;
             z-index: 5;
         }
@@ -210,7 +204,6 @@
             width: 24.592px;
             height: 23.597px;
             margin: 3.903px 0 0 2.704px;
-            background: url(./assets/images/8cda49e0-2c5d-44ab-a7e6-1a4ae853c2c8.png) no-repeat center;
             background-size: 100% 100%;
             z-index: 7;
         }
@@ -308,8 +301,8 @@
             height: 1200px;
             margin-top: 29px;
             margin-right: 0;
-            margin-bottom: 0;
             margin-left: 50px;
+            padding-bottom: 40px;
             /* Mover hacia la derecha */
             z-index: 52;
         }
@@ -442,11 +435,30 @@
             font-size: 20px;
             font-weight: 400;
             line-height: 21px;
+            left: 26px;
             text-align: left;
             white-space: nowrap;
             z-index: 1;
         }
 
+        .nombre {
+            position: relative;
+            height: 21px;
+            margin: 600px 0 0 20px;
+            /* Incrementé el margen izquierdo a 150px */
+            color: #a82929;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 28px;
+            font-weight: 400;
+            line-height: 21px;
+            text-align: left;
+            top: 565px;
+            left: 26px;
+
+            text-transform: capitalize;
+            white-space: nowrap;
+            z-index: 1;
+        }
 
 
         .text-9 {
@@ -557,7 +569,7 @@
             /* Asegura que no exceda el ancho del contenedor */
             min-height: 100px;
             /* Cambiado a min-height para que el textarea pueda crecer */
-            padding: 10px;
+            padding: 20px;
             /* Agregado padding para separar el texto del borde */
             box-sizing: border-box;
             /* Asegura que el padding no afecte el tamaño total */
@@ -569,11 +581,14 @@
             /* Agrega barras de desplazamiento vertical si es necesario */
             font-family: Outfit, var(--default-font-family);
             /* Usa la misma fuente que el contenedor */
-            font-size: inherit;
+            font-size: 18px;
+
+
+            font-weight: 350;
             /* Usa el mismo tamaño de fuente que el contenedor */
             line-height: inherit;
             /* Usa la misma altura de línea que el contenedor */
-            border: 1px solid #aa5454;
+            border: none;
             /* Agregado borde para resaltar el textarea */
         }
 
@@ -585,7 +600,6 @@
             height: 155px;
             top: 20px;
             left: 28px;
-            background: url(./assets/images/0c2e577fef6df3a2c9d120355946b27e8b333dc5.png) no-repeat center;
             background-size: cover;
             z-index: 29;
             border-radius: 200px;
@@ -637,7 +651,7 @@
             width: 158px;
             /* Cambiado de 98px a 148px */
             height: 33px;
-            top: 555px;
+            top: 573px;
             left: 700px;
             /* Ajuste para mover hacia la derecha */
             padding: 6px 25px;
@@ -1282,6 +1296,7 @@
             justify-content: center;
             /* Centra los elementos verticalmente */
             /* Ancho horizontal aumentado */
+            padding-bottom: 30px;
             height: auto;
             top: -60px;
             /* Subir el elemento */
@@ -1300,7 +1315,6 @@
             /* Agregado padding para separar el texto del borde */
             box-sizing: border-box;
             /* Asegura que el padding no afecte el tamaño total */
-            background: #f5e5e3;
             border-radius: 30px;
 
             align-items: center;
@@ -1310,7 +1324,7 @@
 
             width: 900px;
             height: auto;
-            top: 800px;
+            top: 850px;
             left: 0px;
             /* Ajusta la posición horizontal hacia la derecha según sea necesario */
             background: #fff5f4;
@@ -1324,7 +1338,7 @@
             justify-content: flex-start;
             position: absolute;
             height: 13.619px;
-            top: 560px;
+            top: 580px;
             left: 460px;
             color: #311811;
             font-family: Outfit, var(--default-font-family);
@@ -1339,7 +1353,7 @@
         .input-container {
             display: flex;
             align-items: center;
-            margin-top: -2px;
+            margin-top: -4px;
         }
 
         input.quantity {
@@ -1370,6 +1384,54 @@
             border-radius: 5%;
             object-fit: cover;
         }
+
+        textarea.section-8 {
+            /* Desactiva todos los eventos del mouse */
+            /* Establece un color de fondo consistente */
+            border: none;
+            /* Elimina el borde */
+            resize: none;
+            /* Desactiva la redimensión del área de texto */
+            outline: none;
+            /* Elimina el borde de enfoque */
+            /* Establece un color de texto consistente */
+        }
+
+        textarea.section-8:focus {
+            outline: none;
+            /* Asegura que no haya un borde de enfoque */
+            border: none;
+            /* Asegura que no aparezca ningún borde */
+        }
+
+        .stars-outer {
+        display: inline-block;
+       margin-top: 103px;
+       margin-left: 100px;
+        position: absolute;
+        font-family: Arial, sans-serif;
+    }
+
+    .stars-inner {
+        position: absolute;
+        top: 0;
+        left: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        width: 0;
+    }
+
+    .stars-outer::before {
+        content: "★★★★★";
+        font-size: 16px; /* Ajusta el tamaño de las estrellas aquí */
+        color: #ccc; /* Color de las estrellas vacías */
+    }
+
+    .stars-inner::before {
+        content: "★★★★★";
+        font-size: 16px; /* Ajusta el tamaño de las estrellas aquí */
+        color: #b81919; /* Color de las estrellas llenas */
+    }
     </style>
 </head>
 
@@ -1530,42 +1592,85 @@
                     <div class="section-9">
                         <button type="submit" id="editarPerfilButton" class="text-10">Agregar al carrito</button>
                     </div>
+                    <span class="nombre"><?php echo $productos[0]['NOMBRE']; ?></span>
+
                     <span class="text-8">Descripcion:</span>
                     <div class="group-5">
-                        <textarea class="section-8"></textarea>
+                        <textarea class="section-8" readonly><?php echo $productos[0]['DESCRIPCION']; ?></textarea>
                     </div>
 
             </form>
 
 
-            <span class="text-7">Comentarios:</span>
             <div class="section-7" id="commentSection">
+                <span class="text-7">Comentarios:</span>
 
-                <!-- Ejemplo de comentario -->
-                <div class="comment">
-                    <div class="comment-info user-name">Nombre de Usuario</div>
-                    <div class="comment-info date">Fecha: 12 de Mayo, 2024</div>
-                    <div class="comment-info">Comentario:</div>
-                    <div style="font-family: Outfit, var(--default-font-family);
-                        font-size: 16px;">Contenido del comentario Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
-                </div>
-                <div class="comment">
-                    <div class="comment-info user-name">Nombre de Usuario</div>
-                    <div class="comment-info date">Fecha: 12 de Mayo, 2024</div>
-                    <div class="comment-info">Descripción: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    </div>
-                    <div>Contenido del comentario Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
-                </div>
+                <?php
+                if (isset($_GET['idProducto'])) {
+                    // Obtener el valor de 'idUsuario'
+                    $idProducto = $_GET['idProducto'];
+
+                    // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
+                } else {
+                    // Si no se pasó el parámetro 'idUsuario' en la URL
+                    echo "No se ha especificado un ID de usuario.";
+                }
 
 
-                <!-- Agrega más comentarios según necesites -->
+                try {
+                    // Establecer conexión a la base de datos
+                    $query = "SELECT * FROM COMENTARIO WHERE IDPRODUCTO = " . $idProducto . " ORDER BY IDCOMENTARIO ASC";
+
+                    $stmt = $dbh->query($query);
+                    $comentarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    // Si hay comentarios, generar instancias de producto
+                    if (!empty($comentarios)) {
+                        foreach ($comentarios as $comentario) {
+                            $idcomentario = $comentario['IDCOMENTARIO'];
+                            $idUsuarioComentario = $comentario['IDUSUARIO'];
+                            $query = "SELECT NOMBRE_USUARIO FROM DATOS_USUARIO WHERE IDUSUARIO = " . $idUsuarioComentario . "";
+
+                            $stmt = $dbh->query($query);
+                            $USUARIOcomentario = $stmt->fetch(PDO::FETCH_ASSOC);
+                            $valoracion = $comentario['VALORACION']; // Asumiendo que la columna se llama 'VALORACION'
+                            $valoracionPorcentaje = ($valoracion / 5) * 100; // Calcula el ancho de las estrellas llenas
+
+
+
+
+                            echo '<div class="comment">';
+                            echo '<div class="comment-info user-name">Usuario: ' . $USUARIOcomentario['NOMBRE_USUARIO'] . '</div>';
+                            echo '<div class="comment-info date">Fecha: ' . $comentario['FECHA'] . '</div>';
+                            echo '<div class="comment-info">Comentario:</div>';
+                            echo '<div style="font-family: Outfit, var(--default-font-family); font-size: 16px;">' . $comentario['COMENTARIO'] . '</div>';
+                    
+                            // Mostrar las estrellas
+                            echo '<div class="comment-info">Valoración:</div>';
+                            echo '<div class="stars-outer">';
+                            echo '<div class="stars-inner" style="width: ' . $valoracionPorcentaje . '%;"></div>';
+                            echo '</div>';
+                    
+                            echo '</div>';
+                        }
+                    } else {
+                        echo '<div class="comment">';
+                        echo '<div class="comment-info user-name">No existen comentarios para este producto</div>';
+                        echo '</div>';
+                    }
+                } catch (PDOException $e) {
+                    // Mostrar mensaje de error si la conexión falla
+                    echo "Error: " . $e->getMessage();
+                }
+
+                ?>
             </div>
 
 
 
         </div>
         <div class="section-10">
-        <button id="regresarButton" onclick="window.location.href = '<?php echo isset($idUsuario) ? 'index.php?idUsuario='.$idUsuario : 'index.php'; ?>'" class="text-9">Regresar</button>
+            <button id="regresarButton" onclick="window.location.href = '<?php echo isset($idUsuario) ? 'index.php?idUsuario=' . $idUsuario : 'index.php'; ?>'" class="text-9">Regresar</button>
         </div>
 
     </div>

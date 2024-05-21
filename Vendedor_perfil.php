@@ -1277,6 +1277,7 @@
             text-align: left;
             text-transform: capitalize;
             white-space: nowrap;
+            padding-top: 10px;
             letter-spacing: 0.72px;
             z-index: 13;
         }
@@ -1442,12 +1443,12 @@
                     </div>
                     <span onclick="window.location.href = 'GestionProductos.php?idUsuario=<?php echo $idUsuario; ?>'"  class="general">Productos</span>
 
-                    <span class="inventario">Inventario</span><span class="ventas">Ventas</span><span class="ajustes">Ajustes</span>
+                    <span onclick="window.location.href = 'FormInventario.php?idUsuario=<?php echo $idUsuario; ?>'" class="inventario">Inventario</span><span onclick="window.location.href = 'FormVentas.php?idUsuario=<?php echo $idUsuario; ?>'" class="ventas">Ventas</span><span onclick="window.location.href = 'Ajustes_vendedor.php?idUsuario=<?php echo $idUsuario; ?>'" class="ajustes">Ajustes</span>
                 </div>
                 <div class="wrapper-4" id="tablaWrapper">
                     <div class="section-6">
                         <span class="text-c">perfil de vendedor</span>
-                        <div ">
+                        <div>
                           
                           <table id=" tablaContenido">
 
@@ -1519,9 +1520,7 @@
                             window.location.href = "FormEditarPerfilVendedor.php";
                         });
 
-                        document.getElementById("agregarRolesButton").addEventListener("click", function() {
-                            window.location.href = "FormGestionarRoles.html";
-                        });
+                       
 
                         // Cargar el contenido de FormGestionarRoles.html
                     </script>

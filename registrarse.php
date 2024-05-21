@@ -253,7 +253,7 @@
           </div>
           <div class="form-section">
             <label for="confirm-password" class="letra">Confirmar contraseña:</label>
-            <input type="password" id="confirm-password" name="confirm-password">
+            <input type="password" id="confirm-password" name="confirm-password" maxlength="20">
           </div>
           <div class="form-section">
             <label for="email" class="letra">Correo Electrónico:</label>
@@ -275,7 +275,7 @@
 
           <div class="form-section" id="telefono-section">
             <label for="telefono" class="letra">Telefono:</label>
-            <input type="number" id="telefono" name="telefono" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="Numero telefonico" required>
+            <input type="number" id="telefono" name="telefono" pattern="\d{3}-?\d{3}-?\d{4}" placeholder="Formato: xxx-xxx-xxxx" value="000-000-0000" required>
           </div>
 
           <div class="form-buttons">

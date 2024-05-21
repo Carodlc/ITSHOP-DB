@@ -6,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Agregar comentario</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;800&display=swap" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-        integrity="sha384-Uv7g9DVHwjZe3+6O3NPVWDTXX0jFkX8+dln5qlxB7OXeq+JKHR2axYb1OPI1UQI/" crossorigin="anonymous">
 
     <style>
         :root {
@@ -15,7 +13,7 @@
                 Ubuntu, "Helvetica Neue", Helvetica, Arial, "PingFang SC",
                 "Hiragino Sans GB", "Microsoft Yahei UI", "Microsoft Yahei",
                 "Source Han Sans CN", sans-serif;
-                background: #fff5f4;
+            background: #fff5f4;
 
         }
 
@@ -450,15 +448,41 @@
 
 
 </head>
+<?php
+include 'conexion.php';
+
+if (isset($_GET['idProducto']) && isset($_GET['idUsuario'])) {
+    $idProducto = $_GET['idProducto'];
+    $idUsuario = $_GET['idUsuario'];
+
+    $stmt = $dbh->prepare("SELECT * FROM DATOS_USUARIO WHERE IDUSUARIO = ?");
+    $stmt->execute([$idUsuario]);
+    $datosUsuario = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $stmt = $dbh->prepare("SELECT * FROM DATOS_PRODUCTO WHERE IDPRODUCTO = ?");
+    $stmt->execute([$idProducto]);
+    $datos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $DATA = $dbh->query("SELECT SYSDATE FROM DUAL");
+
+    // Obtener la fecha actual
+    $fecha_actual = $DATA->fetchColumn();
+} else {
+    echo 'No se han especificado los parámetros necesarios.';
+}
+?>
 
 <body>
     <div class="main-container">
-        <span class="text">Comentario</span><span class="text-2">Prooducto: paletitas</span><span class="text-3">Fecha:
-            auto</span><span class="text-4">Andrea_Fuentes</span>
-        <!-- Tu input para la especialidad -->
+        <span class="text">Comentario</span>
+        <span class="text-2">Producto: <?php echo $datos[0]['NOMBRE'] ?></span>
+        <span class="text-3">Fecha: <?php echo $fecha_actual ?></span>
+        <span class="text-4">Usuario: <?php echo $datosUsuario[0]['NOMBRE_USUARIO'] ?></span>
+        
         <div class="rectangle-2" style="margin-top: 10px;">
-            <input type="text" class="espe-input" placeholder="Escribe tu comentario aqui... " />
+            <input type="text" id="comentario" name="comentario" class="espe-input" placeholder="Escribe tu comentario aqui... " />
         </div>
+        
         <div class="wrapper">
             <span class="text-6">Valoracion:</span>
             <div id="rating" class="valorar">
@@ -468,36 +492,57 @@
                 <img src="assets/Star_gray.png" alt="4 Stars" onclick="rateProduct(4)">
                 <img src="assets/Star_gray.png" alt="5 Stars" onclick="rateProduct(5)">
             </div>
-
-
         </div>
+        
         <div class="wrapper-2">
-            <div class="section"><button id="regresarButton" class="text-7">Regresar</button></div>
-            <div class="box"><button id="guardarButton" class="text-8">Guardar</button></div>
+            <div class="section">
+                <button id="regresarButton" class="text-7">Regresar</button>
+            </div>
+            <div class="box">
+                <button id="guardarButton" class="text-8">Guardar</button>
+            </div>
         </div>
     </div>
+    
     <script>
-        document.getElementById("regresarButton").addEventListener("click", function () {
-            window.location.href = "Comentarios.html"; // Redirige al archivo "Comentarios.html"
-        });
-
-        document.getElementById("guardarButton").addEventListener("click", function () {
-            window.location.href = "Comentarios.html"; // Redirige al archivo "Comentarios.html"
-        });
-
-        // En tu backend, cuando recibas la valoración del usuario, puedes almacenarla en una base de datos.
-
-        function guardarValoracion(valoracion) {
-            // Aquí iría tu código para guardar la valoración en la base de datos
-            console.log('Se ha guardado la valoración: ' + valoracion);
-        }
-
+        const idProducto = <?php echo $idProducto; ?>;
+        const idUsuario = <?php echo $idUsuario; ?>;
         let currentRating = 0;
+
+        document.getElementById("regresarButton").addEventListener("click", function() {
+            window.location.href = "Comentarios.html";
+        });
+
+        document.getElementById("guardarButton").addEventListener("click", function() {
+            const comentario = document.getElementById('comentario').value;
+
+            const data = {
+                idProducto: idProducto,
+                idUsuario: idUsuario,
+                comentario: comentario,
+                rating: currentRating
+            };
+
+            fetch('guardarComentario.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                window.location.href = "Comentarios.php?idProducto=<?php echo $idProducto ?>&idUsuario=<?php echo $idUsuario ?>"; // Redirige al archivo "Comentarios.html"
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
 
         function rateProduct(rating) {
             currentRating = rating;
             highlightStars(rating);
-            guardarValoracion(rating);
         }
 
         function highlightStars(rating) {
@@ -510,11 +555,7 @@
                 }
             });
         }
-
-
-
     </script>
-    <!-- Generated by Codia AI - https://codia.ai/ -->
 </body>
 
 </html>

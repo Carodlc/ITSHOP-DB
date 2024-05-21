@@ -346,6 +346,7 @@
             background: #fff5f4;
             z-index: 22;
             left: -170px;
+            padding-bottom: 20px;
             border-radius: 30px;
         }
 
@@ -684,6 +685,7 @@
             color: #311811;
             font-family: Outfit, var(--default-font-family);
             font-size: 17px;
+            text-transform: capitalize;
             font-weight: 800;
             line-height: 21px;
             text-align: left;
@@ -872,20 +874,32 @@
         <div class="flex-row-d">
             <div class="rectangle-4">
                 <span class="mi-cuenta-5">mi cuenta</span><span onclick="window.location.href = 'Vendedor_perfil.php?idUsuario=<?php echo $idUsuario; ?>'" class="general">General</span>
-                <span class="ventas">Productos</span>
+                <span  onclick="window.location.href = 'GestionProductos.php?idUsuario=<?php echo $idUsuario; ?>'" class="ventas">Productos</span>
 
                 <div class="rectangle-6">
                     <div class="rectangle-7"></div>
                     <span class="productos">Inventario</span>
                 </div>
-                <span class="ventas">Ventas</span><span class="ajustes">Ajustes</span>
+                <span  onclick="window.location.href = 'FormVentas.php?idUsuario=<?php echo $idUsuario; ?>'" class="ventas">Ventas</span><span  onclick="window.location.href = 'Ajustes_vendedor.php?idUsuario=<?php echo $idUsuario; ?>'" class="ajustes">Ajustes</span>
             </div>
             <div class="rectangle-8">
                 <div class="flex-row-df">
-                    <span class="productos-9">Productos</span><button class="frame" onclick="window.location.href='AgregarProduto.php?idUsuario=<?php echo $idUsuario = $_GET['idUsuario']; ?>'">
-                        <span class="agregar-producto">Reporte de inventario</span>
-                    </button>
+                    <span class="productos-9">Inventario</span>
                 </div>
+                <div style="color: #8D2D2C; font-size: 17px; font-family: Outfit; font-weight: 400; word-wrap: break-word; margin-bottom: 10px; margin-left:30px">Crear reporte de inventario:</div>
+            <form method="GET" action="crear_reporteInventario.php">
+                <input type="hidden" name="idUsuario" value="<?php echo $idUsuario; ?>">
+                <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+                    <div style="color: #8D2D2C; font-size: 17px; font-family: Outfit; font-weight: 400; margin-right: 10px;">Desde:</div>
+                    <input type="date" id="fechaDesde" name="fechaDesde">
+                    <div style="margin-left: 20px; margin-right: 20px;">&nbsp;</div> <!-- Espacio entre DESDE y HASTA -->
+                    <div style="color: #8D2D2C; font-size: 17px; font-family: Outfit; font-weight: 400; margin-left: 10px; margin-right: 10px;">Hasta:</div>
+                    <input type="date" id="fechaHasta" name="fechaHasta">
+                </div>
+                <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                <button id="generateReport" style="background: #8D2D2C; color: white; font-size: 17px; font-family: Outfit; font-weight: 500; border-radius: 30px; padding: 6px 25px; border:none;">Generar</button>
+                </div>
+            </form>
                 <?php
                 include 'conexion.php';
                 if (isset($_GET['idUsuario'])) {
@@ -1005,6 +1019,25 @@
             });
         });
     });
+
+    document.getElementById('generateReport').addEventListener('click', function () {
+        // Obtén los valores de los inputs de fecha
+        const fechaDesde = document.getElementById('fechaDesde').value;
+        const fechaHasta = document.getElementById('fechaHasta').value;
+        const idUsuario = '<?php echo $_GET['idUsuario']; ?>';
+
+        // Verifica que las fechas estén presentes
+        if (fechaDesde && fechaHasta) {
+            // Construye la URL con los parámetros
+            const url = `crear_reporteInventario.php?idUsuario=${idUsuario}&fechaDesde=${fechaDesde}&fechaHasta=${fechaHasta}`;
+
+            // Redirige a la URL para generar y descargar el PDF
+            window.location.href = url;
+        } else {
+            alert('Por favor, selecciona ambas fechas.');
+        }
+    });
+
 </script>
 
 </html>

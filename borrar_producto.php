@@ -5,13 +5,10 @@ if (isset($_GET['idProducto'])) {
   include 'conexion.php';
   $idProducto = $_GET['idProducto'];
 
-  $query = "DELETE FROM PRODUCTS_IMG WHERE ID = ?";
+  $query = "UPDATE DATOS_PRODUCTO SET PUBLICADO = 2 WHERE IDPRODUCTO = ?";
   $stmt = $dbh->prepare($query);
   $stmt->execute([$idProducto]);
 
-  $query = "DELETE FROM DATOS_PRODUCTO WHERE IDPRODUCTO = ?";
-  $stmt = $dbh->prepare($query);
-  $stmt->execute([$idProducto]);
   // Responde con un estado HTTP 200 OK si la eliminación fue exitosa
   http_response_code(200);
 

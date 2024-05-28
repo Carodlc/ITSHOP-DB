@@ -229,7 +229,7 @@
           </div>
           <div class="form-section">
             <label for="nombre" class="letra">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" required>
+            <input type="text" id="nombre" name="nombre" maxlength="25" required pattern="[a-zA-Z\s]+" title="El nombre solo puede contener letras y espacios.">
           </div>
           <div class="form-section">
             <label for="fecha-nacimiento" class="letra">Fecha de nacimiento:</label>
@@ -249,7 +249,7 @@
           </div>
           <div class="form-section">
             <label for="password" class="letra">Contraseña:</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="password" name="password" maxlength="20" required>
           </div>
           <div class="form-section">
             <label for="confirm-password" class="letra">Confirmar contraseña:</label>
@@ -270,12 +270,12 @@
 
           <div class="form-section" id="tienda-name-section">
             <label for="tienda-name" class="letra">Nombre de la tienda:</label>
-            <input type="text" id="tienda-name" name="tienda-name" value="Nombre por defecto" required>
+            <input type="text" id="tienda-name" name="tienda-name" maxlength="40" value="Nombre de tu tienda" required>
           </div>
 
           <div class="form-section" id="telefono-section">
             <label for="telefono" class="letra">Telefono:</label>
-            <input type="number" id="telefono" name="telefono" pattern="\d{3}-?\d{3}-?\d{4}" placeholder="Formato: xxx-xxx-xxxx" value="000-000-0000" required>
+            <input type="text" id="telefono" name="telefono" pattern="\d{3}-?\d{3}-?\d{4}" value="844" required title="El número de teléfono debe tener el formato 123-456-7890 o 1234567890.">
           </div>
 
           <div class="form-buttons">
@@ -287,42 +287,85 @@
     </div>
 
     <script>
-      function openFileExplorer() {
-      document.getElementById('imagen').click();
-    }
+       function openFileExplorer() {
+                document.getElementById('imagen').click();
+            }
 
-    const inputImagen = document.getElementById('imagen');
-    const profilePreview = document.getElementById('profilePreview');
+            const inputImagen = document.getElementById('imagen');
+            const profilePreview = document.getElementById('profilePreview');
 
-    inputImagen.addEventListener('change', function() {
-      const file = this.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function() {
-          profilePreview.src = reader.result;
-        }
-        reader.readAsDataURL(file);
-      } else {
-        profilePreview.src = '/fotos/default-profile-pic.jpg';
-      }
-    });
+            inputImagen.addEventListener('change', function(event) {
+                const files = Array.from(event.target.files);
+                const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+                const invalidFiles = files.filter(file => !allowedTypes.includes(file.type));
 
+                if (invalidFiles.length > 0) {
+                    alert('Solo se permiten archivos de tipo imagen (JPG, PNG, GIF, WEBP).');
+                    // Limpiar la selección de archivos inválidos
+                    event.target.value = '';
+                    return;
+                }
 
-     
+                const file = files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function() {
+                        profilePreview.src = reader.result;
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    profilePreview.src = '/fotos/default-profile-pic.jpg';
+                }
+            });
 
-      function toggleTiendaSection() {
-        var rolesDropdown = document.getElementById("roles");
-        var tiendaSection = document.getElementById("tienda-name-section");
-        var telefono = document.getElementById("telefono-section");
+            function toggleTiendaSection() {
+                var rolesDropdown = document.getElementById("roles");
+                var tiendaSection = document.getElementById("tienda-name-section");
+                var telefono = document.getElementById("telefono-section");
 
-        if (rolesDropdown.value === "vendedor") {
-          tiendaSection.style.display = "block";
-          telefono.style.display = "block"
+                if (rolesDropdown.value === "vendedor") {
+                    tiendaSection.style.display = "block";
+                    telefono.style.display = "block";
+                } else {
+                    tiendaSection.style.display = "none";
+                }
+            }
 
-        } else {
-          tiendaSection.style.display = "none";
-        }
-      }
+            document.getElementById('nombre').addEventListener('input', function(event) {
+                // Expresión regular para permitir solo letras y espacios
+                const regex = /^[a-zA-Z\s]*$/;
+                // Si el valor actual no cumple con la expresión regular, eliminar el último carácter
+                if (!regex.test(event.target.value)) {
+                    event.target.value = event.target.value.slice(0, -1);
+                }
+            });
+
+            document.getElementById('telefono').addEventListener('input', function(event) {
+                let input = event.target.value;
+                input = input.replace(/\D/g, ''); // Eliminar todo lo que no sean dígitos
+                if (input.length > 3 && input.length <= 6) {
+                    input = input.slice(0, 3) + '-' + input.slice(3);
+                } else if (input.length > 6) {
+                    input = input.slice(0, 3) + '-' + input.slice(3, 6) + '-' + input.slice(6, 10);
+                }
+                event.target.value = input;
+            });
+
+            // Obtener el elemento de fecha de nacimiento
+            const fechaNacimiento = document.getElementById('fecha-nacimiento');
+
+            // Obtener la fecha actual
+            const hoy = new Date().toISOString().split('T')[0];
+
+            // Establecer la fecha máxima como la fecha actual
+            fechaNacimiento.setAttribute('max', hoy);
+
+            document.getElementById('form').addEventListener('submit', function(event) {
+                // Eliminar los guiones del número de teléfono antes de enviar el formulario
+                const telefonoInput = document.getElementById('telefono');
+                telefonoInput.value = telefonoInput.value.replace(/-/g, '');
+            });
+
     </script>
 
   </form>

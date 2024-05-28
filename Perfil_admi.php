@@ -21,7 +21,6 @@
     height: auto; /* Cambiado a 'auto' para adaptarse al contenido */
     margin: -10px auto 0 -50px; /* Ajustado el margen superior y el margen izquierdo */
     background: #f5e5e3;
-    overflow: hidden;
 }
 
 
@@ -804,7 +803,7 @@
     position: absolute;
     width: 628px;
     height: 183px;
-    top: 708px; /* Ajustamos la propiedad top para bajarlo */
+    top: 470px; /* Ajustamos la propiedad top para bajarlo */
     left: 40px; /* Mantenemos la propiedad left para alinear a la izquierda */
     background: #f5e5e3;
     z-index: 52;
@@ -1145,7 +1144,7 @@
                     <div class="section-3"><div class="pic-3"></div></div>
                 </div>
                 <div class="group-3"></div>
-                <span class="text">ITSHOP</span><span class="text-2">ITSHOP</span>
+                <span onclick="window.location.href = 'index.php?idUsuario=' + 1" class="text-2">ITSHOP</span>
                 <div class="section-4">
                     <span class="text-3">Inicio > </span
                     ><span class="text-4">Mi Cuenta </span>
@@ -1165,25 +1164,15 @@
             <div class="wrapper-4" id="tablaWrapper">
                     <div class="section-6">
                         <span class="text-c">perfil de administrador</span>
+                        
                         <div class="section-7">
                           <button id="gestionarUsuariosButton" class="text-d">Gestionar usuarios</button>
                           <table id="tablaContenido">
 
                           </table>
                         </div>
-                      
                     </div>
-                    <div class="group-5">
-                        <div class="section-8">
-                            <div class="pic-4"></div>
-                           
-                            <div class="section-9">
-                              <button id="editarPerfilButton" class="text-10">Editar</button>
-                          </div>
-                          
-                        </div>
-                    </div>
-                    <span class="text-12">aDMIN</span>
+                    
 <div class="section-b">
   <div class="box-5">
     <span class="text-13">Roles</span>
@@ -1193,7 +1182,7 @@
 </div>
 
     <div class="group-6">
-        <button id="agregarRolesButton" class="text-15">Agregar</button>
+        <button onclick="window.location.href = 'FormGestionarRoles.php'" id="agregarRolesButton" class="text-15">Agregar</button>
     </div>
 </div>
 

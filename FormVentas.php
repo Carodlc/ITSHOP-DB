@@ -904,7 +904,7 @@
 
                 try {
                     // Establecer conexión a la base de datos
-                    $query = "SELECT * FROM PEDIDO WHERE IDUSUARIOVENDEDOR = " . $idUsuario . " ORDER BY ESTADO ASC";
+                    $query = "SELECT * FROM PEDIDO WHERE IDUSUARIOVENDEDOR = " . $idUsuario . " ORDER BY ESTADO ASC, FECHA DESC";
 
                     $stmt = $dbh->query($query);
                     $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -916,7 +916,7 @@
 
 
                             echo "<div class='div-rectangle'>";
-                            echo "<button class='frame-button-e' onclick=\"window.location.href='FormEditar_producto.php?idProducto=" . $producto['IDPEDIDO'] . "&idUsuario=" . $idUsuario . "'\">";
+                            echo "<button class='frame-button-e' onclick=\"window.location.href='detallePedido.php?idPedido=" . $producto['IDPEDIDO'] . "&idUsuario=" . $idUsuario . "'\">";
                             echo "<span class='span-editar'>Ver detalles</span></button>";
                             echo "<span class='span-botellas-agua'>IDPEDIDO: " . $producto['IDPEDIDO'] . "</span>";
                             echo "<span class='mx-15'>MX$ " . $producto['TOTALPRECIO'] . "</span>";
@@ -937,7 +937,7 @@
                         }
                     } else {
                         echo "<div class='div-rectangle'>";
-                        echo "<span class='mi-cuenta'>No tienes productos agregados.</span>";
+                        echo "<span class='mi-cuenta'>No tienes pedidos aún.</span>";
                     }
                 } catch (PDOException $e) {
                     // Mostrar mensaje de error si la conexión falla

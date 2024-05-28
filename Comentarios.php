@@ -428,6 +428,23 @@
             display: block;
             position: relative;
             height: 21px;
+            margin: 20px 0 0 20px;
+            /* Incrementé el margen izquierdo a 150px */
+            color: #311811;
+            font-family: Outfit, var(--default-font-family);
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 21px;
+            left: 26px;
+            text-align: left;
+            white-space: nowrap;
+            z-index: 1;
+        }
+
+        .text-stock {
+            display: flex;
+            position: relative;
+            height: 21px;
             margin: 600px 0 0 20px;
             /* Incrementé el margen izquierdo a 150px */
             color: #311811;
@@ -1324,7 +1341,7 @@
 
             width: 900px;
             height: auto;
-            top: 850px;
+            margin-top: 50px;
             left: 0px;
             /* Ajusta la posición horizontal hacia la derecha según sea necesario */
             background: #fff5f4;
@@ -1593,6 +1610,8 @@
                         <button type="submit" id="editarPerfilButton" class="text-10">Agregar al carrito</button>
                     </div>
                     <span class="nombre"><?php echo $productos[0]['NOMBRE']; ?></span>
+                    
+                    <span class="text-stock">Stock: <?php echo $productos[0]['STOCK']; ?></span>
 
                     <span class="text-8">Descripcion:</span>
                     <div class="group-5">
@@ -1679,9 +1698,7 @@
     </div>
 
     <script>
-        document.getElementById("editarPerfilButton").addEventListener("click", function() {
-            window.location.href = "Carrito.html";
-        });
+        
     </script>
 </body>
 

@@ -129,6 +129,12 @@ if (isset($_GET['idUsuario'])) {
         if (!empty($productos)) {
           foreach ($productos as $producto) {
             $idProducto = $producto['IDPRODUCTO'];
+            $idVendedor = $producto['DATOS_USUARIO_IDUSUARIO'];
+            $stmt = $dbh->prepare("SELECT NOMBRE_TIENDA FROM DATOS_USUARIO WHERE IDUSUARIO = ?");
+            $stmt->execute([$idVendedor]);
+            $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $ruta_imagen = $rol_row['RUTA_PRODUCTO'] ?? '';
+
             $stmt = $dbh->prepare("SELECT RUTA_PRODUCTO FROM PRODUCTS_IMG WHERE ID = ?");
             $stmt->execute([$idProducto]);
             $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -147,6 +153,7 @@ if (isset($_GET['idUsuario'])) {
             echo "<span class='cinturon-unisex-moda'>" . $producto['NOMBRE'] . "</span>";
             echo "<span class='mx-150'> MX$" . $producto['PRECIO'] . "</span>";
             echo "</div>";
+            echo "<span class='reviews'>" . $producto['PRECIO'] . "</span>";
             echo "</div>";
           }
         } else {
@@ -156,7 +163,8 @@ if (isset($_GET['idUsuario'])) {
         echo "Error: " . $e->getMessage();
       }
     } else {
-      echo "Inicia Sesión para ver los productos";
+      echo "<span class='cinturon-unisex-moda'>Inicia Sesión para ver los productos</span>";
+
     }
     ?>
 

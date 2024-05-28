@@ -134,14 +134,14 @@
         <label for="uploadBtn" class="frame-3">
           <span class="upload-photo">Subir foto</span>
         </label>
-        <input type="file" id="uploadBtn" style="display:none" name="imagen" required>
+        <input type="file" id="uploadBtn" style="display:none" name="imagen" accept="image/*" required>
       </div>
 
       <span class="description">Descripción:</span>
 
       <div class="rectangle-4">
         <textarea id="descripcion" name="descripcion" placeholder="Agrega una descripción.." style="border: none !important;" maxlength="100" required></textarea>
-        <div id="warningMessage" class="warn" style="display: none; color: red;">You have exceeded the maximum character limit.</div>
+        <div id="warningMessage" class="warn" style="display: none; color: red;">Haz llegado al maximo de caracteres.</div>
 
       </div>
 
@@ -176,6 +176,22 @@
 
 
     document.getElementById('uploadBtn').addEventListener('change', function() {
+      var file = this.files[0];
+      var fileType = file['type'];
+      var validImageTypes = ['image/gif', 'image/jpeg', 'image/png','image/webp'];
+
+      if (!validImageTypes.includes(fileType)) {
+        alert("Solo se permiten archivos de tipo imagen (JPG, PNG, GIF, WEBP).");
+        this.value = ''; // Limpia el campo de entrada
+        document.getElementById('preview').style.display = 'none'; // Oculta la imagen previa si el archivo no es válido
+        return;
+      }
+
+      readURL(this);
+    });
+
+
+    document.getElementById('uploadBtn').addEventListener('change', function() {
       readURL(this);
     });
 
@@ -193,6 +209,13 @@
         document.getElementById('descripcion').addEventListener('input', function() {
             checkLength(this);
         });
+        
+        document.getElementById('precioInput').addEventListener('input', function (event) {
+            // Eliminar cualquier carácter que no sea un número entero
+            let value = event.target.value;
+            event.target.value = value.replace(/[^0-9]/g, '');
+        });
+
   </script>
 </body>
 

@@ -342,8 +342,21 @@
             const inputImagen = document.getElementById('imagen');
             const profilePreview = document.getElementById('profilePreview');
 
-            inputImagen.addEventListener('change', function() {
-                const file = this.files[0];
+            inputImagen.addEventListener('change', function(event) {
+                const files = Array.from(event.target.files);
+
+                const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+
+                const invalidFiles = files.filter(file => !allowedTypes.includes(file.type));
+
+                if (invalidFiles.length > 0) {
+                    alert('Solo se permiten archivos de tipo imagen (JPG, PNG, GIF, WEBP).');
+                    // Limpiar la selección de archivos inválidos
+                    event.target.value = '';
+                    return;
+                }
+
+                const file = files[0];
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = function() {

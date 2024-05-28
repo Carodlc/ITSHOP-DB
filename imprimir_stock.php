@@ -11,7 +11,7 @@ class PDF extends FPDF
         // Arial bold 15
         $this->SetFont('Arial', 'B', 15);
         // Título
-        $this->Cell(0, 10, 'ITSHOP - Reporte de Movimientos', 0, 1, 'C');
+        $this->Cell(0, 10, 'ITSHOP - Reporte de Inventario', 0, 1, 'C');
         $this->Ln(10);
     }
 
@@ -30,7 +30,7 @@ class PDF extends FPDF
     function BasicTable($header, $data)
     {
         // Anchos de las columnas
-        $w = array(60, 60, 60); // Ajusta los anchos de las columnas
+        $w = array(40, 90, 40); // Ajusta los anchos de las columnas
 
         // Cabecera
         for ($i = 0; $i < count($header); $i++) {
@@ -49,68 +49,52 @@ class PDF extends FPDF
 }
 
 // Verificar si idUsuario está presente
-if (isset($_GET['idUsuario']) && isset($_GET['fechaDesde']) && isset($_GET['fechaHasta'])) {
+if (isset($_GET['idUsuario'])) {
     $idUsuario = $_GET['idUsuario'];
-    $fechaDesde = $_GET['fechaDesde'];
-    $fechaHasta = $_GET['fechaHasta'];
-
-    // Convertir fechas de YYYY-MM-DD a DD/MM/YY para la consulta
-    $fechaDesde = DateTime::createFromFormat('Y-m-d', $fechaDesde)->format('d/m/y');
-    $fechaHasta = DateTime::createFromFormat('Y-m-d', $fechaHasta)->format('d/m/y');
 
     try {
         // Establecer conexión a la base de datos
-        $query = "SELECT p.NOMBRE, d.CANTIDAD, s.FECHA 
-                  FROM DATOS_PRODUCTO p
-                  JOIN DATOS_PRODUCTO_HAS_SURTIDO d ON p.IDPRODUCTO = d.DATOS_PRODUCTO_IDPRODUCTO
-                  JOIN SURTIDO s ON d.SURTIDO_IDSURTIDO = s.IDSURTIDO
-                  WHERE s.DATOS_USUARIO_IDUSUARIO = :idUsuario 
-                  AND TO_DATE(s.FECHA, 'DD/MM/YY') BETWEEN TO_DATE(:fechaDesde, 'DD/MM/YY') AND TO_DATE(:fechaHasta, 'DD/MM/YY')
-                  ORDER BY s.FECHA ASC";
+        $query = "SELECT IDPRODUCTO, NOMBRE, STOCK FROM DATOS_PRODUCTO WHERE DATOS_USUARIO_IDUSUARIO = :idUsuario ORDER BY IDPRODUCTO ASC";
         $stmt = $dbh->prepare($query);
         $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
-        $stmt->bindParam(':fechaDesde', $fechaDesde, PDO::PARAM_STR);
-        $stmt->bindParam(':fechaHasta', $fechaHasta, PDO::PARAM_STR);
         $stmt->execute();
-        $surtidos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         // Crear instancia del PDF
         $pdf = new PDF();
         $pdf->AddPage();
 
-        // Agregar IDPEDIDO del vendedor y fecha de emisión del reporte
+        // Agregar nombre del usuario y fecha de emisión del reporte
         $pdf->SetFont('Arial', '', 12);
-        $pdf->Cell(0, 10, 'Nombre del Vendedor: ' . obtenerNombreVendedor($idUsuario, $dbh), 0, 1, 'L');
+        $pdf->Cell(0, 10, 'Nombre del Usuario: ' . obtenerNombreUsuario($idUsuario, $dbh), 0, 1, 'L');
         $pdf->Cell(0, 10, 'Fecha de Emision: ' . date('d/m/Y'), 0, 1, 'L');
         $pdf->Ln(10); // Espacio entre el encabezado y la tabla
 
         // Cabecera de la tabla
-        $header = array('Nombre del Producto', 'Cantidad', 'Fecha de Surtido');
+        $header = array('ID Producto', 'Nombre', 'Stock');
 
         // Agregar datos a la tabla
         $data = [];
-        if (!empty($surtidos)) {
-            foreach ($surtidos as $surtido) {
-                // Convertir fecha de DD/MM/YY a DD/MM/YYYY para la salida
-                $fecha = DateTime::createFromFormat('d/m/y', $surtido['FECHA'])->format('d/m/Y');
-                $data[] = array($surtido['NOMBRE'], $surtido['CANTIDAD'], $fecha);
+        if (!empty($productos)) {
+            foreach ($productos as $producto) {
+                $data[] = array($producto['IDPRODUCTO'], $producto['NOMBRE'], $producto['STOCK']);
             }
         }
 
         $pdf->BasicTable($header, $data);
 
         // Salida del PDF
-        $pdf->Output('D', 'reporte_movimientos.pdf');
+        $pdf->Output('D', 'reporte_inventario.pdf');
 
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
 } else {
-    echo "No se ha especificado un ID de usuario o las fechas.";
+    echo "No se ha especificado un ID de usuario.";
 }
 
-// Función para obtener el nombre del vendedor
-function obtenerNombreVendedor($idUsuario, $dbh) {
+// Función para obtener el nombre del usuario
+function obtenerNombreUsuario($idUsuario, $dbh) {
     $query = "SELECT NOMBRE_USUARIO FROM DATOS_USUARIO WHERE IDUSUARIO = :idUsuario";
     $stmt = $dbh->prepare($query);
     $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);

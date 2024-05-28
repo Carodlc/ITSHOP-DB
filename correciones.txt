@@ -1,0 +1,2 @@
+que se abra el pdf, precio que no agarre punto, cambiar estatus del producto a borrado en vez de borrarlo
+0 activo no publicado,1 activo publicado 2 borrado

@@ -402,6 +402,25 @@
             border-radius: 30px;
         }
 
+        .frame-surtir {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: nowrap;
+            flex-shrink: 0;
+            left: 560px;
+            gap: 10px;
+            position: relative;
+            width: 100px;
+            padding: 6px 25px 6px 25px;
+            cursor: pointer;
+            background: #8d2d2c;
+            border: none;
+            z-index: 46;
+            overflow: hidden;
+            border-radius: 30px;
+        }
+
         .agregar-producto {
             flex-shrink: 0;
             flex-basis: auto;
@@ -874,153 +893,149 @@
         <div class="flex-row-d">
             <div class="rectangle-4">
                 <span class="mi-cuenta-5">mi cuenta</span><span onclick="window.location.href = 'Vendedor_perfil.php?idUsuario=<?php echo $idUsuario; ?>'" class="general">General</span>
-                <span  onclick="window.location.href = 'GestionProductos.php?idUsuario=<?php echo $idUsuario; ?>'" class="ventas">Productos</span>
+                <span onclick="window.location.href = 'GestionProductos.php?idUsuario=<?php echo $idUsuario; ?>'" class="ventas">Productos</span>
 
                 <div class="rectangle-6">
                     <div class="rectangle-7"></div>
                     <span class="productos">Inventario</span>
                 </div>
-                <span  onclick="window.location.href = 'FormVentas.php?idUsuario=<?php echo $idUsuario; ?>'" class="ventas">Ventas</span><span  onclick="window.location.href = 'Ajustes_vendedor.php?idUsuario=<?php echo $idUsuario; ?>'" class="ajustes">Ajustes</span>
+                <span onclick="window.location.href = 'FormVentas.php?idUsuario=<?php echo $idUsuario; ?>'" class="ventas">Ventas</span><span onclick="window.location.href = 'Ajustes_vendedor.php?idUsuario=<?php echo $idUsuario; ?>'" class="ajustes">Ajustes</span>
             </div>
             <div class="rectangle-8">
                 <div class="flex-row-df">
-                    <span class="productos-9">Inventario</span>
+                    <span class="productos-9">Inventario</span><button class="frame" onclick="window.location.href='imprimir_stock.php?idUsuario=<?php echo $idUsuario; ?>'">
+                        <span class="agregar-producto">Reporte de inventario</span>
+                    </button>
                 </div>
-                <div style="color: #8D2D2C; font-size: 17px; font-family: Outfit; font-weight: 400; word-wrap: break-word; margin-bottom: 10px; margin-left:30px">Crear reporte de inventario:</div>
-            <form method="GET" action="crear_reporteInventario.php">
-                <input type="hidden" name="idUsuario" value="<?php echo $idUsuario; ?>">
-                <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
-                    <div style="color: #8D2D2C; font-size: 17px; font-family: Outfit; font-weight: 400; margin-right: 10px;">Desde:</div>
-                    <input type="date" id="fechaDesde" name="fechaDesde">
-                    <div style="margin-left: 20px; margin-right: 20px;">&nbsp;</div> <!-- Espacio entre DESDE y HASTA -->
-                    <div style="color: #8D2D2C; font-size: 17px; font-family: Outfit; font-weight: 400; margin-left: 10px; margin-right: 10px;">Hasta:</div>
-                    <input type="date" id="fechaHasta" name="fechaHasta">
-                </div>
-                <div style="display: flex; justify-content: center; margin-bottom: 20px;">
-                <button id="generateReport" style="background: #8D2D2C; color: white; font-size: 17px; font-family: Outfit; font-weight: 500; border-radius: 30px; padding: 6px 25px; border:none;">Generar</button>
-                </div>
-            </form>
-                <?php
-                include 'conexion.php';
-                if (isset($_GET['idUsuario'])) {
-                    // Obtener el valor de 'idUsuario'
-                    $idUsuario = $_GET['idUsuario'];
+                <div style="color: #8D2D2C; font-size: 17px; font-family: Outfit; font-weight: 400; word-wrap: break-word; margin-bottom: 10px; margin-left:30px">Crear reporte de movimientos:</div>
+                <form method="GET" action="crear_reporteInventario.php">
+                    <input type="hidden" name="idUsuario" value="<?php echo $idUsuario; ?>">
+                    <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+                        <div style="color: #8D2D2C; font-size: 17px; font-family: Outfit; font-weight: 400; margin-right: 10px;">Desde:</div>
+                        <input type="date" id="fechaDesde" name="fechaDesde">
+                        <div style="margin-left: 20px; margin-right: 20px;">&nbsp;</div> <!-- Espacio entre DESDE y HASTA -->
+                        <div style="color: #8D2D2C; font-size: 17px; font-family: Outfit; font-weight: 400; margin-left: 10px; margin-right: 10px;">Hasta:</div>
+                        <input type="date" id="fechaHasta" name="fechaHasta">
+                    </div>
+                    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                        <button id="generateReport" style="background: #8D2D2C; color: white; font-size: 17px; font-family: Outfit; font-weight: 500; border-radius: 30px; padding: 6px 25px; border:none;">Generar</button>
+                    </div>
+                </form>
 
-                    // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
-                } else {
-                    // Si no se pasó el parámetro 'idUsuario' en la URL
-                    echo "No se ha especificado un ID de usuario.";
-                }
+                <form id="surtidoForm" action="Surtido.php" method="post" enctype="multipart/form-data">
 
-                $DATA = $dbh->query("SELECT SYSDATE FROM DUAL");
-    
-                // Obtener la fecha actual
-                $fecha_actual = $DATA->fetchColumn();
+                    <button type="submit" class="frame-surtir">
+                        <span class="agregar-producto">Surtir</span>
+                    </button>
+                    <?php
+                    include 'conexion.php';
+                    if (isset($_GET['idUsuario'])) {
+                        // Obtener el valor de 'idUsuario'
+                        $idUsuario = $_GET['idUsuario'];
 
-
-                try {
-                    // Establecer conexión a la base de datos
-                    $query = "SELECT * FROM DATOS_PRODUCTO WHERE DATOS_USUARIO_IDUSUARIO = " . $idUsuario . " ORDER BY IDPRODUCTO DESC";
-
-                    $stmt = $dbh->query($query);
-                    $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                    // Si hay productos, generar instancias de producto
-                    if (!empty($productos)) {
-                        foreach ($productos as $producto) {
-                            
-                            $idProducto = $producto['IDPRODUCTO'];
-                            $stmt = $dbh->prepare("SELECT RUTA_PRODUCTO FROM PRODUCTS_IMG WHERE ID = ?");
-                            $stmt->execute([$idProducto]);
-                            $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
-                            $ruta_imagen = $rol_row['RUTA_PRODUCTO'] ?? '';
-
-                            // Obtener el tipo de contenido de la imagen
-                            $info = getimagesize($ruta_imagen);
-                            $tipo_contenido = $info['mime'];
-
-                            // Obtener el contenido de la imagen como base64
-                            $imagen_codificada = base64_encode(file_get_contents($ruta_imagen));
-                            $imagen_src = 'data:' . $tipo_contenido . ';base64,' . $imagen_codificada;
-
-                            echo "<form id='form' action='FormInventario_surtir.php' method='post' enctype='multipart/form-data'>";
-                            echo "<div class='div-rectangle'>";
-                            echo "<div class='div-rectangle-d'><img src=" . $imagen_src . " alt='Imagen' class='profile-pic'></div>";
-                            echo "<button class='frame-button-e' type='submit'>";
-                            echo "<span class='span-editar'>Surtir</span></button>";
-                            echo "<input type='hidden' value='".$fecha_actual."' name='fecha' required  '>";
-
-                            echo "<span class='span-botellas-agua'>" . $producto['NOMBRE'] . "</span>";
-
-
-                            echo "<span class='stock'>Stock:  " . $producto['STOCK'] . "</span>";
-                            echo "<div class='descripcion'>";
-                            echo '<div class="product-quantity">';
-                            echo '  <span class="title">Cantidad de producto:</span>';
-                            echo '  <div class="input-container">';
-                            echo '    <input type="number" name="cantidad" class="quantity" min="0" value="0" required>';
-                            echo '    <div class="arrow-square-down"><div class="icon-8"></div></div>';
-                            echo '  </div>';
-                            echo '</div>';
-                            echo '<input type="hidden" name="idUsuario" value="'.$idUsuario.'" required>';
-                            echo '<input type="hidden" name="idProducto" value="'.$idProducto.'" required>';
-
-                            echo "</div>";
-
-                            echo "</div>";
-                            echo "</form>";
-
-                        }
+                        // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
                     } else {
-                        echo "<div class='div-rectangle'>";
-                        echo "<span class='mi-cuenta'>No tienes productos agregados.</span>";
+                        // Si no se pasó el parámetro 'idUsuario' en la URL
+                        echo "No se ha especificado un ID de usuario.";
                     }
-                } catch (PDOException $e) {
-                    // Mostrar mensaje de error si la conexión falla
-                    echo "Error: " . $e->getMessage();
-                }
 
-                ?>
+                    $DATA = $dbh->query("SELECT SYSDATE FROM DUAL");
 
+                    // Obtener la fecha actual
+                    $fecha_actual = $DATA->fetchColumn();
+
+
+                    try {
+                        // Establecer conexión a la base de datos
+                        $query = "SELECT * FROM DATOS_PRODUCTO WHERE DATOS_USUARIO_IDUSUARIO = " . $idUsuario . " ORDER BY IDPRODUCTO DESC";
+
+                        $stmt = $dbh->query($query);
+                        $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                        // Si hay productos, generar instancias de producto
+                        if (!empty($productos)) {
+                            foreach ($productos as $producto) {
+
+                                $idProducto = $producto['IDPRODUCTO'];
+                                $stmt = $dbh->prepare("SELECT RUTA_PRODUCTO FROM PRODUCTS_IMG WHERE ID = ?");
+                                $stmt->execute([$idProducto]);
+                                $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
+                                $ruta_imagen = $rol_row['RUTA_PRODUCTO'] ?? '';
+
+                                // Obtener el tipo de contenido de la imagen
+                                $info = getimagesize($ruta_imagen);
+                                $tipo_contenido = $info['mime'];
+
+                                // Obtener el contenido de la imagen como base64
+                                $imagen_codificada = base64_encode(file_get_contents($ruta_imagen));
+                                $imagen_src = 'data:' . $tipo_contenido . ';base64,' . $imagen_codificada;
+
+                                echo "<div class='div-rectangle'>";
+                                echo "<div class='div-rectangle-d'><img src=" . $imagen_src . " alt='Imagen' class='profile-pic'></div>";
+                                
+                                echo "<input type='hidden' value='" . $fecha_actual . "' name='fecha' required  '>";
+
+                                echo "<span class='span-botellas-agua'>" . $producto['NOMBRE'] . "</span>";
+
+
+                                echo "<span class='stock'>Stock:  " . $producto['STOCK'] . "</span>";
+                                echo "<div class='descripcion'>";
+                                echo '<div class="product-quantity">';
+                                echo '  <span class="title">Cantidad de producto:</span>';
+                                echo '  <div class="input-container">';
+                                echo '    <input type="number" name="cantidad' . $idProducto . '" class="quantity" min="0" value="0" required>';
+                                echo '    <div class="arrow-square-down"><div class="icon-8"></div></div>';
+                                echo '  </div>';
+                                echo '</div>';
+                                echo '<input type="hidden" name="idUsuario" value="' . $idUsuario . '" required>';
+                                echo '<input type="hidden" name="idProducto" value="' . $idProducto . '" required>';
+
+                                echo "</div>";
+
+                                echo "</div>";
+                            }
+                        } else {
+                            echo "<div class='div-rectangle'>";
+                            echo "<span class='mi-cuenta'>No tienes productos agregados.</span>";
+                        }
+                    } catch (PDOException $e) {
+                        // Mostrar mensaje de error si la conexión falla
+                        echo "Error: " . $e->getMessage();
+                    }
+
+                    ?>
+
+                </form>
 
 
             </div>
+
         </div>
     </div>
     <!-- Generated by Codia AI - https://codia.ai/ -->
 </body>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Capturar el evento de envío del formulario
-        document.querySelectorAll('form').forEach(function(form) {
-            form.addEventListener('submit', function(event) {
-                // Evitar que el formulario se envíe de forma predeterminada
-                event.preventDefault();
+    document.getElementById('surtidoForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Evitar que el formulario se envíe de forma tradicional
 
-                // Recolectar los datos del formulario
-                const formData = new FormData(form);
+        // Crear un objeto FormData con los datos del formulario
+        var formData = new FormData(this);
 
-                // Realizar la solicitud AJAX
-                fetch(form.action, {
-                    method: form.method,
-                    body: formData
-                })
-                .then(response => response.text())
-                .then(data => {
-                    // Manejar la respuesta del servidor, si es necesario
-                    console.log(data);
-
-                    // Actualizar la página si es necesario
-                    location.reload();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            });
-        });
+        // Usar fetch para enviar los datos del formulario de forma asíncrona
+        fetch('Surtido.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text()) // Asumimos que la respuesta es texto
+        .then(data => {
+            // Aquí puedes actualizar el contenido de la página según sea necesario
+            // Por ejemplo, podrías recargar parte de la página o actualizar un mensaje de estado
+            location.reload(); // Recargar la página
+        })
+        .catch(error => console.error('Error:', error));
     });
 
-    document.getElementById('generateReport').addEventListener('click', function () {
+    document.getElementById('generateReport').addEventListener('click', function() {
         // Obtén los valores de los inputs de fecha
         const fechaDesde = document.getElementById('fechaDesde').value;
         const fechaHasta = document.getElementById('fechaHasta').value;
@@ -1037,7 +1052,6 @@
             alert('Por favor, selecciona ambas fechas.');
         }
     });
-
 </script>
 
 </html>

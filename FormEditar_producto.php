@@ -191,7 +191,7 @@
 
             <div class="rectangle-4">
                 <textarea id="descripcion" name="descripcion" placeholder="Agrega una descripción.." style="border: none !important;" required maxlength="100"><?php echo $datos[0]['DESCRIPCION']; ?></textarea>
-                <div id="warningMessage" class="warn" style="display: none; color: red;">You have exceeded the maximum character limit.</div>
+                <div id="warningMessage" class="warn" style="display: none; color: red;">Haz llegado al maximo de caracteres.</div>
             </div>
 
             <!-- Vista previa de la imagen -->
@@ -220,21 +220,51 @@
         });
 
         function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
 
-                reader.onload = function(e) {
-                    document.getElementById('preview').src = e.target.result;
-                    document.getElementById('preview').style.display = 'block'; // Mostrar la imagen previa
-                }
+        reader.onload = function(e) {
+          document.getElementById('preview').src = e.target.result;
+          document.getElementById('preview').style.display = 'block'; // Mostrar la imagen previa
+        }
 
-                reader.readAsDataURL(input.files[0]); // convertir a base64
+        reader.readAsDataURL(input.files[0]); // convertir a base64
+      }
+    }
+
+
+    document.getElementById('uploadBtn').addEventListener('change', function() {
+      var file = this.files[0];
+      var fileType = file['type'];
+      var validImageTypes = ['image/gif', 'image/jpeg', 'image/png','image/webp'];
+
+      if (!validImageTypes.includes(fileType)) {
+        alert("Solo se permiten archivos de tipo imagen (JPG, PNG, GIF, WEBP).");
+        this.value = ''; // Limpia el campo de entrada
+        return;
+      }
+
+      readURL(this);
+    });
+
+
+    document.getElementById('uploadBtn').addEventListener('change', function() {
+      readURL(this);
+    });
+
+    function checkLength(textarea) {
+            var warningMessage = document.getElementById("warningMessage");
+            if (textarea.value.length >= 100) {
+                textarea.value = textarea.value.substring(0, 100); // Trim the text to 100 characters
+                warningMessage.style.display = "block"; // Show the warning message
+            } else {
+                warningMessage.style.display = "none"; // Hide the warning message if characters are within limit
             }
         }
 
-
-        document.getElementById('uploadBtn').addEventListener('change', function() {
-            readURL(this);
+        // Add event listener to trigger checkLength() function when textarea content changes
+        document.getElementById('descripcion').addEventListener('input', function() {
+            checkLength(this);
         });
 
         function checkLength(textarea) {
@@ -251,6 +281,13 @@
         document.getElementById('descripcion').addEventListener('input', function() {
             checkLength(this);
         });
+
+        document.getElementById('precioInput').addEventListener('input', function (event) {
+            // Eliminar cualquier carácter que no sea un número entero
+            let value = event.target.value;
+            event.target.value = value.replace(/[^0-9]/g, '');
+        });
+
     </script>
 </body>
 

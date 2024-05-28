@@ -11,9 +11,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $IDUSUARIO = $_POST['idUsuario'] ?? '';
 
         // Obtener el ID del vendedor del nuevo producto
-        $stmtVendedor = $dbh->prepare("SELECT DATOS_USUARIO_IDUSUARIO FROM DATOS_PRODUCTO WHERE IDPRODUCTO = ?");
+        $stmtVendedor = $dbh->prepare("SELECT DATOS_USUARIO_IDUSUARIO, STOCK FROM DATOS_PRODUCTO WHERE IDPRODUCTO = ?");
         $stmtVendedor->execute([$IDPRODUCTO]);
-        $vendedorProducto = $stmtVendedor->fetchColumn();
+        $productoData = $stmtVendedor->fetch(PDO::FETCH_ASSOC);
+        $vendedorProducto = $productoData['DATOS_USUARIO_IDUSUARIO'];
+        $stockDisponible = $productoData['STOCK'];
+
+        // Verificar si hay suficiente stock
+        if ($cantidad > $stockDisponible) {
+            echo "<script>alert('No hay suficiente stock disponible.'); window.location.href = 'Comentarios.php?idUsuario=$IDUSUARIO&idProducto=$IDPRODUCTO';</script>";
+            exit(); // Detener la ejecución del script
+        }
 
         // Verificar si ya existe un producto en el carrito del usuario
         $stmtCarrito = $dbh->prepare("SELECT * FROM CARRITO WHERE ID_USUARIO = ?");
@@ -21,14 +29,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $existingProduct = $stmtCarrito->fetch();
 
         if ($existingProduct) {
-
             $IDPRODUCTO_CARRITO= $existingProduct['ID_PRODUCTO'];
             $stmtVendedor = $dbh->prepare("SELECT DATOS_USUARIO_IDUSUARIO FROM DATOS_PRODUCTO WHERE IDPRODUCTO = ?");
             $stmtVendedor->execute([$IDPRODUCTO_CARRITO]);
             $IDUSUARIO_CARRITO = $stmtVendedor->fetchColumn();
-
-            echo "IDUSUARIO CARRITO".$IDUSUARIO_CARRITO;
-
 
             // Si hay productos en el carrito, verificar si pertenecen al mismo vendedor
             $vendedorCarrito = $IDUSUARIO_CARRITO;
@@ -51,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo "<script>alert('El producto ya está en tu carrito.'); window.location.href = 'Comentarios.php?idUsuario=$IDUSUARIO&idProducto=$IDPRODUCTO';</script>";
             } else {
                 // Si no existe, insertar un nuevo registro
-                $rowCount = insertData($dbh, 'CARRITO', ['ID_PRODUCTO', 'ID_USUARIO', 'CANTIDAD',], [$IDPRODUCTO, $IDUSUARIO, $cantidad,]);
+                $rowCount = insertData($dbh, 'CARRITO', ['ID_PRODUCTO', 'ID_USUARIO', 'CANTIDAD'], [$IDPRODUCTO, $IDUSUARIO, $cantidad]);
                 if ($rowCount > 0) {
                     echo "<script>alert('Se agregó el producto a tu carrito'); window.location.href = 'Carrito.php?idUsuario=$IDUSUARIO';</script>";
                 } else {

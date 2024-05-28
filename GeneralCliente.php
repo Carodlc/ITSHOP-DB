@@ -1598,7 +1598,7 @@
 
                 try {
                     // Establecer conexión a la base de datos
-                    $query = "SELECT * FROM PEDIDO WHERE IDUSUARIOCLIENTE = " . $idUsuario . " ORDER BY ESTADO ASC";
+                    $query = "SELECT * FROM PEDIDO WHERE IDUSUARIOCLIENTE = " . $idUsuario . " ORDER BY ESTADO ASC, FECHA DESC";
 
                     $stmt = $dbh->query($query);
                     $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -1615,7 +1615,7 @@
 
 
                             echo "<div class='section-b'>";
-                            echo "<button class='frame-button-e' onclick=\"window.location.href='FormEditar_producto.php?idProducto=" . $producto['IDPEDIDO'] . "&idUsuario=" . $idUsuario . "'\">";
+                            echo "<button class='frame-button-e' onclick=\"window.location.href='detallePedido.php?idPedido=" . $producto['IDPEDIDO'] . "&idUsuario=" . $idUsuario . "'\">";
 
                             echo "<span class='span-editar'>Ver detalles</span></button>";
 
@@ -1625,7 +1625,7 @@
                             if ($producto['ESTADO'] == 0) {
 
                                 echo "<span class='pedido'>Pedido pendiente</span>";
-                                echo "<button class='chat'>";
+                                echo "<button class='comentar'>";
                                 echo "<a  class='span-editar' href='https://wa.me/52" . $telefono['TELEFONO'] . "' target='_blank'>Chat</a></button>";
                             } else {
                                 echo "<button class='comentar' onclick=\"openPopup(" . $producto['IDPEDIDO'] . ", " . $idUsuario . ")\">";

@@ -1397,7 +1397,6 @@
         }
     </style>
 </head>
-
 <body>
     <div class="main-container">
         <div class="box">
@@ -1428,7 +1427,7 @@
                 </div>
             </div>
             <div class="group-3"></div>
-            <span onclick="window.location.href = 'index.php?idUsuario=<?php echo $idUsuario = $_GET['idUsuario']; ?>'" class="text-2">ITSHOP</span>
+            <span onclick="window.location.href = 'index.php?idUsuario=<?php echo $_GET['idUsuario']; ?>'" class="text-2">ITSHOP</span>
             <div class="section-4">
                 <span class="text-3">Inicio > </span><span class="text-4">Mi Cuenta </span>
             </div>
@@ -1437,69 +1436,53 @@
             <div class="flex-row-d">
                 <div class="rectangle-4">
                     <span class="mi-cuenta-5">mi cuenta</span>
-                    <span  onclick="window.location.href = 'Vendedor_perfil.php?idUsuario=<?php echo $idUsuario; ?>'" class="general">General</span>
-                   
-                    <span onclick="window.location.href = 'GestionProductos.php?idUsuario=<?php echo $idUsuario; ?>'"  class="ventas">Productos</span>
-
-                    <span onclick="window.location.href = 'FormInventario.php?idUsuario=<?php echo $idUsuario; ?>'" class="ventas">Inventario</span><span onclick="window.location.href = 'FormVentas.php?idUsuario=<?php echo $idUsuario; ?>'" class="ventas">Ventas</span>
+                    <span onclick="window.location.href = 'Vendedor_perfil.php?idUsuario=<?php echo $_GET['idUsuario']; ?>'" class="general">General</span>
+                    <span onclick="window.location.href = 'GestionProductos.php?idUsuario=<?php echo $_GET['idUsuario']; ?>'" class="ventas">Productos</span>
+                    <span onclick="window.location.href = 'FormInventario.php?idUsuario=<?php echo $_GET['idUsuario']; ?>'" class="ventas">Inventario</span>
+                    <span onclick="window.location.href = 'FormVentas.php?idUsuario=<?php echo $_GET['idUsuario']; ?>'" class="ventas">Ventas</span>
                     <div class="rectangle-6">
                         <div class="rectangle-7"></div>
-                        <span onclick="window.location.href = 'Ajustes_vendedor.php?idUsuario=<?php echo $idUsuario; ?>'" class="productos">Ajustes</span>
+                        <span onclick="window.location.href = 'Ajustes_vendedor.php?idUsuario=<?php echo $_GET['idUsuario']; ?>'" class="productos">Ajustes</span>
                     </div>
                 </div>
                 <?php
-            include 'conexion.php';
-            if (isset($_GET['idUsuario'])) {
-                // Obtener el valor de 'idUsuario'
-                $idUsuario = $_GET['idUsuario'];
+                include 'conexion.php';
+                if (isset($_GET['idUsuario'])) {
+                    $idUsuario = $_GET['idUsuario'];
 
-                $query = "SELECT * FROM DATOS_USUARIO WHERE IDUSUARIO = " . $idUsuario . "";
-
-                $stmt = $dbh->query($query);
-                $datos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
-            } else {
-                // Si no se pasó el parámetro 'idUsuario' en la URL
-                echo "No se ha especificado un ID de usuario.";
-            }
-            ?>
-            <div class="wrapper-4" id="tablaWrapper">
-                <div class="section-6">
-                    <span class="text-c">Mi Perfil</span>
-
-
-                </div>
-                <div class="group-5">
-                    <div class="section-8">
-                        <span class="text-7">Nombre:<?php echo $datos[0]['NOMBRE_USUARIO']; ?></span>
-                        <span class="text-8">Correo:<?php echo $datos[0]['CORREO']; ?></span>
-                        <div class="section-9">
-                            <button id="editarPerfilButton" class="text-10">Eliminar Cuenta</button>
+                    $query = "SELECT * FROM DATOS_USUARIO WHERE IDUSUARIO = " . $idUsuario;
+                    $stmt = $dbh->query($query);
+                    $datos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                } else {
+                    echo "No se ha especificado un ID de usuario.";
+                }
+                ?>
+                <div class="wrapper-4" id="tablaWrapper">
+                    <div class="section-6">
+                        <span class="text-c">Mi Perfil</span>
+                    </div>
+                    <div class="group-5">
+                        <div class="section-8">
+                            <span class="text-7">Nombre: <?php echo $datos[0]['NOMBRE_USUARIO']; ?></span>
+                            <span class="text-8">Correo: <?php echo $datos[0]['CORREO']; ?></span>
+                            <div class="section-9">
+                                <button id="eliminarCuentaButton" class="text-10">Eliminar Cuenta</button>
+                            </div>
                         </div>
-
                     </div>
                 </div>
-
-
             </div>
-
-
-                    <script>
-                        document.getElementById("gestionarUsuariosButton").addEventListener("click", function() {
-                            window.location.href = "FormGestionarUsuarios.html";
-                        });
-
-                        document.getElementById("editarPerfilButton").addEventListener("click", function() {
-                            window.location.href = "FormEditarPerfilVendedor.php";
-                        });
-
-                       
-
-                        // Cargar el contenido de FormGestionarRoles.html
-                    </script>
-
-                    <!-- Generated by Codia AI - https://codia.ai/ -->
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("eliminarCuentaButton").addEventListener("click", function() {
+                if (confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.")) {
+                    sessionStorage.removeItem('idUsuario'); // Eliminar el idUsuario del sessionStorage
+                    window.location.href = "eliminar_cuenta.php?idUsuario=<?php echo $_GET['idUsuario']; ?>";
+                }
+            });
+        });
+    </script>
 </body>
-
 </html>

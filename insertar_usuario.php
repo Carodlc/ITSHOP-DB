@@ -83,7 +83,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt_rol->execute([$ROL_NOMBRE]);
             $rol_row = $stmt_rol->fetch(PDO::FETCH_ASSOC);
             $ROL_IDROL = $rol_row['IDROL'] ?? '';
-            echo "El ROLESSSSSSSSSSSSS: " . $ROL_NOMBRE;
 
             // Obtener el último ID insertado
             // Obtener el último ID de usuario de la base de datos
@@ -124,7 +123,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $TELEFONO = $_POST['telefono'] ?? null;
 
             }
-            echo "el valor es " . $IDUSUARIO;
 
             // Insertar datos en la tabla de usuarios
             $rowCount = insertData($dbh, 'DATOS_USUARIO', ['IDUSUARIO', 'NOMBRE_USUARIO', 'ESPECIALIDADES_IDESPECIALIDAD', 'ROL_IDROL', 'NOMBRE_TIENDA', 'FECHA_NACIMIENTO', 'CORREO', 'CONTRASENA','TELEFONO'], [$IDUSUARIO , $NOMBRE_USUARIO, $ESPECIALIDADES_IDESPECIALIDAD, $ROL_IDROL,  $NOMBRE_TIENDA, $fecha_formateada, $CORREO, $CONTRASENA_ENCRYPTADA,$TELEFONO]);
@@ -143,7 +141,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     // Mueve el archivo a la carpeta destino
                     if (move_uploaded_file($nombreTempArchivo, $directorioDestino . $nombreArchivo,)) {
-                        echo 'Imagen subida correctamente.';
 
                         // Después de la inserción de la imagen en la carpeta local, inserta la información en la base de datos
                         insertImage($dbh, $IDUSUARIO, $nombreArchivo, $directorioDestino . $nombreArchivo);

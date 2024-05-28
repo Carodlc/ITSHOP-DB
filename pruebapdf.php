@@ -30,7 +30,7 @@ class PDF extends FPDF
     function BasicTable($header, $data)
     {
         // Anchos de las columnas
-        $w = array(90, 90); // Ajusta los anchos de las columnas
+        $w = array(50, 50, 50); // Ajusta los anchos de las columnas
 
         // Cabecera
         for ($i = 0; $i < count($header); $i++) {
@@ -42,6 +42,7 @@ class PDF extends FPDF
         foreach ($data as $row) {
             $this->Cell($w[0], 6, $row[0], 1);
             $this->Cell($w[1], 6, $row[1], 1);
+            $this->Cell($w[2], 6, $row[2], 1);
             $this->Ln();
         }
     }
@@ -53,44 +54,55 @@ if (isset($_GET['idUsuario']) && isset($_GET['fechaDesde']) && isset($_GET['fech
     $fechaDesde = $_GET['fechaDesde'];
     $fechaHasta = $_GET['fechaHasta'];
 
-    // Convertir fechas de DD/MM/AA a DD/MM/YYYY para la consulta
+    // Convertir fechas de Y-m-d a d/m/y para la consulta
     $fechaDesde = DateTime::createFromFormat('Y-m-d', $fechaDesde)->format('d/m/y');
     $fechaHasta = DateTime::createFromFormat('Y-m-d', $fechaHasta)->format('d/m/y');
 
     try {
         // Establecer conexión a la base de datos
-        $query = "SELECT IDPEDIDO, FECHA FROM PEDIDO WHERE IDUSUARIOVENDEDOR = :idUsuario AND TO_DATE(FECHA, 'DD/MM/YY') BETWEEN TO_DATE(:fechaDesde, 'DD/MM/YY') AND TO_DATE(:fechaHasta, 'DD/MM/YY') ORDER BY ESTADO ASC";
+        $query = "SELECT IDPEDIDO, TO_CHAR(FECHA, 'DD/MM/YY') AS FECHA, TOTALPRECIO 
+                  FROM PEDIDO 
+                  WHERE IDUSUARIOVENDEDOR = :idUsuario 
+                    AND TO_DATE(FECHA, 'DD/MM/YY') BETWEEN TO_DATE(:fechaDesde, 'DD/MM/YY') AND TO_DATE(:fechaHasta, 'DD/MM/YY') 
+                  ORDER BY ESTADO ASC";
         $stmt = $dbh->prepare($query);
         $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
         $stmt->bindParam(':fechaDesde', $fechaDesde, PDO::PARAM_STR);
         $stmt->bindParam(':fechaHasta', $fechaHasta, PDO::PARAM_STR);
         $stmt->execute();
-        $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $ventas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         // Crear instancia del PDF
         $pdf = new PDF();
         $pdf->AddPage();
 
-        // Agregar IDPEDIDO del vendedor y fecha de emisión del reporte
+        // Agregar nombre del vendedor y fecha de emisión del reporte
         $pdf->SetFont('Arial', '', 12);
         $pdf->Cell(0, 10, 'Nombre del Vendedor: ' . obtenerNombreVendedor($idUsuario, $dbh), 0, 1, 'L');
         $pdf->Cell(0, 10, 'Fecha de Emision: ' . date('d/m/Y'), 0, 1, 'L');
         $pdf->Ln(10); // Espacio entre el encabezado y la tabla
 
         // Cabecera de la tabla
-        $header = array('IDPEDIDO', 'Fecha');
+        $header = array('IDPEDIDO', 'Fecha', 'Cantidad (MX$)');
 
         // Agregar datos a la tabla
         $data = [];
-        if (!empty($productos)) {
-            foreach ($productos as $producto) {
+        $totalGanado = 0;
+        if (!empty($ventas)) {
+            foreach ($ventas as $venta) {
                 // Convertir fecha de DD/MM/YY a DD/MM/YYYY para la salida
-                $fecha = DateTime::createFromFormat('d/m/y', $producto['FECHA'])->format('d/m/Y');
-                $data[] = array($producto['IDPEDIDO'], $fecha);
+                $fecha = DateTime::createFromFormat('d/m/y', $venta['FECHA'])->format('d/m/Y');
+                $data[] = array($venta['IDPEDIDO'], $fecha, $venta['TOTALPRECIO']);
+                $totalGanado += $venta['TOTALPRECIO'];
             }
         }
 
         $pdf->BasicTable($header, $data);
+
+        // Mostrar el total ganado
+        $pdf->Ln(10); // Espacio antes del total
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(0, 10, 'Total Ganado: MX$' . $totalGanado, 0, 1, 'R');
 
         // Salida del PDF
         $pdf->Output('D', 'reporte_ventas.pdf');

@@ -65,8 +65,8 @@ function getCategorias($dbh) {
 function getNombreProductos($dbh) {
     $query = "SELECT NOMBRE FROM DATOS_PRODUCTO";
     $stmt = $dbh->query($query);
-    $productos = $stmt->fetchAll(PDO::FETCH_COLUMN);
-    return $productos;
+    $categorias = $stmt->fetchAll(PDO::FETCH_COLUMN);
+    return $categorias;
 }
 
 // Function to fetch products from database

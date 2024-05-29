@@ -44,12 +44,9 @@ if (isset($_GET['idUsuario'])) {
     <div class="frame">
 
       <span class="itshop">ITSHOP</span>
-      <form method="GET" action="index.php" id="searchForm">
-
-
+      <form method="GET" action="index.php" id="searchForm" onsubmit="return verificarUsuarioLogueado()">
         <input type="text" id="busqueda" name="busqueda" class="rectangle">
-        <button type="submit" class="icon">
-        </button>
+        <button type="submit" class="icon"></button>
         <input type="hidden" name="idUsuario" value="<?php echo isset($idUsuario) ? $idUsuario : ''; ?>">
 
         <button type="button" class="frame-1" id="categoriesBtn">
@@ -59,20 +56,20 @@ if (isset($_GET['idUsuario'])) {
 
           <select class="categorias" name="categoriasSelect" id="categoriasSelect" onchange="filtrarPorCategoria()">
             <option value="">Categoría</option>
-            <!-- Aquí puedes agregar las opciones de categorías desde PHP -->
             <?php
             include 'conexion.php';
-            $categorias = getCategorias($dbh); // Suponiendo que tienes una función para obtener las categorías desde la base de datos
+            $categorias = getCategorias($dbh);
             foreach ($categorias as $categoria) {
               echo "<option value=\"$categoria\">$categoria</option>";
             }
             ?>
           </select>
         </button>
-        <div id="categoriasDropdown" style="display: none;">
+        <div id="categoriasDropdown" style="display: none;"></div>
       </form>
 
-    </div>
+
+    
     <!-- Agregar el menú desplegable -->
     <div class="dropdown">
       <div class="user">
@@ -115,11 +112,11 @@ if (isset($_GET['idUsuario'])) {
           $categorias = $stmt_especialidad->fetch(PDO::FETCH_ASSOC);
           $IDCATEGORIA = $categorias['IDCATEGORIAS'] ?? null;
 
-          $query = "SELECT NOMBRE, PRECIO, IDPRODUCTO, DESCRIPCION FROM DATOS_PRODUCTO WHERE PUBLICADO = 1 AND CATEGORIAS_IDCATEGORIAS = ? AND LOWER(DESCRIPCION) LIKE LOWER(?) ORDER BY IDPRODUCTO DESC";
+          $query = "SELECT NOMBRE, PRECIO, IDPRODUCTO, DESCRIPCION,DATOS_USUARIO_IDUSUARIO FROM DATOS_PRODUCTO WHERE PUBLICADO = 1 AND CATEGORIAS_IDCATEGORIAS = ? AND LOWER(DESCRIPCION) LIKE LOWER(?) ORDER BY IDPRODUCTO DESC";
           $stmt_check = $dbh->prepare($query);
           $stmt_check->execute([$IDCATEGORIA, '%' . $busqueda . '%']);
         } else {
-          $query = "SELECT NOMBRE, PRECIO, IDPRODUCTO, DESCRIPCION FROM DATOS_PRODUCTO WHERE PUBLICADO = 1 AND LOWER(DESCRIPCION) LIKE LOWER(?) ORDER BY IDPRODUCTO DESC";
+          $query = "SELECT NOMBRE, PRECIO, IDPRODUCTO, DESCRIPCION,DATOS_USUARIO_IDUSUARIO FROM DATOS_PRODUCTO WHERE PUBLICADO = 1 AND LOWER(DESCRIPCION) LIKE LOWER(?) ORDER BY IDPRODUCTO DESC";
           $stmt_check = $dbh->prepare($query);
           $stmt_check->execute(['%' . $busqueda . '%']);
         }
@@ -133,7 +130,7 @@ if (isset($_GET['idUsuario'])) {
             $stmt = $dbh->prepare("SELECT NOMBRE_TIENDA FROM DATOS_USUARIO WHERE IDUSUARIO = ?");
             $stmt->execute([$idVendedor]);
             $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
-            $ruta_imagen = $rol_row['RUTA_PRODUCTO'] ?? '';
+            $nombre_tienda = $rol_row['NOMBRE_TIENDA'] ?? '';
 
             $stmt = $dbh->prepare("SELECT RUTA_PRODUCTO FROM PRODUCTS_IMG WHERE ID = ?");
             $stmt->execute([$idProducto]);
@@ -153,7 +150,7 @@ if (isset($_GET['idUsuario'])) {
             echo "<span class='cinturon-unisex-moda'>" . $producto['NOMBRE'] . "</span>";
             echo "<span class='mx-150'> MX$" . $producto['PRECIO'] . "</span>";
             echo "</div>";
-            echo "<span class='reviews'>" . $producto['PRECIO'] . "</span>";
+            echo "<span class='reviews'>" . $nombre_tienda . "</span>";
             echo "</div>";
           }
         } else {
@@ -164,7 +161,6 @@ if (isset($_GET['idUsuario'])) {
       }
     } else {
       echo "<span class='cinturon-unisex-moda'>Inicia Sesión para ver los productos</span>";
-
     }
     ?>
 
@@ -232,10 +228,29 @@ if (isset($_GET['idUsuario'])) {
       }
     }
 
+    function obtenerIdUsuario() {
+      return sessionStorage.getItem('idUsuario');
+    }
+
+    function verificarUsuarioLogueado() {
+      var idUsuario = "<?php echo isset($idUsuario) ? $idUsuario : ''; ?>";
+      if (!idUsuario) {
+        alert("Por favor, inicia sesión para realizar una búsqueda o filtrar por categoría.");
+        return false; // Evita que el formulario se envíe
+      }
+      return true;
+    }
+
     function filtrarPorCategoria() {
+      var idUsuario = "<?php echo isset($idUsuario) ? $idUsuario : ''; ?>";
+      if (!idUsuario) {
+        alert("Por favor, inicia sesión para realizar una búsqueda o filtrar por categoría.");
+        return;
+      }
+
       var selectedCategoria = document.getElementById("categoriasSelect").value;
       var busqueda = document.getElementById("busqueda").value;
-      var url = "index.php?idUsuario=<?php echo isset($idUsuario) ? $idUsuario : ''; ?>";
+      var url = "index.php?idUsuario=" + encodeURIComponent(idUsuario);
 
       if (selectedCategoria !== "") {
         url += "&categoriasSelect=" + encodeURIComponent(selectedCategoria);
@@ -267,22 +282,6 @@ if (isset($_GET['idUsuario'])) {
       }
       window.location.href = url;
     }
-
-    function filtrarPorCategoria() {
-      var selectedCategoria = document.getElementById("categoriasSelect").value;
-      var busqueda = document.getElementById("busqueda").value;
-      var url = "index.php?idUsuario=<?php echo isset($idUsuario) ? $idUsuario : ''; ?>";
-
-      if (selectedCategoria !== "") {
-        url += "&categoriasSelect=" + encodeURIComponent(selectedCategoria);
-      }
-
-      if (busqueda !== "") {
-        url += "&busqueda=" + encodeURIComponent(busqueda);
-      }
-
-      window.location.href = url;
-    }
   </script>
 
   <!-- btn pruebsa 
@@ -293,7 +292,7 @@ if (isset($_GET['idUsuario'])) {
   </div>
 
 -->
-  
+
 
 </body>
 

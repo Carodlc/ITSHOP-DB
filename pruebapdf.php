@@ -2,6 +2,9 @@
 require('fpdf186/fpdf.php');
 include 'conexion.php';
 
+// Establecer la zona horaria predeterminada
+date_default_timezone_set('America/Mexico_City'); // Ajusta la zona horaria según tu ubicación
+
 // Clase para generar el PDF
 class PDF extends FPDF
 {
@@ -42,7 +45,8 @@ class PDF extends FPDF
         foreach ($data as $row) {
             $this->Cell($w[0], 6, $row[0], 1);
             $this->Cell($w[1], 6, $row[1], 1);
-            $this->Cell($w[2], 6, $row[2], 1);
+            // Ajustar la celda de cantidad para alinear el texto a la derecha
+            $this->Cell($w[2], 6, number_format($row[2], 2), 1, 0, 'R');
             $this->Ln();
         }
     }
@@ -83,7 +87,7 @@ if (isset($_GET['idUsuario']) && isset($_GET['fechaDesde']) && isset($_GET['fech
         $pdf->Ln(10); // Espacio entre el encabezado y la tabla
 
         // Cabecera de la tabla
-        $header = array('IDPEDIDO', 'Fecha', 'Cantidad (MX$)');
+        $header = array('Folio pedido', 'Fecha', 'Cantidad (MX$)');
 
         // Agregar datos a la tabla
         $data = [];
@@ -102,7 +106,8 @@ if (isset($_GET['idUsuario']) && isset($_GET['fechaDesde']) && isset($_GET['fech
         // Mostrar el total ganado
         $pdf->Ln(10); // Espacio antes del total
         $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(0, 10, 'Total Ganado: MX$' . $totalGanado, 0, 1, 'R');
+        // Justificar el total ganado a la derecha
+        $pdf->Cell(0, 10, 'Total Ganado: MX$' . number_format($totalGanado, 2), 0, 1, 'R');
 
         // Salida del PDF
         $pdf->Output('D', 'reporte_ventas.pdf');

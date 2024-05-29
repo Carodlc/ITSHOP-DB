@@ -2,6 +2,9 @@
 require('fpdf186/fpdf.php');
 include 'conexion.php';
 
+// Establecer la zona horaria predeterminada
+date_default_timezone_set('America/Mexico_City'); // Ajusta la zona horaria según tu ubicación
+
 // Clase para generar el PDF
 class PDF extends FPDF
 {
@@ -35,14 +38,14 @@ class PDF extends FPDF
         $this->Cell(0, 10, 'Vendedor: ' . $pedido['VENDEDOR'], 0, 1, 'L');
         $this->Cell(0, 10, 'Comprador: ' . $pedido['COMPRADOR'], 0, 1, 'L');
         $this->Cell(0, 10, 'Fecha del Pedido: ' . $pedido['FECHA'], 0, 1, 'L');
-        $this->Cell(0, 10, 'Total del Pedido: MX$' . $pedido['TOTALPRECIO'], 0, 1, 'L');
+        $this->Cell(0, 10, 'Total del Pedido: MX$' . number_format($pedido['TOTALPRECIO'], 2), 0, 1, 'R'); // Justificado a la derecha
         $this->Ln(10);
 
         // Cabecera de la tabla
         $this->SetFont('Arial', 'B', 12);
         $this->Cell(60, 10, 'Producto', 1);
         $this->Cell(40, 10, 'Cantidad', 1);
-        $this->Cell(40, 10, 'Subtotal', 1);
+        $this->Cell(40, 10, 'Subtotal', 1, 0, 'R'); // Justificado a la derecha
         $this->Ln();
 
         // Datos de los productos
@@ -50,7 +53,7 @@ class PDF extends FPDF
         foreach ($productos as $producto) {
             $this->Cell(60, 10, $producto['NOMBRE'], 1);
             $this->Cell(40, 10, $producto['CANTIDAD'], 1);
-            $this->Cell(40, 10, 'MX$' . $producto['IMPORTE'], 1);
+            $this->Cell(40, 10, 'MX$' . number_format($producto['IMPORTE'], 2), 1, 0, 'R'); // Justificado a la derecha
             $this->Ln();
         }
     }
@@ -90,6 +93,11 @@ if (isset($_GET['idUsuario']) && isset($_GET['idPedido'])) {
 
         // Agregar datos del pedido y los productos al PDF
         $pdf->PedidoTable($pedido, $productos);
+
+        // Mostrar la fecha de emisión
+        $pdf->Ln(10);
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(0, 10, 'Fecha de Emision: ' . date('d/m/Y'), 0, 1, 'L');
 
         // Salida del PDF
         $pdf->Output('D', 'recibo_pedido.pdf');

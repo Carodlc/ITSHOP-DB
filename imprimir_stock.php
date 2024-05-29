@@ -71,7 +71,7 @@ if (isset($_GET['idUsuario'])) {
         $pdf->Ln(10); // Espacio entre el encabezado y la tabla
 
         // Cabecera de la tabla
-        $header = array('ID Producto', 'Nombre', 'Stock');
+        $header = array('Folio Del Producto', 'Nombre', 'Stock');
 
         // Agregar datos a la tabla
         $data = [];

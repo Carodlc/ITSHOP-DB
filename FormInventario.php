@@ -947,7 +947,7 @@
 
                     try {
                         // Establecer conexión a la base de datos
-                        $query = "SELECT * FROM DATOS_PRODUCTO WHERE DATOS_USUARIO_IDUSUARIO = " . $idUsuario . " ORDER BY IDPRODUCTO DESC";
+                        $query = "SELECT * FROM DATOS_PRODUCTO WHERE DATOS_USUARIO_IDUSUARIO = " . $idUsuario . " AND publicado IN (0, 1) ORDER BY IDPRODUCTO DESC";
 
                         $stmt = $dbh->query($query);
                         $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);

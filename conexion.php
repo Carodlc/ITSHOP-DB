@@ -1,26 +1,28 @@
 <?php
 // Oracle database connection parameters
-$hostname = 'localhost'; // Replace with your Oracle database hostname
-$service_name = 'XE'; // Replace with your Oracle database service name
-$username = 'ITSHOP'; // Replace with your Oracle database username
-$password = 'ITS'; // Replace with your Oracle database password
+$hostname = 'itshopp.azurewebsites.net'; // Replace with your Oracle database hostname
+$username = 'admindba'; // Replace with your Oracle database username
+$password = 'ITSHOP$24'; // Replace with your Oracle database password
+$dbname = "ITSHOP";
 
 // Construct the data source name (DSN) for PDO
-$dsn = "oci:dbname=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=$hostname)(PORT=1522)))(CONNECT_DATA=(SID=$service_name)))";
+$dsn = "mysql:host=$hostname;dbname=$dbname;charset=utf8";
 
 try {
-    // Establish a connection to the Oracle database using PDO
+    // Establish a connection to the MySQL database using PDO
     $dbh = new PDO($dsn, $username, $password);
 
     // Set PDO error mode to exception
     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Connection successful, display a message
-    
+    echo "Connection successful!";
 } catch (PDOException $e) {
     // Connection failed, display an error message
     echo "Connection failed: " . $e->getMessage();
 }
+
+// Function to insert data into a table
 function insertData($dbh, $table, $columns, $values) {
     // Build the INSERT INTO statement
     $query = "INSERT INTO $table (" . implode(", ", $columns) . ") VALUES (" . str_repeat("?,", count($columns) - 1) . "?)";
@@ -34,6 +36,7 @@ function insertData($dbh, $table, $columns, $values) {
     // Return the number of rows affected
     return $stmt->rowCount();
 }
+
 // Function to fetch roles from database
 function getRoles($dbh) {
     $query = "SELECT NOMBREROL FROM ROL";
@@ -50,6 +53,7 @@ function getEspecialidades($dbh) {
     return $especialidades;
 }
 
+// Function to fetch categories from database
 function getCategorias($dbh) {
     $query = "SELECT NOMBRE_CATEGORIA FROM CATEGORIAS";
     $stmt = $dbh->query($query);
@@ -57,12 +61,15 @@ function getCategorias($dbh) {
     return $categorias;
 }
 
+// Function to fetch product names from database
 function getNombreProductos($dbh) {
-    $query = "SELECT NOMBRE FROM DATOS_PRODUCTO WHERE ";
+    $query = "SELECT NOMBRE FROM DATOS_PRODUCTO";
     $stmt = $dbh->query($query);
     $categorias = $stmt->fetchAll(PDO::FETCH_COLUMN);
     return $categorias;
 }
+
+// Function to fetch products from database
 function getProductos($dbh) {
     $query = "SELECT NOMBRE, PRECIO,IDPRODUCTO FROM DATOS_PRODUCTO WHERE PUBLICADO = 1 ORDER BY IDPRODUCTO DESC";
 
@@ -70,41 +77,26 @@ function getProductos($dbh) {
     $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $productos;
 }
+
+// Function to fetch user data by ID
 function getUsuario($dbh, $IDUSUARIO) {
     $query = "SELECT * FROM DATOS_USUARIO WHERE IDUSUARIO = ?";
-
     $stmt = $dbh->prepare($query);
-    
-    // Ejecutar la consulta pasando el IDUSUARIO como parámetro
     $stmt->execute([$IDUSUARIO]);
-    
-    // Obtener los resultados como un arreglo asociativo
     $datos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    // Retornar los resultados
     return $datos;
 }
 
-
+// Function to fetch orders by user ID
 function getPedidos($dbh, $IDUSUARIO) {
-    // Consulta SQL para obtener los pedidos asociados al IDUSUARIO
     $query = "SELECT IDPEDIDO, FECHA FROM PEDIDO WHERE IDUSUARIOVENDEDOR = ?";
-    
-    // Preparar la consulta
     $stmt = $dbh->prepare($query);
-    
-    // Ejecutar la consulta pasando el IDUSUARIO como parámetro
     $stmt->execute([$IDUSUARIO]);
-    
-    // Obtener los resultados como un arreglo asociativo
-    $ventas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    // Retornar los resultados
-    return $ventas;
+    $pedidos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $pedidos;
 }
 
-
-
+// Function to fetch role ID by user ID
 function obtenerRolPorIdUsuario($dbh, $idUsuario) {
     $query = "SELECT ROL_IDROL FROM DATOS_USUARIO WHERE IDUSUARIO = :idUsuario";
     $stmt = $dbh->prepare($query);
@@ -115,11 +107,7 @@ function obtenerRolPorIdUsuario($dbh, $idUsuario) {
     if ($resultado) {
         return $resultado['ROL_IDROL'];
     } else {
-        // En caso de que el usuario no exista o no tenga un rol asignado, puedes retornar un valor por defecto o lanzar una excepción según tu necesidad.
-        return null; // O puedes lanzar una excepción aquí
+        return null; // Return null or handle the case where no role is found
     }
 }
-
-
 ?>
-

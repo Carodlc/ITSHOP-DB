@@ -55,7 +55,7 @@ function getEspecialidades($dbh) {
 
 // Function to fetch categories from database
 function getCategorias($dbh) {
-    $query = "SELECT NOMBRE_CATEGORIA FROM CATEGORIAS";
+    $query = "SELECT nombre_categoria FROM categorias";
     $stmt = $dbh->query($query);
     $categorias = $stmt->fetchAll(PDO::FETCH_COLUMN);
     return $categorias;

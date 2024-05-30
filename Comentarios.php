@@ -1498,7 +1498,7 @@
                         // Obtener el valor de 'idProducto'
                         $idUsuario = $_GET['idUsuario'];
 
-                        $DATA = $dbh->query("SELECT SYSDATE FROM dual");
+                        $DATA = $dbh->query("SELECT CURDATE()");
 
                         // Obtener la fecha actual
                         $fecha_actual = $DATA->fetchColumn();

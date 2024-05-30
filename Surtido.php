@@ -70,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $detalle_surtido = insertData($dbh, 'DATOS_PRODUCTO_HAS_SURTIDO', ['DATOS_PRODUCTO_IDPRODUCTO', 'SURTIDO_IDSURTIDO', 'CANTIDAD',], [$idProducto, $IDSURTIDO, $cantidad,]);
                         if ($detalle_surtido > 0) {
                             // Actualizar el stock del producto
-                            $updateStmt = $dbh->prepare("UPDATE DATOS_PRODUCTO SET STOCK = STOCK + ? WHERE IDPRODUCTO = ?");
+                            $updateStmt = $dbh->prepare("UPDATE datos_producto SET stock = stock + ? WHERE idproducto = ?");
                             $updateStmt->execute([$cantidad, $idProducto]);
                         }
                     }

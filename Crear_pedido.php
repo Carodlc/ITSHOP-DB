@@ -8,23 +8,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Obtener el valor de 'idUsuario'
         $IDUSUARIO = $_POST['idUsuario'] ?? '';
 
-        $query = "SELECT ID_PRODUCTO, CANTIDAD FROM CARRITO WHERE ID_USUARIO = " . $IDUSUARIO . " ORDER BY ID_PRODUCTO DESC";
+        $query = "SELECT id_producto, cantidad FROM carrito WHERE id_usuario = " . $IDUSUARIO . " order by id_producto desc";
         $stmt = $dbh->query($query);
         $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $IDPROD = $productos[0]['ID_PRODUCTO'];
         echo "id PRODUCTO" . $IDPROD;
-        $stmtVendedor = $dbh->prepare("SELECT DATOS_USUARIO_IDUSUARIO FROM DATOS_PRODUCTO WHERE IDPRODUCTO = ?");
+        $stmtVendedor = $dbh->prepare("SELECT datos_usuario_idusuario FROM datos_producto WHERE idproducto = ?");
         $stmtVendedor->execute([$IDPROD]);
         $IDUSUARIOVENDEDOR = $stmtVendedor->fetchColumn();
         $ESTADO = 0;
         $contador = 0;
 
-        $DATA = $dbh->query("SELECT SYSDATE FROM DUAL");
+        $DATA = $dbh->query("SELECT SYSDATE FROM dual");
 
         // Obtener la fecha actual
         $fecha_actual = $DATA->fetchColumn();
 
-        $query = "SELECT MAX(IDPEDIDO) FROM PEDIDO";
+        $query = "SELECT MAX(idpedido) FROM pedido";
         $stmt = $dbh->query($query);
         $maxRow = $stmt->fetch(PDO::FETCH_ASSOC);
         $lastID = $maxRow['MAX(IDPEDIDO)'] ?? 0;

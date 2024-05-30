@@ -1606,35 +1606,35 @@
                     // Si hay productos, generar instancias de producto
                     if (!empty($productos)) {
                         foreach ($productos as $producto) {
-                            $idProducto = $producto['IDPEDIDO'];
-                            $idvendedor = $producto['IDUSUARIOVENDEDOR'];
-                            $query = "SELECT TELEFONO,IDUSUARIO FROM DATOS_USUARIO WHERE IDUSUARIO = " . $idvendedor . "";
+                            $idProducto = $producto['idpedido'];
+                            $idvendedor = $producto['idusuariovendedor'];
+                            $query = "SELECT telefono,IDUSUARIO FROM DATOS_USUARIO WHERE IDUSUARIO = " . $idvendedor . "";
 
                             $stmt = $dbh->query($query);
                             $telefono = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
                             echo "<div class='section-b'>";
-                            echo "<button class='frame-button-e' onclick=\"window.location.href='detallePedido.php?idPedido=" . $producto['IDPEDIDO'] . "&idUsuario=" . $idUsuario . "'\">";
+                            echo "<button class='frame-button-e' onclick=\"window.location.href='detallePedido.php?idPedido=" . $producto['idpedido'] . "&idUsuario=" . $idUsuario . "'\">";
 
                             echo "<span class='span-editar'>Ver detalles</span></button>";
 
-                            echo "<span class='span-botellas-agua'>IDPEDIDO: " . $producto['IDPEDIDO'] . "</span>";
-                            echo "<span class='mx-15'>MX$ " . $producto['TOTALPRECIO'] . "</span>";
+                            echo "<span class='span-botellas-agua'>idpedido: " . $producto['idpedido'] . "</span>";
+                            echo "<span class='mx-15'>MX$ " . $producto['totalprecio'] . "</span>";
 
-                            if ($producto['ESTADO'] == 0) {
+                            if ($producto['estado'] == 0) {
 
                                 echo "<span class='pedido'>Pedido pendiente</span>";
                                 echo "<button class='comentar'>";
-                                echo "<a  class='span-editar' href='https://wa.me/52" . $telefono['TELEFONO'] . "' target='_blank'>Chat</a></button>";
+                                echo "<a  class='span-editar' href='https://wa.me/52" . $telefono['telefono'] . "' target='_blank'>Chat</a></button>";
                             } else {
-                                echo "<button class='comentar' onclick=\"openPopup(" . $producto['IDPEDIDO'] . ", " . $idUsuario . ")\">";
+                                echo "<button class='comentar' onclick=\"openPopup(" . $producto['idpedido'] . ", " . $idUsuario . ")\">";
                                 echo "<span class='span-editar'>Comentar</span></button>";
                                 echo "<span class='pedido'>Pedido completado</span>";
                             }
 
 
-                            echo "<span class='stock'>Fecha:  " . $producto['FECHA'] . "</span>";
+                            echo "<span class='stock'>Fecha:  " . date("Y-m-d", strtotime($producto['fecha'])) . "</span>";
 
 
                             echo "</div>";

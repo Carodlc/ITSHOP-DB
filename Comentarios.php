@@ -1538,7 +1538,7 @@
                         }
                     } else {
                         // Si no se pasó el parámetro 'idUsuario' en la URL
-                        $DATA = $dbh->query("SELECT SYSDATE FROM dual");
+                        $DATA = $dbh->query("SELECT CURDATE()");
 
                         // Obtener la fecha actual
                         $fecha_actual = $DATA->fetchColumn();

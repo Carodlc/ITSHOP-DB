@@ -1348,7 +1348,7 @@ try {
     $stmt = $dbh->query($query);
     $pedido = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $query = "SELECT * FROM detalle_pedido WHERE pedido_idpedido = " . $idpedido . " ORDER BY DATOS_PRODUCTO_IDPRODUCTO ASC";
+    $query = "SELECT * FROM detalle_pedido WHERE pedido_idpedido = " . $idpedido . " ORDER BY datos_producto_idproducto ASC";
 
     $stmt = $dbh->query($query);
     $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -1408,7 +1408,7 @@ try {
                     </div>
 
                 </div>
-                <span class="text-cantidad">fecha: <?php echo $pedido['fecha']; ?></span>
+                <span class="text-cantidad">fecha: <?php echo date('d-m-Y', strtotime($pedido['fecha'])); ?></span>
                 <?php
                
 
@@ -1418,7 +1418,7 @@ try {
                     // Si hay productos, generar instancias de producto
                     if (!empty($productos)) {
                         foreach ($productos as $producto) {
-                            $idProducto = $producto['DATOS_PRODUCTO_IDPRODUCTO'];
+                            $idProducto = $producto['datos_producto_idproducto'];
                             $query1 = "SELECT * FROM DATOS_PRODUCTO WHERE IDPRODUCTO = " . $idProducto . " ";
 
                             $stmt1 = $dbh->query($query1);

@@ -11,23 +11,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 
-        $query = "SELECT * FROM DATOS_PRODUCTO WHERE DATOS_USUARIO_IDUSUARIO = " . $IDUSUARIO . " ORDER BY IDPRODUCTO DESC";
+        $query = "SELECT * FROM datos_producto WHERE datos_usuario_idusuario = " . $IDUSUARIO . " ORDER BY IDPRODUCTO DESC";
         $stmt = $dbh->query($query);
         $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $IDPROD = $productos[0]['IDPRODUCTO'];
         echo "id PRODUCTO" . $IDPROD;
-        $stmtVendedor = $dbh->prepare("SELECT DATOS_USUARIO_IDUSUARIO FROM DATOS_PRODUCTO WHERE IDPRODUCTO = ?");
+        $stmtVendedor = $dbh->prepare("SELECT datos_usuario_idusuario FROM datos_producto WHERE idproducto = ?");
         $stmtVendedor->execute([$IDPROD]);
         $IDUSUARIOVENDEDOR = $stmtVendedor->fetchColumn();
         $ESTADO = 0;
         $contador = 0;
 
-        $DATA = $dbh->query("SELECT SYSDATE FROM DUAL");
+        $DATA = $dbh->query("SELECT sysdate FROM dual");
 
         // Obtener la fecha actual
         $fecha_actual = $DATA->fetchColumn();
 
-        $query = "SELECT MAX(IDSURTIDO) FROM SURTIDO";
+        $query = "SELECT MAX(idsurtido) FROM surtido";
         $stmt = $dbh->query($query);
         $maxRow = $stmt->fetch(PDO::FETCH_ASSOC);
         $lastID = $maxRow['MAX(IDSURTIDO)'] ?? 0;
@@ -36,11 +36,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $newID = $lastID + 1;
 
         // Verificar si el nuevo ID ya existe en la base de datos
-        $query_check = "SELECT COUNT(IDSURTIDO) FROM SURTIDO WHERE IDSURTIDO = ?";
+        $query_check = "SELECT COUNT(idsurtido) FROM surtido WHERE idsurtido = ?";
         $stmt_check = $dbh->prepare($query_check);
         $stmt_check->execute([$newID]);
         $countRow = $stmt_check->fetch(PDO::FETCH_ASSOC);
-        $count = $countRow['COUNT(IDSURTIDO)'] ?? 0;
+        $count = $countRow['COUNT(idsurtido)'] ?? 0;
 
         // Si el nuevo ID ya existe, seguir incrementando hasta encontrar un ID único
         while ($count > 0) {

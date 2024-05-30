@@ -1528,7 +1528,7 @@
 
                         </div>
                     </div>
-
+                    
                     <?php
                     include 'conexion.php';
                     if (isset($_GET['idUsuario'])) {
@@ -1539,39 +1539,39 @@
                     }
 
                     try {
-
-                        $query = "SELECT STOCK FROM DATOS_PRODUCTO WHERE IDPRODUCTO = ?";
+                        $query = "SELECT stock FROM datos_producto WHERE idproducto = ?";
                         $stmt3 = $dbh->prepare($query);
-                        
 
-                        $query = "SELECT ID_PRODUCTO,CANTIDAD FROM CARRITO WHERE ID_USUARIO = " . $idUsuario . " ORDER BY ID_PRODUCTO DESC";
+                        $query = "SELECT id_producto, cantidad FROM carrito WHERE id_usuario = " . $idUsuario . " ORDER BY id_producto DESC";
                         $stmt = $dbh->query($query);
                         $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                         if (!empty($productos)) {
                             foreach ($productos as $producto) {
-                                $idProducto = $producto['ID_PRODUCTO'];
+                                $idProducto = $producto['id_producto'];
                                 $stmt3->execute([$idProducto]);
                                 $stock = $stmt3->fetchColumn();
-                                $stmt = $dbh->prepare("SELECT RUTA_PRODUCTO FROM PRODUCTS_IMG WHERE ID = ?");
+                                $stmt = $dbh->prepare("SELECT ruta_producto FROM products_img WHERE id = ?");
                                 $stmt->execute([$idProducto]);
                                 $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
-                                $ruta_imagen = $rol_row['RUTA_PRODUCTO'] ?? '';
+                                $ruta_imagen = $rol_row['ruta_producto'] ?? '';
                                 $info = getimagesize($ruta_imagen);
                                 $tipo_contenido = $info['mime'];
                                 $imagen_codificada = base64_encode(file_get_contents($ruta_imagen));
                                 $imagen_src = 'data:' . $tipo_contenido . ';base64,' . $imagen_codificada;
 
-                                $query = "SELECT * FROM DATOS_PRODUCTO WHERE IDPRODUCTO = " . $idProducto . " ORDER BY IDPRODUCTO DESC";
+                                $query = "SELECT * FROM datos_producto WHERE idproducto = " . $idProducto . " ORDER BY idproducto DESC";
                                 $stmt = $dbh->query($query);
                                 $datos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+
+                               
                                 echo '<div class="group-5">';
                                 echo '<div class="section-8">';
                                 echo '    <div class="pic-4"></div>';
                                 echo '    <img src="' . $imagen_src . '" alt="Imagen" class="profile-pic">';
-                                echo '    <span class="span-botellas-agua">' . $datos[0]['NOMBRE'] . '</span>';
-                                $precio_unitario = $datos[0]['PRECIO'];
+                                echo '    <span class="span-botellas-agua">' . $datos[0]['nombre'] . '</span>';
+                                $precio_unitario = $datos[0]['precio'];
                                 echo '    <span class="mx-15">MX$</span>';
                                 echo '    <input type="number" class="precio" readonly id="precio" value="' . $precio_unitario . '" min="0" max="' . $stock . '" step="0.01"><br>';
                                 echo '    <span class="span-cantidad">Cantidad de producto:</span>';
@@ -1580,7 +1580,7 @@
                                 echo '        <span class="currency">MX$</span>';
                                 echo '        <input type="text" id="total" readonly class="sub" placeholder="0" required>';
                                 echo '    </div>';
-                                echo '<input type="number" name="cantidad' . $idProducto . '" id="cantidad" class="quantity" min="0" value="' . $producto['CANTIDAD'] . '" required max="' . $stock . '">';
+                                echo '<input type="number" name="cantidad' . $idProducto . '" id="cantidad" class="quantity" min="0" value="' . $producto['cantidad'] . '" required max="' . $stock . '">';
                                 echo '    <div class="section-9">';
                                 echo '        <span class="span-subtotal">Total:</span>';
                                 echo '        <button type="button" class="text-10 borrarProductoButton" data-id-producto="' . $idProducto . '">Borrar</button>';
@@ -1597,103 +1597,85 @@
                     }
                     ?>
                     <input type="hidden" value="<?php echo $idUsuario; ?>" name="idUsuario" required>
-
-
-
             </form>
-
-
             <span id="totalCarrito" class="text-5">Total del Carrito: $0.00</span> <!-- Nuevo elemento para mostrar el total del carrito -->
-
-
-
-
         </div>
-
-
-
-
     </div>
+
     <script>
-          var idUsuario = <?php echo $idUsuario; ?>;
+        var idUsuario = <?php echo $idUsuario; ?>;
 
-const preciosInputs = document.querySelectorAll('.precio');
-const cantidadesInputs = document.querySelectorAll('.quantity');
-const totalesInputs = document.querySelectorAll('.sub');
+        const preciosInputs = document.querySelectorAll('.precio');
+        const cantidadesInputs = document.querySelectorAll('.quantity');
+        const totalesInputs = document.querySelectorAll('.sub');
 
-function calcularTotales() {
-    preciosInputs.forEach((precioInput, index) => {
-        const precio = parseFloat(precioInput.value);
-        const cantidad = parseInt(cantidadesInputs[index].value);
-        const total = precio * cantidad;
-        totalesInputs[index].value = total.toFixed(2);
-    });
-}
-
-preciosInputs.forEach(precioInput => precioInput.addEventListener('input', calcularTotales));
-cantidadesInputs.forEach(cantidadInput => cantidadInput.addEventListener('input', calcularTotales));
-
-calcularTotales();
-
-function calcularTotalCarrito() {
-    const totalesProductos = document.querySelectorAll('.sub');
-    let totalCarrito = 0;
-    totalesProductos.forEach(subtotal => {
-        totalCarrito += parseFloat(subtotal.value);
-    });
-    document.getElementById('totalCarrito').textContent = 'Total del Carrito: $' + totalCarrito.toFixed(2);
-}
-
-preciosInputs.forEach(precioInput => precioInput.addEventListener('input', function() {
-    calcularTotales();
-    calcularTotalCarrito();
-}));
-cantidadesInputs.forEach(cantidadInput => cantidadInput.addEventListener('input', function() {
-    calcularTotales();
-    calcularTotalCarrito();
-}));
-
-calcularTotalCarrito();
-
-document.querySelectorAll('.borrarProductoButton').forEach(button => {
-    button.addEventListener('click', function() {
-        const idProducto = this.getAttribute('data-id-producto');
-        const formData = new FormData();
-        formData.append('idUsuario', idUsuario);
-        formData.append('idProducto', idProducto);
-
-        fetch('eliminar_producto_carrito.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.text())
-        .then(data => {
-            console.log(data);
-            location.reload();
-        })
-        .catch(error => console.error('Error:', error));
-    });
-});
-
-document.getElementById('form').addEventListener('submit', function(event) {
-    let cantidadInvalida = false;
-
-    cantidadesInputs.forEach(input => {
-        if (parseInt(input.value) === 0) {
-            cantidadInvalida = true;
+        function calcularTotales() {
+            preciosInputs.forEach((precioInput, index) => {
+                const precio = parseFloat(precioInput.value);
+                const cantidad = parseInt(cantidadesInputs[index].value);
+                const total = precio * cantidad;
+                totalesInputs[index].value = total.toFixed(2);
+            });
         }
-    });
 
-    if (cantidadInvalida) {
-        event.preventDefault();
-        alert('Por favor, elimine los productos con cantidad 0 o ajuste la cantidad.');
-    }
-});
-        
+        preciosInputs.forEach(precioInput => precioInput.addEventListener('input', calcularTotales));
+        cantidadesInputs.forEach(cantidadInput => cantidadInput.addEventListener('input', calcularTotales));
 
+        calcularTotales();
+
+        function calcularTotalCarrito() {
+            const totalesProductos = document.querySelectorAll('.sub');
+            let totalCarrito = 0;
+            totalesProductos.forEach(subtotal => {
+                totalCarrito += parseFloat(subtotal.value);
+            });
+            document.getElementById('totalCarrito').textContent = 'Total del Carrito: $' + totalCarrito.toFixed(2);
+        }
+
+        preciosInputs.forEach(precioInput => precioInput.addEventListener('input', function() {
+            calcularTotales();
+            calcularTotalCarrito();
+        }));
+        cantidadesInputs.forEach(cantidadInput => cantidadInput.addEventListener('input', function() {
+            calcularTotales();
+            calcularTotalCarrito();
+        }));
+
+        calcularTotalCarrito();
+
+        document.querySelectorAll('.borrarProductoButton').forEach(button => {
+            button.addEventListener('click', function() {
+                const idProducto = this.getAttribute('data-id-producto');
+                const formData = new FormData();
+                formData.append('idUsuario', idUsuario);
+                formData.append('idProducto', idProducto);
+
+                fetch('eliminar_producto_carrito.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data);
+                    location.reload();
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+
+        document.getElementById('form').addEventListener('submit', function(event) {
+            let cantidadInvalida = false;
+
+            cantidadesInputs.forEach(input => {
+                if (parseInt(input.value) === 0) {
+                    cantidadInvalida = true;
+                }
+            });
+
+            if (cantidadInvalida) {
+                event.preventDefault();
+                alert('Por favor, elimine los productos con cantidad 0 o ajuste la cantidad.');
+            }
+        });
     </script>
-
-
 </body>
-
-</html>

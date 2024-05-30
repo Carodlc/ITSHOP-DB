@@ -6,25 +6,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Obtener los datos del formulario
     if (isset($_POST['idUsuario'])) {
         // Obtener el valor de 'idUsuario'
-        $idusuario = $_POST['idUsuario'] ?? '';
+        $IDUSUARIO = $_POST['idUsuario'] ?? '';
 
-        $query = "SELECT id_producto, cantidad FROM carrito WHERE id_usuario = " . $idusuario . " ORDER BY id_producto DESC";
+        $query = "SELECT ID_PRODUCTO, CANTIDAD FROM CARRITO WHERE ID_USUARIO = " . $IDUSUARIO . " ORDER BY ID_PRODUCTO DESC";
         $stmt = $dbh->query($query);
         $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $idprod = $productos[0]['id_producto'];
-        echo "id PRODUCTO" . $idprod;
-        $stmtvendedor = $dbh->prepare("SELECT datos_usuario_idusuario FROM datos_producto WHERE idproducto = ?");
-        $stmtvendedor->execute([$idprod]);
-        $idusuariovendedor = $stmtvendedor->fetchColumn();
-        $estado = 0;
+        $IDPROD = $productos[0]['ID_PRODUCTO'];
+        echo "id PRODUCTO" . $IDPROD;
+        $stmtVendedor = $dbh->prepare("SELECT DATOS_USUARIO_IDUSUARIO FROM DATOS_PRODUCTO WHERE IDPRODUCTO = ?");
+        $stmtVendedor->execute([$IDPROD]);
+        $IDUSUARIOVENDEDOR = $stmtVendedor->fetchColumn();
+        $ESTADO = 0;
         $contador = 0;
 
-        $data = $dbh->query("SELECT SYSDATE FROM dual");
+        $DATA = $dbh->query("SELECT SYSDATE FROM DUAL");
 
         // Obtener la fecha actual
-        $fecha_actual = $data->fetchColumn();
+        $fecha_actual = $DATA->fetchColumn();
 
-        $query = "SELECT MAX(idpedido) FROM pedido";
+        $query = "SELECT MAX(IDPEDIDO) FROM PEDIDO";
         $stmt = $dbh->query($query);
         $maxRow = $stmt->fetch(PDO::FETCH_ASSOC);
         $lastID = $maxRow['MAX(IDPEDIDO)'] ?? 0;
@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $newID = $lastID + 1;
 
         // Verificar si el nuevo ID ya existe en la base de datos
-        $query_check = "SELECT COUNT(idpedido) FROM pedido WHERE idpedido = ?";
+        $query_check = "SELECT COUNT(IDPEDIDO) FROM PEDIDO WHERE IDPEDIDO = ?";
         $stmt_check = $dbh->prepare($query_check);
         $stmt_check->execute([$newID]);
         $countRow = $stmt_check->fetch(PDO::FETCH_ASSOC);
@@ -48,67 +48,67 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // El nuevo ID es único y seguro para usar
-        $idpedido = $newID;
+        $IDPEDIDO = $newID;
 
-        $rowCount = insertData($dbh, 'pedido', ['idpedido', 'idusuariovendedor', 'idusuariocliente', 'fecha', 'estado'], [$idpedido, $idusuariovendedor, $idusuario, $fecha_actual, $estado]);
+        $rowCount = insertData($dbh, 'PEDIDO', ['IDPEDIDO', 'IDUSUARIOVENDEDOR', 'IDUSUARIOCLIENTE', 'FECHA', 'ESTADO'], [$IDPEDIDO, $IDUSUARIOVENDEDOR, $IDUSUARIO, $fecha_actual, $ESTADO]);
         if ($rowCount > 0) {
             if (!empty($productos)) {
                 foreach ($productos as $producto) {
-                    $idproducto = $producto['id_producto'];
-                    $stmtvendedor = $dbh->prepare("SELECT precio, stock FROM datos_producto WHERE idproducto = ?");
-                    $stmtvendedor->execute([$idproducto]);
-                    $productoData = $stmtvendedor->fetch(PDO::FETCH_ASSOC);
-                    $precio = $productoData['precio'];
-                    $stockActual = $productoData['stock'];
+                    $idProducto = $producto['ID_PRODUCTO'];
+                    $stmtVendedor = $dbh->prepare("SELECT PRECIO, STOCK FROM DATOS_PRODUCTO WHERE IDPRODUCTO = ?");
+                    $stmtVendedor->execute([$idProducto]);
+                    $productoData = $stmtVendedor->fetch(PDO::FETCH_ASSOC);
+                    $precio = $productoData['PRECIO'];
+                    $stockActual = $productoData['STOCK'];
 
-                    $cantidad = $_POST["cantidad" . $idproducto] ?? '';
-                    $importe = $precio * $cantidad;
+                    $cantidad = $_POST["cantidad" . $idProducto] ?? '';
+                    $IMPORTE = $precio * $cantidad;
 
                     // Verificar si hay suficiente stock antes de registrar el detalle del pedido
                     if ($cantidad > $stockActual) {
-                        echo "<script>alert('No hay suficiente stock para el producto " . $idproducto . ".'); window.location.href = 'Carrito.php?idUsuario=$idusuario';</script>";
+                        echo "<script>alert('No hay suficiente stock para el producto " . $idProducto . ".'); window.location.href = 'Carrito.php?idUsuario=$IDUSUARIO';</script>";
                         exit();
                     }
 
-                    $detalle_pedido = insertData($dbh, 'detalle_pedido', ['pedido_idpedido', 'datos_producto_idproducto', 'cantidad', 'importe'], [$idpedido, $idproducto, $cantidad, $importe]);
+                    $detalle_pedido = insertData($dbh, 'DETALLE_PEDIDO', ['PEDIDO_IDPEDIDO', 'DATOS_PRODUCTO_IDPRODUCTO', 'CANTIDAD', 'IMPORTE'], [$IDPEDIDO, $idProducto, $cantidad, $IMPORTE]);
                     if ($detalle_pedido > 0) {
                         // Actualizar stock del producto
                         $nuevoStock = $stockActual - $cantidad;
-                        $query_update_stock = "UPDATE datos_producto SET stock = ? WHERE idproducto = ?";
+                        $query_update_stock = "UPDATE DATOS_PRODUCTO SET STOCK = ? WHERE IDPRODUCTO = ?";
                         $stmt_update_stock = $dbh->prepare($query_update_stock);
-                        $stmt_update_stock->execute([$nuevoStock, $idproducto]);
+                        $stmt_update_stock->execute([$nuevoStock, $idProducto]);
 
-                        $query = "SELECT cantidad, importe FROM detalle_pedido WHERE pedido_idpedido = " . $idpedido;
+                        $query = "SELECT CANTIDAD, IMPORTE FROM DETALLE_PEDIDO WHERE PEDIDO_IDPEDIDO = " . $IDPEDIDO;
                         $stmt = $dbh->query($query);
-                        $totales = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                        $totalprecio = 0;
-                        $totalcantidad = 0;
-                        if (!empty($totales)) {
-                            foreach ($totales as $total) {
-                                $cantidad_detalle = $total['cantidad'];
-                                $importe_detalle = $total['importe'];
+                        $TOTALES = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        $TOTAL_PRECIO = 0;
+                        $TOTAL_CANTIDAD = 0;
+                        if (!empty($TOTALES)) {
+                            foreach ($TOTALES as $TOTAL) {
+                                $CANTIDAD_DETALLE = $TOTAL['CANTIDAD'];
+                                $IMPORTE_DETALLE = $TOTAL['IMPORTE'];
 
-                                $totalprecio += $importe_detalle;
-                                $totalcantidad += $cantidad_detalle;
+                                $TOTAL_PRECIO += $IMPORTE_DETALLE;
+                                $TOTAL_CANTIDAD += $CANTIDAD_DETALLE;
                             }
                         }
                     }
 
-                    $query_update = "UPDATE pedido SET totalprecio = ?, totalproductos = ? WHERE idpedido = ?";
+                    $query_update = "UPDATE PEDIDO SET TOTALPRECIO = ?, TOTALPRODUCTOS = ? WHERE IDPEDIDO = ?";
                     $stmt_update = $dbh->prepare($query_update);
 
                     // Ejecutar la consulta SQL con los valores proporcionados
-                    $stmt_update->execute([$totalprecio, $totalcantidad, $idpedido]);
+                    $stmt_update->execute([$TOTAL_PRECIO, $TOTAL_CANTIDAD, $IDPEDIDO]);
 
                     // Verificar si la actualización fue exitosa
                     if ($stmt_update->rowCount() > 0) {
-                        $query_delete = "DELETE FROM carrito WHERE id_usuario = ?";
+                        $query_delete = "DELETE FROM CARRITO WHERE ID_USUARIO = ?";
                         $stmt_delete = $dbh->prepare($query_delete);
-                        $stmt_delete->execute([$idusuario]);
+                        $stmt_delete->execute([$IDUSUARIO]);
 
                         // Verificar si la eliminación fue exitosa
                         if ($stmt_delete->rowCount() > 0) {
-                            echo "<script>alert('Tu pedido se ha registrado.'); window.location.href = 'FormComprar.php?idUsuario=$idusuario&idVendedor=$idusuariovendedor';</script>";
+                            echo "<script>alert('Tu pedido se ha registrado.'); window.location.href = 'FormComprar.php?idUsuario=$IDUSUARIO&idVendedor=$IDUSUARIOVENDEDOR';</script>";
                         } else {
                             echo "Hubo un problema al eliminar los productos del carrito.";
                         }
@@ -118,12 +118,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     echo "precio" . $precio;
                     echo "cantidad" . $cantidad;
-                    echo "id PRODUCTO" . $idproducto;
-                    echo "total" . $importe;
+                    echo "id PRODUCTO" . $idProducto;
+                    echo "total" . $IMPORTE;
                 }
             }
         } else {
-            echo "<script>alert('Hubo un problema al agregar el producto.'); window.location.href='Comentarios.php?idUsuario=$idusuario&idProducto=$idprod';</script>";
+            echo "<script>alert('Hubo un problema al agregar el producto.'); window.location.href='Comentarios.php?idUsuario=$IDUSUARIO&idProducto=$IDPROD';</script>";
         }
     }
 }

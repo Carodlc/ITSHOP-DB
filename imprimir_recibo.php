@@ -34,10 +34,10 @@ class PDF extends FPDF
     {
         // Datos del pedido
         $this->SetFont('Arial', '', 12);
-        $this->Cell(0, 10, 'ID del Pedido: ' . $pedido['idpedido'], 0, 1, 'L');
-        $this->Cell(0, 10, 'Vendedor: ' . $pedido['vendedor'], 0, 1, 'L');
-        $this->Cell(0, 10, 'Comprador: ' . $pedido['comprador'], 0, 1, 'L');
-        $this->Cell(0, 10, 'Fecha del Pedido: ' . $pedido['fecha'], 0, 1, 'L');
+        $this->Cell(0, 10, 'ID del Pedido: ' . htmlspecialchars($pedido['idpedido']), 0, 1, 'L');
+        $this->Cell(0, 10, 'Vendedor: ' . htmlspecialchars($pedido['vendedor']), 0, 1, 'L');
+        $this->Cell(0, 10, 'Comprador: ' . htmlspecialchars($pedido['comprador']), 0, 1, 'L');
+        $this->Cell(0, 10, 'Fecha del Pedido: ' . htmlspecialchars($pedido['fecha']), 0, 1, 'L');
         $this->Cell(0, 10, 'Total del Pedido: MX$' . number_format($pedido['totalprecio'], 2), 0, 1, 'R'); // Justificado a la derecha
         $this->Ln(10);
 
@@ -51,22 +51,22 @@ class PDF extends FPDF
         // Datos de los productos
         $this->SetFont('Arial', '', 12);
         foreach ($productos as $producto) {
-            $this->Cell(60, 10, $producto['nombre'], 1);
-            $this->Cell(40, 10, $producto['cantidad'], 1);
+            $this->Cell(60, 10, htmlspecialchars($producto['nombre']), 1);
+            $this->Cell(40, 10, htmlspecialchars($producto['cantidad']), 1);
             $this->Cell(40, 10, 'MX$' . number_format($producto['importe'], 2), 1, 0, 'R'); // Justificado a la derecha
             $this->Ln();
         }
     }
 }
 
-// Verificar si idUsuario está presente
+// Verificar si idUsuario y idPedido están presentes
 if (isset($_GET['idUsuario']) && isset($_GET['idPedido'])) {
     $idUsuario = $_GET['idUsuario'];
     $idPedido = $_GET['idPedido'];
 
     try {
         // Establecer conexión a la base de datos
-        $query = "SELECT p.idpedido, TO_CHAR(p.fecha, 'DD/MM/YYYY') AS fecha, p.totalprecio, 
+        $query = "SELECT p.idpedido, DATE_FORMAT(p.fecha, '%d/%m/%Y') AS fecha, p.totalprecio, 
                          v.nombre_usuario AS vendedor, c.nombre_usuario AS comprador 
                   FROM pedido p
                   JOIN datos_usuario v ON p.idusuariovendedor = v.idusuario
@@ -97,7 +97,7 @@ if (isset($_GET['idUsuario']) && isset($_GET['idPedido'])) {
         // Mostrar la fecha de emisión
         $pdf->Ln(10);
         $pdf->SetFont('Arial', '', 12);
-        $pdf->Cell(0, 10, 'Fecha de Emision: ' . date('d/m/Y'), 0, 1, 'L');
+        $pdf->Cell(0, 10, 'Fecha de Emisión: ' . date('d/m/Y'), 0, 1, 'L');
 
         // Salida del PDF
         $pdf->Output('D', 'recibo_pedido.pdf');

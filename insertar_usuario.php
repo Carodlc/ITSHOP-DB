@@ -107,17 +107,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     // Mueve el archivo a la carpeta temporal
                     // Mueve el archivo a la carpeta temporal
+                    // Mueve el archivo a la carpeta temporal
                     if (move_uploaded_file($nombreTempArchivo, $rutaTemporal)) {
                         // Obtener el token de GitHub desde la variable de entorno
-                        $token = $_ENV['TOKEN'] ?? '';
+                        $token = getenv('TOKEN');
 
-                        // Verificar si se ha proporcionado un token
-                        if (empty($token)) {
-                            echo 'Error: No se ha proporcionado un token de GitHub.';
-                            exit; // Salir del script si no hay token
-                        }
-
-                        $repo = 'Carodlc/ITSHOP-DB'; // Reemplaza con tu usuario y repositorio
+                        // Reemplaza 'Carodlc/ITSHOP-DB' con tu usuario y repositorio
+                        $repo = 'Carodlc/ITSHOP-DB';
                         $branch = 'main'; // Reemplaza con la rama en la que quieres subir el archivo
 
                         // Subir el archivo a GitHub

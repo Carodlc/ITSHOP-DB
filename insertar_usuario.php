@@ -19,7 +19,7 @@ function uploadToGithub($filePath, $repo, $branch, $token) {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'Content-Type: application/json',
-        'Authorization: token ' . $token,
+        'Authorization: Bearer ' . $token,
         'User-Agent: PHP'
     ]);
 

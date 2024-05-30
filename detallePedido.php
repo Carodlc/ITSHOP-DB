@@ -1330,7 +1330,7 @@
 <?php
 include 'conexion.php';
 
-if (isset($_GET['idUsuario']) && isset($_GET['idpedido'])) {
+if (isset($_GET['idUsuario']) && isset($_GET['idPedido'])) {
     $idUsuario = $_GET['idUsuario'];
     $idpedido = $_GET['idpedido'];
 

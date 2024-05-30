@@ -106,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // Mueve el archivo a la carpeta temporal
                     if (move_uploaded_file($nombreTempArchivo, $rutaTemporal)) {
                         // Datos para la API de GitHub
-                        $token = 'YOUR_GITHUB_TOKEN'; // Reemplaza con tu token de acceso personal de GitHub
+                        $token = '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'; // Reemplaza con tu token de acceso personal de GitHub
                         $repo = 'Carodlc/ITSHOP-DB'; // Reemplaza con tu usuario y repositorio
                         $branch = 'main'; // Reemplaza con la rama en la que quieres subir el archivo
 

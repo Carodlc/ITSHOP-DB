@@ -96,7 +96,8 @@ if (isset($_GET['idUsuario'])) {
   </div>
   </div>
   <div class="flex-row-ef">
-    <?phpif (isset($_GET['idUsuario'])) {
+    <?php
+    if (isset($_GET['idUsuario'])) {
     $idUsuario = $_GET['idUsuario'];
     $busqueda = isset($_GET['busqueda']) ? $_GET['busqueda'] : '';
     $categoria = isset($_GET['categoriasSelect']) ? $_GET['categoriasSelect'] : '';

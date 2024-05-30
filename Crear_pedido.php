@@ -12,7 +12,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $dbh->query($query);
         $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $IDPROD = $productos[0]['id_producto'];
-        echo "id PRODUCTO" . $IDPROD;
         $stmtVendedor = $dbh->prepare("SELECT DATOS_USUARIO_IDUSUARIO FROM DATOS_PRODUCTO WHERE IDPRODUCTO = ?");
         $stmtVendedor->execute([$IDPROD]);
         $IDUSUARIOVENDEDOR = $stmtVendedor->fetchColumn();
@@ -116,10 +115,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         echo "Hubo un problema al actualizar el pedido.";
                     }
 
-                    echo "precio" . $precio;
-                    echo "cantidad" . $cantidad;
-                    echo "id PRODUCTO" . $idProducto;
-                    echo "total" . $IMPORTE;
                 }
             }
         } else {

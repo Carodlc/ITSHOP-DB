@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Detalle Pedido</title>
+    <title>Detalle pedido</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@500&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;500;600&display=swap" />
     <style>
@@ -1329,25 +1329,26 @@
 </head>
 <?php
 include 'conexion.php';
-if (isset($_GET['idusuario'])) {
-    // Obtener el valor de 'idusuario'
-    $idusuario = $_GET['idusuario'];
+if (isset($_GET['idUsuario'])) {
+    // Obtener el valor de 'idUsuario'
+    $idUsuario = $_GET['idUsuario'];
     $idpedido = $_GET['idpedido'];
 
-    // Ahora puedes utilizar la variable $idusuario como quieras en esta página
+    // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
 } else {
-    // Si no se pasó el parámetro 'idusuario' en la URL
+    // Si no se pasó el parámetro 'idUsuario' en la URL
     echo "No se ha especificado un ID de usuario.";
 }
 
+
 try {
     // Establecer conexión a la base de datos
-    $query = "select fecha, totalprecio from pedido where idpedido = " . $idpedido;
+    $query = "SELECT fecha,total_precio FROM pedido WHERE idpedido = " . $idpedido . "";
 
     $stmt = $dbh->query($query);
     $pedido = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $query = "select * from detalle_pedido where pedido_idpedido = " . $idpedido . " order by datos_producto_idproducto asc";
+    $query = "SELECT * FROM detalle_pedido WHERE pedido_idpedido = " . $idpedido . " ORDER BY DATOS_PRODUCTO_IDPRODUCTO ASC";
 
     $stmt = $dbh->query($query);
     $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -1357,8 +1358,8 @@ try {
     // Mostrar mensaje de error si la conexión falla
     echo "Error: " . $e->getMessage();
 }
-?>
 
+?>
 
 <body>
     <div class="main-container">
@@ -1394,102 +1395,107 @@ try {
 
         </div>
         <div class="box-4">
-    <div class="group-6">
-        <button id="agregarRolesButton" class="text-15" onclick="history.back(); return false;">Atras</button>
-    </div>
-
-    <div class="wrapper-4" id="tablaWrapper">
-        <div class="section-6">
-            <span class="text-c">Detalles del pedido</span>
-            <div class="section-7">
-                <button id="Imprimir" class="text-d" onclick="window.location.href='imprimir_recibo.php?idusuario=<?php echo $idusuario; ?>&idpedido=<?php echo $idpedido; ?>'">Imprimir</button>
+            <div class="group-6">
+            <button id="agregarRolesButton" class="text-15" onclick="history.back(); return false;">Atras</button>
             </div>
-        </div>
-        <span class="text-cantidad">Fecha: <?php echo $pedido['fecha']; ?></span>
 
-        <?php
+            <div class="wrapper-4" id="tablaWrapper">
+                <div class="section-6">
+                    <span class="text-c">Detalles del pedido</span>
+                    <div class="section-7">
+                        <button id="Imprimir" class="text-d" onclick="window.location.href='imprimir_recibo.php?idUsuario=<?php echo $idUsuario; ?>&idpedido=<?php echo $idpedido; ?>'">Imprimir</button>
 
-try {
+                    </div>
 
-    // Si hay productos, generar instancias de producto
-    if (!empty($productos)) {
-        foreach ($productos as $producto) {
-            $idProducto = $producto['datos_producto_idproducto'];
-            $query1 = "select * from datos_producto where idproducto = " . $idProducto . " ";
+                </div>
+                <span class="text-cantidad">fecha: <?php echo $pedido['fecha']; ?></span>
+                <?php
+               
 
-            $stmt1 = $dbh->query($query1);
-            $datos = $stmt1->fetch(PDO::FETCH_ASSOC);
+                try {
+                
 
-            echo '<div class="section-b">';
-            echo '<div class="box-5">';
-            echo '<span class="text-8">Producto: ' . $datos['nombre'] . '</span>';
-            echo '<span class="text-10">Cantidad: ' . $producto['cantidad'] . '</span>';
-            echo '<span class="text-subtotal">Subtotal: MX$' . $producto['importe'] . '</span>';
-            echo '</div>';
-            echo '</div>';
-            echo '';
-        }
-    } else {
-        echo '<div class="section-b">';
-        echo '<div class="box-5">';
-        echo "<span class='mi-cuenta'>No se encontraron los productos.</span>";
-        echo '</div>';
-        echo '</div>';
-    }
-} catch (PDOException $e) {
-    // Mostrar mensaje de error si la conexión falla
-    echo "Error: " . $e->getMessage();
-}
+                    // Si hay productos, generar instancias de producto
+                    if (!empty($productos)) {
+                        foreach ($productos as $producto) {
+                            $idProducto = $producto['DATOS_PRODUCTO_IDPRODUCTO'];
+                            $query1 = "SELECT * FROM DATOS_PRODUCTO WHERE IDPRODUCTO = " . $idProducto . " ";
 
-?>
+                            $stmt1 = $dbh->query($query1);
+                            $datos = $stmt1->fetch(PDO::FETCH_ASSOC);
 
-<span class="text-total">Total MX$<?php echo $pedido['totalprecio']; ?></span>
+                            echo '<div class="section-b">';
+                            echo '<div class="box-5">';
+                            echo '<span class="text-8">Producto: ' . $datos['nombre'] . '</span>';
+                            echo '<span class="text-10">cantidad: ' . $producto['cantidad'] . '</span>';
+                            echo '<span class="text-subtotal">Subtotal: MX$' . $producto['importe'] . '</span>';
+                            echo '</div>';
+                            echo '</div>';
+                            echo '';
+                        }
+                    } else {
+                        echo '<div class="section-b">';
+                        echo '<div class="box-5">';
+                        echo "<span class='mi-cuenta'>No se encontraron los productos.</span>";
+                        echo '</div>';
+                        echo '</div>';
+                    }
+                } catch (PDOException $e) {
+                    // Mostrar mensaje de error si la conexión falla
+                    echo "Error: " . $e->getMessage();
+                }
 
-</div>
-<script>
-    // Obtenemos referencia al botón de borrar
-    var editarButton = document.getElementById("editarPerfilButton");
+                ?>
 
-    // Añadimos un evento de clic al botón
-    editarButton.addEventListener("click", function() {
-        // Obtenemos referencia al elemento que queremos borrar
-        var groupElement = document.querySelector(".group-5");
-        // Verificamos si el elemento existe antes de intentar borrarlo
-        if (groupElement) {
-            // Borramos el elemento
-            groupElement.remove();
-        }
-    });
-    // Obtenemos referencia al botón de borrar
-    var borrarButton = document.getElementById("agregarRolesButton");
+                <span class="text-total">Total MX$<?php echo $pedido['total_precio']; ?></span>
 
-    // Añadimos un evento de clic al botón
-    borrarButton.addEventListener("click", function() {
-        // Obtenemos referencia al elemento que queremos borrar
-        var sectionBElement = document.querySelector(".section-b");
-        // Verificamos si el elemento existe antes de intentar borrarlo
-        if (sectionBElement) {
-            // Borramos el elemento
-            sectionBElement.remove();
-        }
-    });
-    // Obtenemos referencia a todos los elementos con la clase "group" y "group-5"
-    var groupElements = document.querySelectorAll(".group, .group-5");
 
-    // Función para manejar el clic en los elementos
-    function handleClick() {
-        // Realiza la acción deseada aquí
-        // Por ejemplo, puedes agregar una clase para resaltar el elemento seleccionado
-        this.classList.toggle("selected");
-    }
+            </div>
 
-    // Añadimos un evento de clic a cada elemento
-    groupElements.forEach(function(element) {
-        element.addEventListener("click", handleClick);
-    });
-</script>
+            <script>
+                // Obtenemos referencia al botón de borrar
+                var editarButton = document.getElementById("editarPerfilButton");
 
-<!-- Generated by Codia AI - https://codia.ai/ -->
+                // Añadimos un evento de clic al botón
+                editarButton.addEventListener("click", function() {
+                    // Obtenemos referencia al elemento que queremos borrar
+                    var groupElement = document.querySelector(".group-5");
+                    // Verificamos si el elemento existe antes de intentar borrarlo
+                    if (groupElement) {
+                        // Borramos el elemento
+                        groupElement.remove();
+                    }
+                });
+                // Obtenemos referencia al botón de borrar
+                var borrarButton = document.getElementById("agregarRolesButton");
+
+                // Añadimos un evento de clic al botón
+                borrarButton.addEventListener("click", function() {
+                    // Obtenemos referencia al elemento que queremos borrar
+                    var sectionBElement = document.querySelector(".section-b");
+                    // Verificamos si el elemento existe antes de intentar borrarlo
+                    if (sectionBElement) {
+                        // Borramos el elemento
+                        sectionBElement.remove();
+                    }
+                });
+                // Obtenemos referencia a todos los elementos con la clase "group" y "group-5"
+                var groupElements = document.querySelectorAll(".group, .group-5");
+
+                // Función para manejar el clic en los elementos
+                function handleClick() {
+                    // Realiza la acción deseada aquí
+                    // Por ejemplo, puedes agregar una clase para resaltar el elemento seleccionado
+                    this.classList.toggle("selected");
+                }
+
+                // Añadimos un evento de clic a cada elemento
+                groupElements.forEach(function(element) {
+                    element.addEventListener("click", handleClick);
+                });
+            </script>
+
+            <!-- Generated by Codia AI - https://codia.ai/ -->
 </body>
 
 </html>

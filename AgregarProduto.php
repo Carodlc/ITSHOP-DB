@@ -88,7 +88,6 @@
     }
   </style>
 </head>
-
 <body>
   <form id="form" action="AgregarProducto_insertar.php" method="post" enctype="multipart/form-data">
     <div class="navbar">

@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['roles'])) {
     try {
         // Preparar la consulta de eliminación
         $placeholders = implode(',', array_fill(0, count($rolesToDelete), '?'));
-        $query = "DELETE FROM ROL WHERE NOMBREROL IN ($placeholders)";
+        $query = "DELETE FROM rol WHERE nombrerol IN ($placeholders)";
         $stmt = $dbh->prepare($query);
         
         // Ejecutar la consulta para eliminar los roles seleccionados
@@ -26,3 +26,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['roles'])) {
     }
 }
 ?>
+

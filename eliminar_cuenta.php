@@ -11,25 +11,25 @@ if (isset($_GET['idUsuario'])) {
         // Elimina registros de las tablas relacionadas
         $queries = [
             // Eliminar registros del carrito relacionados con los productos del usuario
-            "DELETE FROM CARRITO WHERE ID_PRODUCTO IN (SELECT IDPRODUCTO FROM DATOS_PRODUCTO WHERE DATOS_USUARIO_IDUSUARIO = :idUsuario)",
+            "DELETE FROM carrito WHERE id_producto IN (SELECT idproducto FROM datos_producto WHERE datos_usuario_idusuario = :idUsuario)",
             // Eliminar registros del detalle del pedido relacionados con los pedidos del usuario
-            "DELETE FROM DETALLE_PEDIDO WHERE PEDIDO_IDPEDIDO IN (SELECT IDPEDIDO FROM PEDIDO WHERE IDUSUARIOVENDEDOR = :idUsuario OR IDUSUARIOCLIENTE = :idUsuario)",
+            "DELETE FROM detalle_pedido WHERE pedido_idpedido IN (SELECT idpedido FROM pedido WHERE idusuariovendedor = :idUsuario OR idusuariocliente = :idUsuario)",
             // Eliminar pedidos del usuario
-            "DELETE FROM PEDIDO WHERE IDUSUARIOVENDEDOR = :idUsuario OR IDUSUARIOCLIENTE = :idUsuario",
+            "DELETE FROM pedido WHERE idusuariovendedor = :idUsuario OR idusuariocliente = :idUsuario",
             // Eliminar imágenes de productos del usuario
-            "DELETE FROM PRODUCTS_IMG WHERE ID IN (SELECT IDPRODUCTO FROM DATOS_PRODUCTO WHERE DATOS_USUARIO_IDUSUARIO = :idUsuario)",
+            "DELETE FROM products_img WHERE id IN (SELECT idproducto FROM datos_producto WHERE datos_usuario_idusuario = :idUsuario)",
             // Eliminar registros de productos en surtido relacionados con el usuario
-            "DELETE FROM DATOS_PRODUCTO_HAS_SURTIDO WHERE SURTIDO_IDSURTIDO IN (SELECT IDSURTIDO FROM SURTIDO WHERE DATOS_USUARIO_IDUSUARIO = :idUsuario)",
+            "DELETE FROM datos_producto_has_surtido WHERE surtido_idsurtido IN (SELECT idsurtido FROM surtido WHERE datos_usuario_idusuario = :idUsuario)",
             // Eliminar surtido del usuario
-            "DELETE FROM SURTIDO WHERE DATOS_USUARIO_IDUSUARIO = :idUsuario",
+            "DELETE FROM surtido WHERE datos_usuario_idusuario = :idUsuario",
             // Eliminar imágenes del usuario
-            "DELETE FROM USUARIOS_IMG WHERE ID = :idUsuario",
+            "DELETE FROM usuarios_img WHERE id = :idUsuario",
             // Eliminar productos del usuario
-            "DELETE FROM DATOS_PRODUCTO WHERE DATOS_USUARIO_IDUSUARIO = :idUsuario",
+            "DELETE FROM datos_producto WHERE datos_usuario_idusuario = :idUsuario",
             // Eliminar comentarios del usuario
-            "DELETE FROM COMENTARIO WHERE IDUSUARIO = :idUsuario",
+            "DELETE FROM comentario WHERE idusuario = :idUsuario",
             // Eliminar el usuario
-            "DELETE FROM DATOS_USUARIO WHERE IDUSUARIO = :idUsuario"
+            "DELETE FROM datos_usuario WHERE idusuario = :idUsuario"
         ];
 
         foreach ($queries as $query) {

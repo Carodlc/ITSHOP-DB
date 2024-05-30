@@ -383,37 +383,38 @@
           <table>
 
             <tbody>
-              <?php
-              // Tu código de conexión y funciones existentes
+            <?php
+// Tu código de conexión y funciones existentes
 
-              try {
-                // Establecer conexión a la base de datos
-                $dbh = new PDO($dsn, $username, $password);
-                $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+try {
+    // Establecer conexión a la base de datos
+    $dbh = new PDO($dsn, $username, $password);
+    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                // Obtener roles desde la base de datos
-                $stmt_especialidad = $dbh->prepare("SELECT NOMBRE FROM ESPECIALIDADES WHERE NOMBREESPECIALIDAD = ?");
-                $stmt_especialidad->execute([$ESPECIALIDAD_NOMBRE]);
-                $especialidad_row = $stmt_especialidad->fetch(PDO::FETCH_ASSOC);
-                $ESPECIALIDADES_IDESPECIALIDAD = $especialidad_row['IDESPECIALIDAD'] ?? null;
+    // Obtener roles desde la base de datos
+    $stmt_especialidad = $dbh->prepare("select idespecialidad from especialidades where nombreespecialidad = ?");
+    $stmt_especialidad->execute([$especialidad_nombre]);
+    $especialidad_row = $stmt_especialidad->fetch(PDO::FETCH_ASSOC);
+    $especialidades_idespecialidad = $especialidad_row['idespecialidad'] ?? null;
+
+    // Si hay roles, generar filas para la tabla
+    if (!empty($roles)) {
+        foreach ($roles as $rol) {
+            echo "<tr>";
+            echo "<td><input type='checkbox' name='roles[]' value='$rol'></td>"; // Columna de checkboxes
+            echo "<td>$rol</td>"; // Columna de rol
+            echo "</tr>";
+        }
+    } else {
+        echo "<tr><td colspan='2'>No se encontraron roles</td></tr>";
+    }
+} catch (PDOException $e) {
+    // Mostrar mensaje de error si la conexión falla
+    echo "Error: " . $e->getMessage();
+}
+?>
 
 
-                // Si hay roles, generar filas para la tabla
-                if (!empty($roles)) {
-                  foreach ($roles as $rol) {
-                    echo "<tr>";
-                    echo "<td><input type='checkbox' name='roles[]' value='$rol'></td>"; // Columna de checkboxes
-                    echo "<td>$rol</td>"; // Columna de rol
-                    echo "</tr>";
-                  }
-                } else {
-                  echo "<tr><td colspan='2'>No se encontraron roles</td></tr>";
-                }
-              } catch (PDOException $e) {
-                // Mostrar mensaje de error si la conexión falla
-                echo "Error: " . $e->getMessage();
-              }
-              ?>
             </tbody>
           </table>
         </div>
@@ -435,39 +436,39 @@
         <div class="rectangle-3">
           <table>
             <tbody>
-              <?php
-              // Tu código de conexión y funciones existentes
+            <?php
+// Tu código de conexión y funciones existentes
 
-              try {
-                // Establecer conexión a la base de datos
-                $dbh = new PDO($dsn, $username, $password);
-                $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+try {
+    // Establecer conexión a la base de datos
+    $dbh = new PDO($dsn, $username, $password);
+    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                // Obtener roles desde la base de datos
-                $roles = getRoles($dbh);
+    // Obtener roles desde la base de datos
+    $roles = getRoles($dbh);
 
-                // Si hay roles, generar filas para la tabla
-                if (!empty($roles)) {
-                  foreach ($roles as $rol) {
-                    echo "<tr>";
-                    echo "<td><input type='checkbox' name='roles[]' value='$rol'></td>"; // Columna de checkboxes
-                    echo "<td>$rol</td>"; // Columna de rol
-                    echo "</tr>";
-                  }
-                } else {
-                  echo "<tr><td colspan='2'>No se encontraron roles</td></tr>";
-                }
-              } catch (PDOException $e) {
-                // Mostrar mensaje de error si la conexión falla
-                echo "Error: " . $e->getMessage();
-              }
-              ?>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <span class="total-mx">TOTAL MX$</span><button class="frame"><span class="return">Regresar</span></button>
-    </div>
-  </body>
+    // Si hay roles, generar filas para la tabla
+    if (!empty($roles)) {
+        foreach ($roles as $rol) {
+            echo "<tr>";
+            echo "<td><input type='checkbox' name='roles[]' value='$rol'></td>"; // Columna de checkboxes
+            echo "<td>$rol</td>"; // Columna de rol
+            echo "</tr>";
+        }
+    } else {
+        echo "<tr><td colspan='2'>No se encontraron roles</td></tr>";
+    }
+} catch (PDOException $e) {
+    // Mostrar mensaje de error si la conexión falla
+    echo "Error: " . $e->getMessage();
+}
+?>
+</tbody>
+</table>
+</div>
+</div>
+<span class="total-mx">TOTAL MX$</span><button class="frame"><span class="return">Regresar</span></button>
+</div>
+</body>
 
 </html>

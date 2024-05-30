@@ -1527,39 +1527,37 @@
                 <div class="section-6">
                     <span class="text-c">Perfil</span>
 
-
                 </div>
                 <div class="group-5">
-                    <div class="section-8">
+    <div class="section-8">
+
+        <div class="pic-4">
+            <?php
+            include 'conexion.php';
+            if (isset($_GET['idUsuario'])) {
+                // Obtener el valor de 'idUsuario'
+                $idUsuario = $_GET['idUsuario'];
+
+                // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
+            } else {
+                // Si no se pasó el parámetro 'idUsuario' en la URL
+                echo "No se ha especificado un ID de usuario.";
+            }
 
 
-                        <div class="pic-4">
-                            <?php
-                            include 'conexion.php';
-                            if (isset($_GET['idUsuario'])) {
-                                // Obtener el valor de 'idUsuario'
-                                $idUsuario = $_GET['idUsuario'];
+ // Obtener la ruta de la imagen del usuario
+ $stmt = $dbh->prepare("SELECT ruta_usuario FROM usuarios_img WHERE id = ?");
+ $stmt->execute([$idUsuario]);
+ $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
+ $ruta_imagen = $rol_row['ruta_usuario'] ?? '';
 
-                                // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
-                            } else {
-                                // Si no se pasó el parámetro 'idUsuario' en la URL
-                                echo "No se ha especificado un ID de usuario.";
-                            }
+ // Obtener el tipo de contenido de la imagen
+ $info = getimagesize($ruta_imagen);
+ $tipo_contenido = $info['mime'];
 
-
-
-                            $stmt = $dbh->prepare("SELECT RUTA_USUARIO FROM USUARIOS_IMG WHERE ID = ?");
-                            $stmt->execute([$idUsuario]);
-                            $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
-                            $ruta_imagen = $rol_row['RUTA_USUARIO'] ?? '';
-
-                            // Obtener el tipo de contenido de la imagen
-                            $info = getimagesize($ruta_imagen);
-                            $tipo_contenido = $info['mime'];
-
-                            // Obtener el contenido de la imagen como base64
-                            $imagen_codificada = base64_encode(file_get_contents($ruta_imagen));
-                            $imagen_src = 'data:' . $tipo_contenido . ';base64,' . $imagen_codificada;
+ // Obtener el contenido de la imagen como base64
+ $imagen_codificada = base64_encode(file_get_contents($ruta_imagen));
+ $imagen_src = 'data:' . $tipo_contenido . ';base64,' . $imagen_codificada;
 
                             ?>
                             <img src="<?php echo $imagen_src; ?>" alt="Imagen" class="profile-pic">
@@ -1567,213 +1565,182 @@
                         </div>
 
                         <?php
+$stmt_rol = $dbh->prepare("SELECT nombre_usuario FROM datos_usuario WHERE idusuario = ?");
+$stmt_rol->execute([$idUsuario]);
+$rol_row = $stmt_rol->fetch(PDO::FETCH_ASSOC);
+$NOMBREUSUARIO = $rol_row['nombre_usuario'] ?? '';
+echo  "<span class='text-NOMBRE'>", $NOMBREUSUARIO, "</span>";
 
-                        $stmt_rol = $dbh->prepare("SELECT NOMBRE_USUARIO FROM DATOS_USUARIO WHERE IDUSUARIO = ?");
-                        $stmt_rol->execute([$idUsuario]);
-                        $rol_row = $stmt_rol->fetch(PDO::FETCH_ASSOC);
-                        $NOMBREUSUARIO = $rol_row['NOMBRE_USUARIO'] ?? '';
-                        echo  "<span class='text-NOMBRE'>", $NOMBREUSUARIO, "</span>";
+?>
 
+<div class="section-9">
+    <button onclick="window.location.href = 'FormEditarPerfilUsuario.php?idUsuario=' + idUsuario" id="editarPerfilButton" class="text-10">Editar</button>
+</div>
 
-                        ?>
-                        <div class="section-9">
-                            <button onclick="window.location.href = 'FormEditarPerfilUsuario.php?idUsuario= + idUsuario'" id="editarPerfilButton" class="text-10">Editar</button>
-                        </div>
+</div>
+</div>
 
-                    </div>
-                </div>
+<span class="text-12">Compras</span>
+<?php
+if (isset($_GET['idUsuario'])) {
+    // Obtener el valor de 'idUsuario'
+    $idUsuario = $_GET['idUsuario'];
 
-                <span class="text-12">Compras</span>
-                <?php
-                if (isset($_GET['idUsuario'])) {
-                    // Obtener el valor de 'idUsuario'
-                    $idUsuario = $_GET['idUsuario'];
-
-                    // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
-                } else {
-                    // Si no se pasó el parámetro 'idUsuario' en la URL
-                    echo "No se ha especificado un ID de usuario.";
-                }
-
-
-                try {
-                    // Establecer conexión a la base de datos
-                    $query = "SELECT * FROM PEDIDO WHERE IDUSUARIOCLIENTE = " . $idUsuario . " ORDER BY ESTADO ASC, FECHA DESC";
-
-                    $stmt = $dbh->query($query);
-                    $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                    // Si hay productos, generar instancias de producto
-                    if (!empty($productos)) {
-                        foreach ($productos as $producto) {
-                            $idProducto = $producto['idpedido'];
-                            $idvendedor = $producto['idusuariovendedor'];
-                            $query = "SELECT telefono,IDUSUARIO FROM DATOS_USUARIO WHERE IDUSUARIO = " . $idvendedor . "";
-
-                            $stmt = $dbh->query($query);
-                            $telefono = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
+} else {
+    // Si no se pasó el parámetro 'idUsuario' en la URL
+    echo "No se ha especificado un ID de usuario.";
+}
 
 
-                            echo "<div class='section-b'>";
-                            echo "<button class='frame-button-e' onclick=\"window.location.href='detallePedido.php?idPedido=" . $producto['idpedido'] . "&idUsuario=" . $idUsuario . "'\">";
+try {
+    // Establecer conexión a la base de datos
+    $query = "SELECT * FROM pedido WHERE idusuariocliente = " . $idUsuario . " ORDER BY estado ASC, fecha DESC";
 
-                            echo "<span class='span-editar'>Ver detalles</span></button>";
+    $stmt = $dbh->query($query);
+    $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                            echo "<span class='span-botellas-agua'>idpedido: " . $producto['idpedido'] . "</span>";
-                            echo "<span class='mx-15'>MX$ " . $producto['totalprecio'] . "</span>";
+    // Si hay productos, generar instancias de producto
+    if (!empty($productos)) {
+        foreach ($productos as $producto) {
+            $idProducto = $producto['idpedido'];
+            $idvendedor = $producto['idusuariovendedor'];
+            $query = "SELECT telefono, idusuario FROM datos_usuario WHERE idusuario = " . $idvendedor . "";
 
-                            if ($producto['estado'] == 0) {
+            $stmt = $dbh->query($query);
+            $telefono = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                                echo "<span class='pedido'>Pedido pendiente</span>";
-                                echo "<button class='comentar'>";
-                                echo "<a  class='span-editar' href='https://wa.me/52" . $telefono['telefono'] . "' target='_blank'>Chat</a></button>";
-                            } else {
-                                echo "<button class='comentar' onclick=\"openPopup(" . $producto['idpedido'] . ", " . $idUsuario . ")\">";
-                                echo "<span class='span-editar'>Comentar</span></button>";
-                                echo "<span class='pedido'>Pedido completado</span>";
-                            }
+            echo "<div class='section-b'>";
+            echo "<button class='frame-button-e' onclick=\"window.location.href='detallePedido.php?idPedido=" . $producto['idpedido'] . "&idUsuario=" . $idUsuario . "'\">";
 
+            echo "<span class='span-editar'>Ver detalles</span></button>";
 
-                            echo "<span class='stock'>Fecha:  " . date("Y-m-d", strtotime($producto['fecha'])) . "</span>";
+            echo "<span class='span-botellas-agua'>idpedido: " . $producto['idpedido'] . "</span>";
+            echo "<span class='mx-15'>MX$ " . $producto['totalprecio'] . "</span>";
 
+            if ($producto['estado'] == 0) {
 
-                            echo "</div>";
-                        }
-                    } else {
-                        echo "<div class='div-rectangle'>";
-                        echo "<span class='mi-cuenta'>No haz realizado ninguna compra.</span>";
-                    }
-                } catch (PDOException $e) {
-                    // Mostrar mensaje de error si la conexión falla
-                    echo "Error: " . $e->getMessage();
-                }
+                echo "<span class='pedido'>Pedido pendiente</span>";
+                echo "<button class='comentar'>";
+                echo "<a  class='span-editar' href='https://wa.me/52" . $telefono['telefono'] . "' target='_blank'>Chat</a></button>";
+            } else {
+                echo "<button class='comentar' onclick=\"openPopup(" . $producto['idpedido'] . ", " . $idUsuario . ")\">";
+                echo "<span class='span-editar'>Comentar</span></button>";
+                echo "<span class='pedido'>Pedido completado</span>";
+            }
+
+            echo "<span class='stock'>Fecha:  " . date("Y-m-d", strtotime($producto['fecha'])) . "</span>";
+
+            echo "</div>";
+        }
+    } else {
+        echo "<div class='div-rectangle'>";
+        echo "<span class='mi-cuenta'>No haz realizado ninguna compra.</span>";
+    }
+} catch (PDOException $e) {
+    // Mostrar mensaje de error si la conexión falla
+    echo "Error: " . $e->getMessage();
+}
 
                 ?>
 
-
-
-
                 <script>
-                    var queryString = window.location.search;
+                 var queryString = window.location.search;
 
-                    // Crear un objeto URLSearchParams para analizar la cadena de consulta
-                    var urlParams = new URLSearchParams(queryString);
+// Crear un objeto URLSearchParams para analizar la cadena de consulta
+var urlParams = new URLSearchParams(queryString);
 
-                    // Obtener el valor del parámetro 'idUsuario' de la URL
-                    var idUsuario = urlParams.get('idUsuario');
+// Obtener el valor del parámetro 'idUsuario' de la URL
+var idUsuario = urlParams.get('idUsuario');
 
-                    // Hacer algo con el valor de idUsuario
-                    console.log('ID del usuario:', idUsuario);
+// Hacer algo con el valor de idUsuario
+console.log('ID del usuario:', idUsuario);
 
-                    document.getElementById("editarPerfilButton").addEventListener("click", function() {
-                        window.location.href = "FormEditarPerfilUsuario.php?idUsuario=" + idUsuario;
-                    });
+document.getElementById("editarPerfilButton").addEventListener("click", function() {
+    window.location.href = "FormEditarPerfilUsuario.php?idUsuario=" + idUsuario;
+});
 
-                    // Agregar evento de clic al botón de detalles
-                    document.getElementById("compraButton").addEventListener("click", function() {
-                        // Redirigir a la página FormDetallesCompra.html
-                        window.location.href = "FormDetallesCompra.html";
-                    });
+// Agregar evento de clic al botón de detalles
+document.getElementById("compraButton").addEventListener("click", function() {
+    // Redirigir a la página FormDetallesCompra.html
+    window.location.href = "FormDetallesCompra.html";
+});
 
-                    document.getElementById("agregarRolesButton").addEventListener("click", function() {
-                        window.location.href = "Comentarios.html";
-                    });
+document.getElementById("agregarRolesButton").addEventListener("click", function() {
+    window.location.href = "Comentarios.html";
+});
 
-                    // Cargar el contenido de FormCategorias.html
-                    fetch("FormCategorias.html")
-                        .then(response => response.text())
-                        .then(html => {
-                            // Insertar el contenido en la tablaCategorias
-                            document.getElementById("tablaCategorias").innerHTML = html;
-                        })
-                        .catch(error => console.log("Error al cargar el contenido de categorías:", error));
+// Cargar el contenido de FormCategorias.html
+fetch("FormCategorias.html")
+    .then(response => response.text())
+    .then(html => {
+        // Insertar el contenido en la tablaCategorias
+        document.getElementById("tablaCategorias").innerHTML = html;
+    })
+    .catch(error => console.log("Error al cargar el contenido de categorías:", error));
 
-                    document.getElementById("agregarCategoriasButton").addEventListener("click", function() {
-                        window.location.href = "FormCategorias.html";
-                    });
-                    document.getElementById("agregarEspecialidadButton").addEventListener("click", function() {
-                        window.location.href = "FormEspecialidades.html";
-                    });
+document.getElementById("agregarCategoriasButton").addEventListener("click", function() {
+    window.location.href = "FormCategorias.html";
+});
+document.getElementById("agregarEspecialidadButton").addEventListener("click", function() {
+    window.location.href = "FormEspecialidades.html";
+});
+var queryString = window.location.search;
 
-                    var queryString = window.location.search;
+// Crear un objeto URLSearchParams para analizar la cadena de consulta
+var urlParams = new URLSearchParams(queryString);
 
-                    // Crear un objeto URLSearchParams para analizar la cadena de consulta
-                    var urlParams = new URLSearchParams(queryString);
+// Obtener el valor del parámetro 'idUsuario' de la URL
+var idUsuario = urlParams.get('idUsuario');
 
-                    // Obtener el valor del parámetro 'idUsuario' de la URL
-                    var idUsuario = urlParams.get('idUsuario');
+// Hacer algo con el valor de idUsuario
+console.log('ID del usuario:', idUsuario);
 
-                    // Hacer algo con el valor de idUsuario
-                    console.log('ID del usuario:', idUsuario);
+document.getElementById("editarPerfilButton").addEventListener("click", function() {
+    window.location.href = "FormEditarPerfilUsuario.php?idUsuario=" + idUsuario;
+});
 
-                    document.getElementById("editarPerfilButton").addEventListener("click", function() {
-                        window.location.href = "FormEditarPerfilUsuario.php?idUsuario=" + idUsuario;
-                    });
+function openPopup(idPedido, idUsuario) {
+    fetch(`getProductos.php?idPedido=${idPedido}&idUsuario=${idUsuario}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.error('Error del servidor:', data.error);
+                return;
+            }
 
-                    function openPopup(idPedido, idUsuario) {
-                        fetch(`getProductos.php?idPedido=${idPedido}&idUsuario=${idUsuario}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.error) {
-                                    console.error('Error del servidor:', data.error);
-                                    return;
-                                }
+            const popupBody = document.getElementById('popup-body');
+            popupBody.innerHTML = ''; // Limpiar contenido anterior
 
-                                const popupBody = document.getElementById('popup-body');
-                                popupBody.innerHTML = ''; // Limpiar contenido anterior
+            data.productos.forEach(producto => {
+                const productDiv = document.createElement('div');
+                productDiv.classList.add('product-item');
 
-                                data.productos.forEach(producto => {
-                                    const productDiv = document.createElement('div');
-                                    productDiv.classList.add('product-item');
+                const productName = document.createElement('span');
+                productName.textContent = producto.nombre;
+                productDiv.appendChild(productName);
 
-                                    const productName = document.createElement('span');
-                                    productName.textContent = producto.nombre;
-                                    productDiv.appendChild(productName);
+                const commentButton = document.createElement('button');
+                commentButton.textContent = 'Comentar';
+                commentButton.onclick = function() {
+                    window.location.href = `FormComentarios.php?idProducto=${producto.id}&idUsuario=${idUsuario}`;
+                };
+                productDiv.appendChild(commentButton);
 
-                                    const commentButton = document.createElement('button');
-                                    commentButton.textContent = 'Comentar';
-                                    commentButton.onclick = function() {
-                                        window.location.href = `FormComentarios.php?idProducto=${producto.id}&idUsuario=${idUsuario}`;
-                                    };
-                                    productDiv.appendChild(commentButton);
+                popupBody.appendChild(productDiv);
+            });
 
-                                    popupBody.appendChild(productDiv);
-                                });
+            document.getElementById('popup').style.display = 'block';
+        })
+        .catch(error => console.error('Error al obtener los productos:', error));
+}
 
-                                document.getElementById('popup').style.display = 'block';
-                            })
-                            .catch(error => console.error('Error al obtener los productos:', error));
-                    }
+function closePopup() {
+    document.getElementById('popup').style.display = 'none';
+}
 
-                    function closePopup() {
-                        document.getElementById('popup').style.display = 'none';
-                    }
-
-                    window.onclick = function(event) {
-                        if (event.target === document.getElementById('popup')) {
-                            closePopup();
-                        }
-                    }
-
-
-
-                    // Cargar el contenido de FormEspecialidades.html
-                </script>
-
-                <!-- Generated by Codia AI - https://codia.ai/ -->
-
-            </div>
-        </div>
-        <div id="popup" class="popup">
-            <div class="popup-content">
-                <span class="close" onclick="closePopup()">&times;</span>
-                <div id="popup-body"></div>
-            </div>
-        </div>
-
-    </div>
-
-
-</body>
-
-</html>
+window.onclick = function(event) {
+    if (event.target === document.getElementById('popup')) {
+        closePopup();
+    }
+};

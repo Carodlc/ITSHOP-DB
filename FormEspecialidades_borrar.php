@@ -7,10 +7,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['especialidades'])) {
     try {
         // Preparar la consulta de eliminación
         $placeholders = implode(',', array_fill(0, count($rolesToDelete), '?'));
-        $query = "DELETE FROM ESPECIALIDADES WHERE NOMBREESPECIALIDAD IN ($placeholders)";
+        $query = "DELETE FROM especialidades WHERE nombreespecialidad IN ($placeholders)";
         $stmt = $dbh->prepare($query);
         
-        // Ejecutar la consulta para eliminar los roles seleccionados
+        // Ejecutar la consulta para eliminar las especialidades seleccionadas
         $stmt->execute($rolesToDelete);
 
         // Obtener y devolver la tabla actualizada
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['especialidades'])) {
             echo "</tr>";
         }
     } catch (PDOException $e) {
-        echo "Error al borrar los roles: " . $e->getMessage();
+        echo "Error al borrar las especialidades: " . $e->getMessage();
     }
 }
 ?>

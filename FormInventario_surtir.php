@@ -4,15 +4,15 @@ include 'conexion.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Obtener los datos del formulario
     $cantidad = $_POST["cantidad"] ?? '';
-    $FECHA = $_POST['fecha'] ?? '';
-    $ID_USUARIO = $_POST['idUsuario'] ?? '';
-    $ID_PRODUCTO = $_POST['idProducto'] ?? '';
+    $fecha = $_POST['fecha'] ?? '';
+    $id_usuario = $_POST['idUsuario'] ?? '';
+    $id_producto = $_POST['idProducto'] ?? '';
 
 
     echo "Cantidad" . $cantidad;
-    echo "fecha" . $FECHA;
-    echo "idusuario" . $ID_USUARIO;
-    echo "idPROD" . $ID_PRODUCTO;
+    echo "fecha" . $fecha;
+    echo "idusuario" . $id_usuario;
+    echo "idPROD" . $id_producto;
 
 
     function generateSurtidoId($dbh)
@@ -32,34 +32,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     
-    function insertSurtido($dbh, $fecha, $cantidad, $productId, $userId)
+    function insertSurtido($dbh, $fecha, $cantidad, $product_id, $user_id)
     {
         try {
             // Generar un nuevo IDSURTIDO
-            $idSurtido = generateSurtidoId($dbh);
+            $id_surtido = generateSurtidoId($dbh);
     
-            if ($idSurtido === false) {
+            if ($id_surtido === false) {
                 // Si no se pudo generar el IDSURTIDO, retorna falso
                 return false;
             }
     
-            // Insertar datos en la tabla SURTIDO
-            $stmt = $dbh->prepare("INSERT INTO SURTIDO (IDSURTIDO, DATOS_USUARIO_IDUSUARIO, FECHA) VALUES (:idSurtido, :userId, :fecha)");
-            $stmt->bindParam(':idSurtido', $idSurtido, PDO::PARAM_INT);
-            $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+            // Insertar datos en la tabla surtido
+            $stmt = $dbh->prepare("INSERT INTO surtido (idsurtido, datos_usuario_idusuario, fecha) VALUES (:id_surtido, :user_id, :fecha)");
+            $stmt->bindParam(':id_surtido', $id_surtido, PDO::PARAM_INT);
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
             $stmt->bindParam(':fecha', $fecha, PDO::PARAM_STR);
             $stmt->execute();
     
-            // Insertar datos en la tabla DATOS_PRODUCTO_HAS_SURTIDO
-            $stmt = $dbh->prepare("INSERT INTO DATOS_PRODUCTO_HAS_SURTIDO (DATOS_PRODUCTO_IDPRODUCTO, SURTIDO_IDSURTIDO, CANTIDAD) VALUES (:productId, :idSurtido, :cantidad)");
-            $stmt->bindParam(':productId', $productId, PDO::PARAM_INT);
-            $stmt->bindParam(':idSurtido', $idSurtido, PDO::PARAM_INT);
+            // Insertar datos en la tabla datos_producto_has_surtido
+            $stmt = $dbh->prepare("INSERT INTO datos_producto_has_surtido (datos_producto_idproducto, surtido_idsurtido, cantidad) VALUES (:product_id, :id_surtido, :cantidad)");
+            $stmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
+            $stmt->bindParam(':id_surtido', $id_surtido, PDO::PARAM_INT);
             $stmt->bindParam(':cantidad', $cantidad, PDO::PARAM_INT);
             $stmt->execute();
     
-            $stmt = $dbh->prepare("UPDATE DATOS_PRODUCTO SET STOCK = STOCK + :cantidad WHERE IDPRODUCTO = :productId");
+            $stmt = $dbh->prepare("UPDATE datos_producto SET stock = stock + :cantidad WHERE idproducto = :product_id");
             $stmt->bindParam(':cantidad', $cantidad, PDO::PARAM_INT);
-            $stmt->bindParam(':productId', $productId, PDO::PARAM_INT);
+            $stmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
             $stmt->execute();
     
             // Retornar éxito
@@ -72,5 +72,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     
 
-    insertSurtido($dbh, $FECHA, $cantidad, $ID_PRODUCTO, $ID_USUARIO);
+    insertSurtido($dbh, $fecha, $cantidad, $id_producto, $id_usuario);
 }

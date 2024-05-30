@@ -360,7 +360,6 @@
         }
     </style>
 </head>
-
 <body>
     <div class="main-container">
         <span class="text">Categorias</span>
@@ -390,18 +389,20 @@
                     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
                     // Obtener roles desde la base de datos
-                    $categorias = getCategorias($dbh);
+                    $query = "SELECT * FROM categorias"; // Query en minúsculas
+                    $stmt = $dbh->query($query);
 
-                    // Si hay roles, generar filas para la tabla
-                    if (!empty($categorias)) {
-                        foreach ($categorias as $categoria) {
+                    // Si hay categorías, generar filas para la tabla
+                    if ($stmt->rowCount() > 0) {
+                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                            $categoria = $row['nombre_categoria']; // Cambiado a minúsculas
                             echo "<tr>";
-                            echo "<td><input type='checkbox' name='roles[]' value='$categoria'></td>"; // Columna de checkboxes
-                            echo "<td>$categoria</td>"; // Columna de rol
+                            echo "<td><input type='checkbox' name='categorias[]' value='$categoria'></td>"; // Columna de checkboxes
+                            echo "<td>$categoria</td>"; // Columna de categoría
                             echo "</tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='2'>No se encontraron roles</td></tr>";
+                        echo "<tr><td colspan='2'>No se encontraron categorías</td></tr>";
                     }
                 } catch (PDOException $e) {
                     // Mostrar mensaje de error si la conexión falla
@@ -412,58 +413,60 @@
         </table>
         <div class="wrapper-4">
             <button class="add-button box"><span class="text-6">Agregar</span></button>
-            <div class="box cancel-button"><span class="text-6"><a href="Perfil_admi.php">Cancelar</span></div></a>
+            <div class="box cancel-button"><span class="text-6"><a href="Perfil_admi.php">Cancelar</a></span></div> <!-- Corregido para cerrar la etiqueta <a> -->
             <div class="box-2"><span class="text-7">Borrar</span></div>
         </div>
+    </div>
+</body>
 
-        <script>
-            const addButton = document.querySelector('.add-button');
-            const roleInput = document.querySelector('.role-input');
-            const rolesTableBody = document.querySelector('.roles-table tbody');
-            const deleteButton = document.querySelector('.box-2');
+<script>
+    const addButton = document.querySelector('.add-button');
+    const roleInput = document.querySelector('.role-input');
+    const rolesTableBody = document.querySelector('.roles-table tbody');
+    const deleteButton = document.querySelector('.box-2');
 
-            // Función para agregar un nuevo rol
-            addButton.addEventListener('click', () => {
-                const roleName = roleInput.value.trim();
+    // Función para agregar un nuevo rol
+    addButton.addEventListener('click', () => {
+        const roleName = roleInput.value.trim();
 
-                if (roleName) {
-                    // Realizar una solicitud AJAX para insertar el nuevo rol en la base de datos
-                    const xhr = new XMLHttpRequest();
-                    xhr.open('POST', 'FormCategorias_insertar.php');
-                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                    xhr.onload = function() {
-                        if (xhr.status === 200) {
-                            // Si la inserción es exitosa, actualizar la tabla
-                            rolesTableBody.innerHTML = xhr.responseText;
-                        } else {
-                            console.error('Error al insertar el rol');
-                        }
-                    };
-                    xhr.send(`categoria=${roleName}`);
-                    roleInput.value = '';
+        if (roleName) {
+            // Realizar una solicitud AJAX para insertar el nuevo rol en la base de datos
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'formcategorias_insertar.php'); // Cambiado a minúsculas
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Si la inserción es exitosa, actualizar la tabla
+                    rolesTableBody.innerHTML = xhr.responseText;
+                } else {
+                    console.error('Error al insertar el rol');
                 }
-            });
+            };
+            xhr.send(`categoria=${roleName}`);
+            roleInput.value = '';
+        }
+    });
 
-            // Función para eliminar roles seleccionados
-            deleteButton.addEventListener('click', () => {
-                const checkboxes = document.querySelectorAll('.roles-table tbody input[type="checkbox"]:checked');
-                const categoriasToDelete = Array.from(checkboxes).map(checkbox => checkbox.value);
+    // Función para eliminar roles seleccionados
+    deleteButton.addEventListener('click', () => {
+        const checkboxes = document.querySelectorAll('.roles-table tbody input[type="checkbox"]:checked');
+        const categoriasToDelete = Array.from(checkboxes).map(checkbox => checkbox.value);
 
-                // Realizar una solicitud AJAX para eliminar los roles seleccionados de la base de datos
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', 'FormCategorias_borrar.php');
-                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                xhr.onload = function() {
-                    if (xhr.status === 200) {
-                        // Si la eliminación es exitosa, actualizar la tabla
-                        rolesTableBody.innerHTML = xhr.responseText;
-                    } else {
-                        console.error('Error al borrar los roles');
-                    }
-                };
-                xhr.send(`categorias=${JSON.stringify(categoriasToDelete)}`);
-            });
-        </script>
+        // Realizar una solicitud AJAX para eliminar los roles seleccionados de la base de datos
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'formcategorias_borrar.php'); // Cambiado a minúsculas
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                // Si la eliminación es exitosa, actualizar la tabla
+                rolesTableBody.innerHTML = xhr.responseText;
+            } else {
+                console.error('Error al borrar los roles');
+            }
+        };
+        xhr.send(`categorias=${JSON.stringify(categoriasToDelete)}`);
+    });
+</script>
 </body>
 
 </html>

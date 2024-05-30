@@ -5,17 +5,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['role'])) {
     $rol = $_POST['role'];
 
     try {
-        // Obtener el último IDROL
-        $query_last_id = "SELECT MAX(IDROL) AS LAST_ID FROM ROL";
+        // Obtener el último idrol
+        $query_last_id = "SELECT MAX(idrol) AS last_id FROM rol";
         $stmt_last_id = $dbh->prepare($query_last_id);
         $stmt_last_id->execute();
-        $last_id = $stmt_last_id->fetch(PDO::FETCH_ASSOC)['LAST_ID'];
+        $last_id = $stmt_last_id->fetch(PDO::FETCH_ASSOC)['last_id'];
 
         // Generar el nuevo ID incrementando el último ID
         $new_id = $last_id + 1;
 
         // Insertar el nuevo rol en la base de datos
-        $query_insert = "INSERT INTO ROL (IDROL, NOMBREROL, ESTADO) VALUES (?, ?, 1)";
+        $query_insert = "INSERT INTO rol (idrol, nombrerol, estado) VALUES (?, ?, 1)";
         $stmt_insert = $dbh->prepare($query_insert);
         $stmt_insert->execute([$new_id, $rol]);
 

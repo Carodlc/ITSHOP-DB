@@ -3,11 +3,9 @@ require('fpdf186/fpdf.php');
 include 'conexion.php';
 
 // Clase para generar el PDF
-class PDF extends FPDF
-{
+class PDF extends FPDF {
     // Cabecera de página
-    function Header()
-    {
+    function Header() {
         // Arial bold 15
         $this->SetFont('Arial', 'B', 15);
         // Título
@@ -16,8 +14,7 @@ class PDF extends FPDF
     }
 
     // Pie de página
-    function Footer()
-    {
+    function Footer() {
         // Posición: a 1.5 cm del final
         $this->SetY(-15);
         // Arial italic 8
@@ -27,17 +24,17 @@ class PDF extends FPDF
     }
 
     // Tabla simple
-    function BasicTable($header, $data)
-    {
+    function BasicTable($header, $data) {
         // Anchos de las columnas
-        $w = array(40, 90, 40); // Ajusta los anchos de las columnas
+        $w = array(40, 90, 40);
 
+        // Ajusta los anchos de las columnas
         // Cabecera
         for ($i = 0; $i < count($header); $i++) {
             $this->Cell($w[$i], 7, $header[$i], 1, 0, 'C');
         }
         $this->Ln();
-        
+
         // Datos
         foreach ($data as $row) {
             $this->Cell($w[0], 6, $row[0], 1);
@@ -51,10 +48,9 @@ class PDF extends FPDF
 // Verificar si idUsuario está presente
 if (isset($_GET['idUsuario'])) {
     $idUsuario = $_GET['idUsuario'];
-
     try {
         // Establecer conexión a la base de datos
-        $query = "SELECT IDPRODUCTO, NOMBRE, STOCK FROM DATOS_PRODUCTO WHERE DATOS_USUARIO_IDUSUARIO = :idUsuario ORDER BY IDPRODUCTO ASC";
+        $query = "select idproducto, nombre, stock from datos_producto where datos_usuario_idusuario = :idUsuario order by idproducto asc";
         $stmt = $dbh->prepare($query);
         $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
         $stmt->execute();
@@ -77,15 +73,13 @@ if (isset($_GET['idUsuario'])) {
         $data = [];
         if (!empty($productos)) {
             foreach ($productos as $producto) {
-                $data[] = array($producto['IDPRODUCTO'], $producto['NOMBRE'], $producto['STOCK']);
+                $data[] = array($producto['idproducto'], $producto['nombre'], $producto['stock']);
             }
         }
-
         $pdf->BasicTable($header, $data);
 
         // Salida del PDF
         $pdf->Output('D', 'reporte_inventario.pdf');
-
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
@@ -95,11 +89,10 @@ if (isset($_GET['idUsuario'])) {
 
 // Función para obtener el nombre del usuario
 function obtenerNombreUsuario($idUsuario, $dbh) {
-    $query = "SELECT NOMBRE_USUARIO FROM DATOS_USUARIO WHERE IDUSUARIO = :idUsuario";
+    $query = "select nombre_usuario from datos_usuario where idusuario = :idUsuario";
     $stmt = $dbh->prepare($query);
     $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
     $stmt->execute();
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $usuario ? $usuario['NOMBRE_USUARIO'] : 'Desconocido';
+    return $usuario ? $usuario['nombre_usuario'] : 'Desconocido';
 }
-?>

@@ -890,59 +890,60 @@
                 </div>
             </form>
                 <?php
-                include 'conexion.php';
-                if (isset($_GET['idUsuario'])) {
-                    // Obtener el valor de 'idUsuario'
-                    $idUsuario = $_GET['idUsuario'];
-
-                    // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
-                } else {
-                    // Si no se pasó el parámetro 'idUsuario' en la URL
-                    echo "No se ha especificado un ID de usuario.";
-                }
-
-
-                try {
-                    // Establecer conexión a la base de datos
-                    $query = "SELECT * FROM PEDIDO WHERE IDUSUARIOVENDEDOR = " . $idUsuario . " ORDER BY ESTADO ASC, FECHA DESC";
-
-                    $stmt = $dbh->query($query);
-                    $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                    // Si hay productos, generar instancias de producto
-                    if (!empty($productos)) {
-                        foreach ($productos as $producto) {
-                            $idProducto = $producto['IDPEDIDO'];
-
-
-                            echo "<div class='div-rectangle'>";
-                            echo "<button class='frame-button-e' onclick=\"window.location.href='detallePedido.php?idPedido=" . $producto['IDPEDIDO'] . "&idUsuario=" . $idUsuario . "'\">";
-                            echo "<span class='span-editar'>Ver detalles</span></button>";
-                            echo "<span class='span-botellas-agua'>IDPEDIDO: " . $producto['IDPEDIDO'] . "</span>";
-                            echo "<span class='mx-15'>MX$ " . $producto['TOTALPRECIO'] . "</span>";
-
-                            if ($producto['ESTADO'] == 0) {
-                                echo "<button class='frame-f' onclick=\"confirmarPedido($idProducto)\">";
-                                echo "<span class='borrar'>Confirmar pedido</span>";
-                                echo "</button>";
-                            }
-
-
-                            echo "<span class='stock'>Fecha:  " . $producto['FECHA'] . "</span>";
-                            echo "<div class='descripcion'>";
-                            echo "<span class='descripcion-10'>Total de productos</span><span class='colon'>:</span>";
-                            echo "</div>";
-                            echo "<span class='botella-agua'>" . $producto['TOTALPRODUCTOS'] . "</span>";
-                            echo "</div>";
-                        }
-                    } else {
-                        echo "<div class='div-rectangle'>";
-                        echo "<span class='mi-cuenta'>No tienes pedidos aún.</span>";
-                    }
-                } catch (PDOException $e) {
-                    // Mostrar mensaje de error si la conexión falla
-                    echo "Error: " . $e->getMessage();
-                }
+               include 'conexion.php';
+               if (isset($_GET['idUsuario'])) {
+                   // Obtener el valor de 'idUsuario'
+                   $idUsuario = $_GET['idUsuario'];
+               
+                   // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
+               } else {
+                   // Si no se pasó el parámetro 'idUsuario' en la URL
+                   echo "No se ha especificado un ID de usuario.";
+               }
+               
+               
+               try {
+                   // Establecer conexión a la base de datos
+                   $query = "SELECT * FROM pedido WHERE idusuariovendedor = " . $idUsuario . " ORDER BY estado ASC, fecha DESC";
+               
+                   $stmt = $dbh->query($query);
+                   $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+               
+                   // Si hay productos, generar instancias de producto
+                   if (!empty($productos)) {
+                       foreach ($productos as $producto) {
+                           $idProducto = $producto['idpedido'];
+               
+               
+                           echo "<div class='div-rectangle'>";
+                           echo "<button class='frame-button-e' onclick=\"window.location.href='detallePedido.php?idPedido=" . $producto['idpedido'] . "&idUsuario=" . $idUsuario . "'\">";
+                           echo "<span class='span-editar'>Ver detalles</span></button>";
+                           echo "<span class='span-botellas-agua'>IDPEDIDO: " . $producto['idpedido'] . "</span>";
+                           echo "<span class='mx-15'>MX$ " . $producto['totalprecio'] . "</span>";
+               
+                           if ($producto['estado'] == 0) {
+                               echo "<button class='frame-f' onclick=\"confirmarPedido($idProducto)\">";
+                               echo "<span class='borrar'>Confirmar pedido</span>";
+                               echo "</button>";
+                           }
+               
+               
+                           echo "<span class='stock'>Fecha:  " . $producto['fecha'] . "</span>";
+                           echo "<div class='descripcion'>";
+                           echo "<span class='descripcion-10'>Total de productos</span><span class='colon'>:</span>";
+                           echo "</div>";
+                           echo "<span class='botella-agua'>" . $producto['totalproductos'] . "</span>";
+                           echo "</div>";
+                       }
+                   } else {
+                       echo "<div class='div-rectangle'>";
+                       echo "<span class='mi-cuenta'>No tienes pedidos aún.</span>";
+                   }
+               } catch (PDOException $e) {
+                   // Mostrar mensaje de error si la conexión falla
+                   echo "Error: " . $e->getMessage();
+               }
+               
 
                 ?>
 
@@ -954,24 +955,25 @@
     <!-- Generated by Codia AI - https://codia.ai/ -->
 </body>
 <script>
-    function confirmarPedido(idProducto) {
-        if (confirm('¿Estás seguro de que deseas confirmar el pedido?')) {
-            // Envía una solicitud al servidor para eliminar el producto
-            fetch('confirmar_pedido.php?idProducto=' + idProducto, {
-                    method: 'DELETE'
-                })
-                .then(response => {
-                    if (response.ok) {
-                        // Recarga la página después de eliminar el producto
-                        window.location.reload();
-                    } else {
-                        // Maneja el caso si la eliminación del producto falla
-                        console.error('Error al confirmar pedido');
-                    }
-                })
-                .catch(error => console.error('Error al eliminar el producto:', error));
-        }
+   function confirmarPedido(idProducto) {
+    if (confirm('¿Estás seguro de que deseas confirmar el pedido?')) {
+        // Envía una solicitud al servidor para eliminar el producto
+        fetch('confirmar_pedido.php?idProducto=' + idProducto, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Recarga la página después de eliminar el producto
+                    window.location.reload();
+                } else {
+                    // Maneja el caso si la eliminación del producto falla
+                    console.error('Error al confirmar pedido');
+                }
+            })
+            .catch(error => console.error('Error al eliminar el producto:', error));
     }
+}
+
 </script>
 
 </html>

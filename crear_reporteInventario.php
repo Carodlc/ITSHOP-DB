@@ -60,13 +60,13 @@ if (isset($_GET['idUsuario']) && isset($_GET['fechaDesde']) && isset($_GET['fech
 
     try {
         // Establecer conexión a la base de datos
-        $query = "SELECT p.NOMBRE, d.CANTIDAD, s.FECHA 
-                  FROM DATOS_PRODUCTO p
-                  JOIN DATOS_PRODUCTO_HAS_SURTIDO d ON p.IDPRODUCTO = d.DATOS_PRODUCTO_IDPRODUCTO
-                  JOIN SURTIDO s ON d.SURTIDO_IDSURTIDO = s.IDSURTIDO
-                  WHERE s.DATOS_USUARIO_IDUSUARIO = :idUsuario 
-                  AND TO_DATE(s.FECHA, 'DD/MM/YY') BETWEEN TO_DATE(:fechaDesde, 'DD/MM/YY') AND TO_DATE(:fechaHasta, 'DD/MM/YY')
-                  ORDER BY s.FECHA ASC";
+        $query = "select p.nombre, d.cantidad, s.fecha 
+                  from datos_producto p
+                  join datos_producto_has_surtido d on p.idproducto = d.datos_producto_idproducto
+                  join surtido s on d.surtido_idsurtido = s.idsurtido
+                  where s.datos_usuario_idusuario = :idUsuario 
+                  and to_date(s.fecha, 'dd/mm/yy') between to_date(:fechaDesde, 'dd/mm/yy') and to_date(:fechaHasta, 'dd/mm/yy')
+                  order by s.fecha asc";
         $stmt = $dbh->prepare($query);
         $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
         $stmt->bindParam(':fechaDesde', $fechaDesde, PDO::PARAM_STR);
@@ -80,20 +80,20 @@ if (isset($_GET['idUsuario']) && isset($_GET['fechaDesde']) && isset($_GET['fech
 
         // Agregar IDPEDIDO del vendedor y fecha de emisión del reporte
         $pdf->SetFont('Arial', '', 12);
-        $pdf->Cell(0, 10, 'Nombre del Vendedor: ' . obtenerNombreVendedor($idUsuario, $dbh), 0, 1, 'L');
+        $pdf->Cell(0, 10, 'nombre del Vendedor: ' . obtenerNombreVendedor($idUsuario, $dbh), 0, 1, 'L');
         $pdf->Cell(0, 10, 'Fecha de Emision: ' . date('d/m/Y'), 0, 1, 'L');
         $pdf->Ln(10); // Espacio entre el encabezado y la tabla
 
         // Cabecera de la tabla
-        $header = array('Nombre del Producto', 'Cantidad', 'Fecha de Surtido');
+        $header = array('nombre del Producto', 'cantidad', 'Fecha de Surtido');
 
         // Agregar datos a la tabla
         $data = [];
         if (!empty($surtidos)) {
             foreach ($surtidos as $surtido) {
                 // Convertir fecha de DD/MM/YY a DD/MM/YYYY para la salida
-                $fecha = DateTime::createFromFormat('d/m/y', $surtido['FECHA'])->format('d/m/Y');
-                $data[] = array($surtido['NOMBRE'], $surtido['CANTIDAD'], $fecha);
+                $fecha = DateTime::createFromFormat('d/m/y', $surtido['fecha'])->format('d/m/Y');
+                $data[] = array($surtido['nombre'], $surtido['cantidad'], $fecha);
             }
         }
 
@@ -111,11 +111,11 @@ if (isset($_GET['idUsuario']) && isset($_GET['fechaDesde']) && isset($_GET['fech
 
 // Función para obtener el nombre del vendedor
 function obtenerNombreVendedor($idUsuario, $dbh) {
-    $query = "SELECT NOMBRE_USUARIO FROM DATOS_USUARIO WHERE IDUSUARIO = :idUsuario";
+    $query = "select nombre_usuario from datos_usuario where idusuario = :idUsuario";
     $stmt = $dbh->prepare($query);
     $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
     $stmt->execute();
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $usuario ? $usuario['NOMBRE_USUARIO'] : 'Desconocido';
+    return $usuario ? $usuario['nombre_usuario'] : 'Desconocido';
 }
 ?>

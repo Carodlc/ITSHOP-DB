@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // Consultar si el correo electrónico ya existe en la base de datos excluyendo el correo del usuario actual
-        $stmt_check_email = $dbh->prepare("SELECT COUNT(*) FROM datos_usuario WHERE correo = ? AND idusuario != ?");
+        $stmt_check_email = $dbh->prepare("select count(*) from datos_usuario where correo = ? and idusuario != ?");
         $stmt_check_email->execute([$CORREO, $ID_USUARIO]);
         $email_exists = $stmt_check_email->fetchColumn();
 
@@ -78,13 +78,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit; // Salir del script PHP para evitar que se imprima más contenido HTML
         } else {
             // Consultar el ID de la especialidad
-            $stmt_especialidad = $dbh->prepare("SELECT idespecialidad FROM especialidades WHERE nombreespecialidad = ?");
+            $stmt_especialidad = $dbh->prepare("select idespecialidad from especialidades where nombreespecialidad = ?");
             $stmt_especialidad->execute([$ESPECIALIDAD_NOMBRE]);
             $especialidad_row = $stmt_especialidad->fetch(PDO::FETCH_ASSOC);
             $ESPECIALIDADES_IDESPECIALIDAD = $especialidad_row['IDESPECIALIDAD'] ?? null;
 
             // Modificar la consulta para realizar un UPDATE en lugar de un INSERT
-            $query_update = "UPDATE DATOS_USUARIO SET NOMBRE_USUARIO = ?, ESPECIALIDADES_IDESPECIALIDAD = ? , FECHA_NACIMIENTO = ?, CORREO = ?, CONTRASENA = ?,NOMBRE_TIENDA = ? WHERE IDUSUARIO = ?";
+            $query_update = "update datos_usuario set nombre_usuario = ?, especialidades_idespecialidad = ? , fecha_nacimiento = ?, correo = ?, contrasena = ?,nombre_tienda = ? where idusuario = ?";
             $stmt_update = $dbh->prepare($query_update);
             $stmt_update->execute([$NOMBRE_USUARIO, $ESPECIALIDADES_IDESPECIALIDAD,  $fecha_formateada, $CORREO, $CONTRASENA_ENCRYPTADA,$NOMBRE_TIENDA, $ID_USUARIO]);
 
@@ -121,3 +121,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error al actualizar el usuario: " . $e->getMessage();
     }
 }
+?>

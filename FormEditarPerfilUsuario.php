@@ -197,181 +197,178 @@
 </head>
 
 <body>
-
-    <form id="form" action="Editar_perfil_usuario.php" method="post" enctype="multipart/form-data">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@500&display=swap" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;800&display=swap" />
-        <div class="navbar">
-            <!-- Aquí puedes agregar el contenido de tu barra de navegación -->
-            <span class="itshop">ITSHOP</span>
-        </div>
-        <div class="container">
-            <div class="flex-container">
-                <div class="left-section">
-                    <div class="form-section">
-                        <span class="registro-itshop">Editar perfil | ITSHOP</span>
-                    </div>
-                    <?php
-
-                    if (isset($_GET['idUsuario'])) {
-                        // Obtener el valor de 'idUsuario'
-                        $idUsuario = $_GET['idUsuario'];
-
-                        // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
-                    } else {
-                        // Si no se pasó el parámetro 'idUsuario' en la URL
-                        echo "No se ha especificado un ID de usuario.";
-                    }
-
-                    $stmt = $dbh->prepare("SELECT RUTA_USUARIO FROM USUARIOS_IMG WHERE ID = ?");
-                    $stmt->execute([$idUsuario]);
-                    $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
-                    $ruta_imagen = $rol_row['RUTA_USUARIO'] ?? '';
-
-                    // Obtener el tipo de contenido de la imagen
-                    $info = getimagesize($ruta_imagen);
-                    $tipo_contenido = $info['mime'];
-
-                    // Obtener el contenido de la imagen como base64
-                    $imagen_codificada = base64_encode(file_get_contents($ruta_imagen));
-                    $imagen_src = 'data:' . $tipo_contenido . ';base64,' . $imagen_codificada;
-                    ?>
-                    <div class="profile-pic-container">
-                        <img src="<?php echo $imagen_src; ?>" alt="Profile Picture" class="profile-pic" id="profilePreview">
-                        <label for="imagen" class="profile-pic-label">Cambiar imagen</label>
-                        <input type="file" id="imagen" name="imagen" accept="image/*" style="display: none;" >
-                    </div>
+<form id="form" action="editar_perfil_usuario.php" method="post" enctype="multipart/form-data">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@500&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;800&display=swap" />
+    <div class="navbar">
+        <!-- Aquí puedes agregar el contenido de tu barra de navegación -->
+        <span class="itshop">ITSHOP</span>
+    </div>
+    <div class="container">
+        <div class="flex-container">
+            <div class="left-section">
+                <div class="form-section">
+                    <span class="registro-itshop">Editar perfil | ITSHOP</span>
                 </div>
-                <div class="right-section">
-                    <div class="form-section">
-                        <label for="Vacio"></label>
-                    </div>
-                    <?php
-                    if (isset($_GET['idUsuario'])) {
-                        // Obtener el valor de 'idUsuario'
-                        $IDUSUARIO = $_GET['idUsuario'];
+                <?php
 
-                        // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
-                    } else {
-                        // Si no se pasó el parámetro 'idUsuario' en la URL
-                        echo "No se ha especificado un ID de usuario.";
-                    }
-                    $dbh = new PDO($dsn, $username, $password);
-                    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                    $query = "SELECT * FROM DATOS_USUARIO WHERE IDUSUARIO = ?";
+                if (isset($_GET['idUsuario'])) {
+                    // Obtener el valor de 'idUsuario'
+                    $idUsuario = $_GET['idUsuario'];
 
-                    $stmt = $dbh->prepare($query);
+                    // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
+                } else {
+                    // Si no se pasó el parámetro 'idUsuario' en la URL
+                    echo "No se ha especificado un ID de usuario.";
+                }
 
-                    // Ejecutar la consulta pasando el IDUSUARIO como parámetro
-                    $stmt->execute([$IDUSUARIO]);
+                $stmt = $dbh->prepare("SELECT ruta_usuario FROM usuarios_img WHERE ID = ?");
+                $stmt->execute([$idUsuario]);
+                $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
+                $ruta_imagen = $rol_row['ruta_usuario'] ?? '';
 
-                    // Obtener los resultados como un arreglo asociativo
-                    $datos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                // Obtener el tipo de contenido de la imagen
+                $info = getimagesize($ruta_imagen);
+                $tipo_contenido = $info['mime'];
 
-                    // Retornar los resultados
-
-                    // Obtener productos desde la base de datos
-                    echo "<div class='form-section'>";
-                    echo "<label for='nombre' class='letra'>Nombre:</label>";
-                    echo "<input type='text' id='nombre' name='nombre' value='" . $datos[0]['NOMBRE_USUARIO'] . "' required>";
-                    echo "</div>";
-                    echo "<div class='form-section'>";
-
-                    // Convertir el formato de la fecha de DD/MM/AA a YYYY-MM-DD
-                    $fecha_nacimiento_formateada = date('Y-m-d', strtotime(str_replace('/', '-', $datos[0]['FECHA_NACIMIENTO'])));
-
-
-                    // Mostrar el input con la fecha formateada
-                    echo "<div class='form-section'>";
-                    echo "<label for='fecha-nacimiento' class='letra'>Fecha de nacimiento:</label>";
-                    echo "<input type='date' id='fecha-nacimiento' name='fecha-nacimiento' value='" . $fecha_nacimiento_formateada . "' required>";
-                    echo "</div>";
-
-                    $IDESPECIALIDAD = $datos[0]['ESPECIALIDADES_IDESPECIALIDAD'];
-                    $stmt_especialidad = $dbh->prepare("SELECT NOMBREESPECIALIDAD FROM ESPECIALIDADES WHERE IDESPECIALIDAD = ?");
-                    $stmt_especialidad->execute([$IDESPECIALIDAD]);
-                    $especialidad_row = $stmt_especialidad->fetch(PDO::FETCH_ASSOC);
-                    $ESPECIALIDADES_IDESPECIALIDAD = $especialidad_row['NOMBREESPECIALIDAD'] ?? null;
-
-                    echo "<div class='form-section'>";
-                    echo "<label for='especialidad' class='letra'>Especialidad:</label>";
-                    echo "<select name='especialidad' id='especialidad' required>";
-                    echo "<option>" . $ESPECIALIDADES_IDESPECIALIDAD . "</option>";
-
-                    $especialidades = getEspecialidades($dbh);
-                    foreach ($especialidades as $especialidad) {
-                        echo "<option value=\"$especialidad\">$especialidad</option>";
-                    }
-
-
-
-                    echo "</select>";
-                    echo "</div>";
-                    echo "<div class='form-section'>";
-                    echo "<label for='password' class='letra'>Contraseña:</label>";
-                    echo "<input type='password' id='password' name='password' placeholder='Introduce una nueva contraseña' required>";
-                    echo "</div>";
-                    echo "<div class='form-section'>";
-                    echo "<label for='confirm-password' class='letra'>Confirmar contraseña:</label>";
-                    echo "<input type='password' id='confirm-password' name='confirm-password' placeholder='Repite la contraseña'>";
-                    echo "</div>";
-                    echo "<div class='form-section'>";
-                    echo "<label for='email' class='letra'>Correo Electrónico:</label>";
-                    echo "<input type='email' id='email' name='email'  value='" . $datos[0]['CORREO'] . "' required>";
-                    echo "</div>";
-               
-                    ?>
-                    <!-- Dentro de tu formulario HTML -->
-                    <input type="hidden" name="idUsuario" value="<?php echo $IDUSUARIO; ?>" required>
-
-                    <div class="form-buttons">
-                        <button class="cancelar-button letra" onclick="window.history.back();" id="atrasBtn">Atrás</button>
-                        <button type="submit" class="registrarse-button" id="registrarse-button">Actualizar datos</button>
-                    </div>
+                // Obtener el contenido de la imagen como base64
+                $imagen_codificada = base64_encode(file_get_contents($ruta_imagen));
+                $imagen_src = 'data:' . $tipo_contenido . ';base64,' . $imagen_codificada;
+                ?>
+                <div class="profile-pic-container">
+                    <img src="<?php echo $imagen_src; ?>" alt="Profile Picture" class="profile-pic" id="profilePreview">
+                    <label for="imagen" class="profile-pic-label">Cambiar imagen</label>
+                    <input type="file" id="imagen" name="imagen" accept="image/*" style="display: none;">
                 </div>
             </div>
-        </div>
+            <div class="right-section">
+    <div class="form-section">
+        <label for="Vacio"></label>
+    </div>
+    <?php
+    if (isset($_GET['idUsuario'])) {
+        // Obtener el valor de 'idUsuario'
+        $idUsuario = $_GET['idUsuario'];
+
+        // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
+    } else {
+        // Si no se pasó el parámetro 'idUsuario' en la URL
+        echo "No se ha especificado un ID de usuario.";
+    }
+    $dbh = new PDO($dsn, $username, $password);
+    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $query = "SELECT * FROM datos_usuario WHERE idusuario = ?";
+
+    $stmt = $dbh->prepare($query);
+
+    // Ejecutar la consulta pasando el IDUSUARIO como parámetro
+    $stmt->execute([$idUsuario]);
+
+    // Obtener los resultados como un arreglo asociativo
+    $datos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Retornar los resultados
+
+      // Retornar los resultados
+
+    // Obtener productos desde la base de datos
+    echo "<div class='form-section'>";
+    echo "<label for='nombre' class='letra'>Nombre:</label>";
+    echo "<input type='text' id='nombre' name='nombre' value='" . $datos[0]['nombre_usuario'] . "' required>";
+    echo "</div>";
+    echo "<div class='form-section'>";
+
+    // Convertir el formato de la fecha de DD/MM/AA a YYYY-MM-DD
+    $fecha_nacimiento_formateada = date('Y-m-d', strtotime(str_replace('/', '-', $datos[0]['fecha_nacimiento'])));
+
+
+    // Mostrar el input con la fecha formateada
+    echo "<div class='form-section'>";
+    echo "<label for='fecha-nacimiento' class='letra'>Fecha de nacimiento:</label>";
+    echo "<input type='date' id='fecha-nacimiento' name='fecha-nacimiento' value='" . $fecha_nacimiento_formateada . "' required>";
+    echo "</div>";
+
+    $idespecialidad = $datos[0]['especialidades_idespecialidad'];
+    $stmt_especialidad = $dbh->prepare("SELECT nombreespecialidad FROM especialidades WHERE idespecialidad = ?");
+    $stmt_especialidad->execute([$idespecialidad]);
+    $especialidad_row = $stmt_especialidad->fetch(PDO::FETCH_ASSOC);
+    $especialidades_idespecialidad = $especialidad_row['nombreespecialidad'] ?? null;
+
+    echo "<div class='form-section'>";
+    echo "<label for='especialidad' class='letra'>Especialidad:</label>";
+    echo "<select name='especialidad' id='especialidad' required>";
+    echo "<option>" . $especialidades_idespecialidad . "</option>";
+
+    $especialidades = getEspecialidades($dbh);
+    foreach ($especialidades as $especialidad) {
+        echo "<option value=\"$especialidad\">$especialidad</option>";
+    }
+
+
+    echo "</select>";
+    echo "</div>";
+    echo "<div class='form-section'>";
+    echo "<label for='password' class='letra'>Contraseña:</label>";
+    echo "<input type='password' id='password' name='password' placeholder='Introduce una nueva contraseña' required>";
+    echo "</div>";
+    echo "<div class='form-section'>";
+    echo "<label for='confirm-password' class='letra'>Confirmar contraseña:</label>";
+    echo "<input type='password' id='confirm-password' name='confirm-password' placeholder='Repite la contraseña'>";
+    echo "</div>";
+    echo "<div class='form-section'>";
+    echo "<label for='email' class='letra'>Correo Electrónico:</label>";
+    echo "<input type='email' id='email' name='email'  value='" . $datos[0]['correo'] . "' required>";
+    echo "</div>";
+
+    ?>
+    <!-- Dentro de tu formulario HTML -->
+    <input type="hidden" name="idusuario" value="<?php echo $idusuario; ?>" required>
+
+    <div class="form-buttons">
+        <button class="cancelar-button letra" onclick="window.history.back();" id="atrasBtn">Atrás</button>
+        <button type="submit" class="registrarse-button" id="registrarse-button">Actualizar datos</button>
+    </div>
+    </div>
+    </div>
+    </div>
+
 
         <script>
-            function openFileExplorer() {
-                document.getElementById('imagen').click();
-            }
-
-            const inputImagen = document.getElementById('imagen');
-const profilePreview = document.getElementById('profilePreview');
-
-inputImagen.addEventListener('change', function(event) {
-  const files = Array.from(event.target.files);
-
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/gif','image/webp'];
-
-  const invalidFiles = files.filter(file => !allowedTypes.includes(file.type));
-
-  if (invalidFiles.length > 0) {
-    alert('Solo se permiten archivos de tipo imagen (JPG, PNG, GIF, WEBP).');
-    // Limpiar la selección de archivos inválidos
-    event.target.value = '';
-    return;
-  }
-
-  const file = files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function() {
-      profilePreview.src = reader.result;
+          function openFileExplorer() {
+        document.getElementById('imagen').click();
     }
-    reader.readAsDataURL(file);
-  } else {
-    profilePreview.src = '/fotos/default-profile-pic.jpg';
-  }
-});
 
+    const inputImagen = document.getElementById('imagen');
+    const profilePreview = document.getElementById('profilePreview');
 
+    inputImagen.addEventListener('change', function(event) {
+        const files = Array.from(event.target.files);
 
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif','image/webp'];
 
-        </script>
+        const invalidFiles = files.filter(file => !allowedTypes.includes(file.type));
 
-    </form>
+        if (invalidFiles.length > 0) {
+            alert('Solo se permiten archivos de tipo imagen (JPG, PNG, GIF, WEBP).');
+            // Limpiar la selección de archivos inválidos
+            event.target.value = '';
+            return;
+        }
+
+        const file = files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                profilePreview.src = reader.result;
+            }
+            reader.readAsDataURL(file);
+        } else {
+            profilePreview.src = '/fotos/default-profile-pic.jpg';
+        }
+    });
+</script>
+
+</form>
 </body>
 
 </html>

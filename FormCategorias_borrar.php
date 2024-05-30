@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['categorias'])) {
     try {
         // Preparar la consulta de eliminación
         $placeholders = implode(',', array_fill(0, count($categoriasToDelete), '?'));
-        $query = "DELETE FROM CATEGORIAS WHERE NOMBRE_CATEGORIA IN ($placeholders)";
+        $query = "DELETE FROM categorias WHERE nombre_categoria IN ($placeholders)"; // Cambiado a minúsculas
         $stmt = $dbh->prepare($query);
         
         // Ejecutar la consulta para eliminar los roles seleccionados
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['categorias'])) {
             echo "</tr>";
         }
     } catch (PDOException $e) {
-        echo "Error al borrar los roles: " . $e->getMessage();
+        echo "Error al borrar las categorías: " . $e->getMessage();
     }
 }
 ?>

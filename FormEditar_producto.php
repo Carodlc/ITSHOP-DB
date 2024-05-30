@@ -92,7 +92,6 @@
         }
     </style>
 </head>
-
 <body>
     <form id="form" action="Editar_producto.php" method="post" enctype="multipart/form-data">
         <div class="navbar">
@@ -110,10 +109,10 @@
         }
 
         // Obtener la ruta de la imagen del producto específico
-        $stmt = $dbh->prepare("SELECT RUTA_PRODUCTO FROM PRODUCTS_IMG WHERE ID = ?");
+        $stmt = $dbh->prepare("SELECT ruta_producto FROM products_img WHERE id = ?");
         $stmt->execute([$idProducto]);
         $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
-        $ruta_imagen = $rol_row['RUTA_PRODUCTO'] ?? '';
+        $ruta_imagen = $rol_row['ruta_producto'] ?? '';
 
         // Obtener el tipo de contenido de la imagen
         $info = getimagesize($ruta_imagen);
@@ -123,7 +122,7 @@
         $imagen_codificada = base64_encode(file_get_contents($ruta_imagen));
         $imagen_src = 'data:' . $tipo_contenido . ';base64,' . $imagen_codificada;
 
-        $query = "SELECT * FROM DATOS_PRODUCTO WHERE IDPRODUCTO = ?";
+        $query = "SELECT * FROM datos_producto WHERE idproducto = ?";
 
         $stmt = $dbh->prepare($query);
 
@@ -135,160 +134,142 @@
 
 
 
-        $IDESPECIALIDAD = $datos[0]['CATEGORIAS_IDCATEGORIAS'];
-        $stmt_especialidad = $dbh->prepare("SELECT NOMBRE_CATEGORIA FROM CATEGORIAS WHERE IDCATEGORIAS = ?");
-        $stmt_especialidad->execute([$IDESPECIALIDAD]);
+        $idespecialidad = $datos[0]['categorias_idcategorias'];
+        $stmt_especialidad = $dbh->prepare("SELECT nombre_categoria FROM categorias WHERE idcategorias = ?");
+        $stmt_especialidad->execute([$idespecialidad]);
         $especialidad_row = $stmt_especialidad->fetch(PDO::FETCH_ASSOC);
-        $CATEGORIAS_IDCATEGORIAS = $especialidad_row['NOMBRE_CATEGORIA'] ?? null;
-
-
+        $categorias_idcategorias = $especialidad_row['nombre_categoria'] ?? null;
 
         ?>
 
-        <div class="main-container">
-            <div class="flex-row-acc">
-                <span class="add-product">Editar producto</span>
-                <span class="publish">Publicar</span>
-                <label class="switch">
-                    <input type="hidden" name="switchDisplay" value="off">
-                    <input type="checkbox" id="switchDisplay" name="switchDisplay" value="on" <?php echo ($datos[0]['PUBLICADO'] == 1) ? "checked" : ""; ?>>
-                    <span class="slider"></span>
-                </label>
-            </div>
 
-            <div class="flex-row-de">
-                <span class="nombre">Nombre:</span>
-                <div class="input">
-                    <input type="text" id="nombreInput" name="nombre" placeholder="Introduce el nombre" value="<?php echo $datos[0]['NOMBRE']; ?>" style="border: none !important" required />
-                </div>
-                <div class="rectangle"></div> <!-- Este recuadro se ocultará -->
-                <span class="precio">Precio:</span>
-                <div class="input-1">
-                    <input type="number" id="precioInput" name="precio" placeholder="Introduce Precio" style="border: none !important" min="0" value="<?php echo $datos[0]['PRECIO']; ?>" required />
-                </div>
+<div class="main-container">
+    <div class="flex-row-acc">
+        <span class="add-product">Editar producto</span>
+        <span class="publish">Publicar</span>
+        <label class="switch">
+            <input type="hidden" name="switchDisplay" value="off">
+            <input type="checkbox" id="switchDisplay" name="switchDisplay" value="on" <?php echo ($datos[0]['publicado'] == 1) ? "checked" : ""; ?>>
+            <span class="slider"></span>
+        </label>
+    </div>
 
-                <span class="stock-0">Stock: <?php echo $datos[0]['STOCK']; ?></span>
-                <span class="categoria-label">Categoría:</span>
-                <!-- Cambio el botón por un combobox -->
-                <div class="custom-select categoria-select">
-                    <select id="categoria" name="categoria" required>
-                        <option value="<?php echo $CATEGORIAS_IDCATEGORIAS; ?>"><?php echo $CATEGORIAS_IDCATEGORIAS; ?></option>
-                        <?php
-                        $categorias = getcategorias($dbh);
-                        foreach ($categorias as $categoria) {
-                            echo "<option value=\"$categoria\">$categoria</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
-                <label for="uploadBtn" class="frame-3">
-                    <span class="upload-photo">Subir foto</span>
-                </label>
-                <input type="file" id="uploadBtn" style="display:none" name="imagen">
-            </div>
-
-            <span class="description">Descripción:</span>
-
-            <div class="rectangle-4">
-                <textarea id="descripcion" name="descripcion" placeholder="Agrega una descripción.." style="border: none !important;" required maxlength="100"><?php echo $datos[0]['DESCRIPCION']; ?></textarea>
-                <div id="warningMessage" class="warn" style="display: none; color: red;">Haz llegado al maximo de caracteres.</div>
-            </div>
-
-            <!-- Vista previa de la imagen -->
-
-            <img src="<?php echo $imagen_src; ?>" id="preview" alt="Vista previa" ">
-            <input type=" hidden" name="idProducto" value="<?php echo $idProducto = $_GET['idProducto']; ?>" style="display: none;">
-            <input type="hidden" name="idUsuario" value="<?php echo $idUsuario = $_GET['idUsuario']; ?>">
-
-
-
-            <div class="flex-row-dc">
-                <button class="frame-5">
-                    <a href="GestionProductos.php?idUsuario=<?php echo $idUsuario; ?>" class="return">Regresar</a>
-                </button>
-                <button type="submit" class="frame-6">
-                    <span class="save" id="guardar-button">Guardar</span>
-                </button>
-            </div>
-
+    <div class="flex-row-de">
+        <span class="nombre">Nombre:</span>
+        <div class="input">
+            <input type="text" id="nombreInput" name="nombre" placeholder="Introduce el nombre" value="<?php echo $datos[0]['nombre']; ?>" style="border: none !important" required />
         </div>
-    </form>
-    <script>
-        document.getElementById('switchDisplay').addEventListener('change', function() {
-            var switchValue = this.checked ? 1 : 0;
-            console.log("Valor del interruptor:", switchValue);
-        });
+        <div class="rectangle"></div> <!-- Este recuadro se ocultará -->
+        <span class="precio">Precio:</span>
+        <div class="input-1">
+            <input type="number" id="precioInput" name="precio" placeholder="Introduce Precio" style="border: none !important" min="0" value="<?php echo $datos[0]['precio']; ?>" required />
+        </div>
 
-        function readURL(input) {
-      if (input.files && input.files[0]) {
-        var reader = new FileReader();
+        <span class="stock-0">Stock: <?php echo $datos[0]['stock']; ?></span>
+        <span class="categoria-label">Categoría:</span>
+        <!-- Cambio el botón por un combobox -->
+        <div class="custom-select categoria-select">
+            <select id="categoria" name="categoria" required>
+                <option value="<?php echo $categorias_idcategorias; ?>"><?php echo $categorias_idcategorias; ?></option>
+                <?php
+                $categorias = getcategorias($dbh);
+                foreach ($categorias as $categoria) {
+                    echo "<option value=\"$categoria\">$categoria</option>";
+                }
+                ?>
+            </select>
+        </div>
+        <label for="uploadBtn" class="frame-3">
+            <span class="upload-photo">Subir foto</span>
+        </label>
+        <input type="file" id="uploadBtn" style="display:none" name="imagen">
+    </div>
 
-        reader.onload = function(e) {
-          document.getElementById('preview').src = e.target.result;
-          document.getElementById('preview').style.display = 'block'; // Mostrar la imagen previa
-        }
+    <span class="description">Descripción:</span>
 
-        reader.readAsDataURL(input.files[0]); // convertir a base64
-      }
-    }
+    <div class="rectangle-4">
+        <textarea id="descripcion" name="descripcion" placeholder="Agrega una descripción.." style="border: none !important;" required maxlength="100"><?php echo $datos[0]['descripcion']; ?></textarea>
+        <div id="warningMessage" class="warn" style="display: none; color: red;">Haz llegado al máximo de caracteres.</div>
+    </div>
+
+    <!-- Vista previa de la imagen -->
+
+    <img src="<?php echo $imagen_src; ?>" id="preview" alt="Vista previa">
+    <input type="hidden" name="idProducto" value="<?php echo $idProducto = $_GET['idProducto']; ?>" style="display: none;">
+    <input type="hidden" name="idUsuario" value="<?php echo $idUsuario = $_GET['idUsuario']; ?>">
 
 
-    document.getElementById('uploadBtn').addEventListener('change', function() {
-      var file = this.files[0];
-      var fileType = file['type'];
-      var validImageTypes = ['image/gif', 'image/jpeg', 'image/png','image/webp'];
 
-      if (!validImageTypes.includes(fileType)) {
-        alert("Solo se permiten archivos de tipo imagen (JPG, PNG, GIF, WEBP).");
-        this.value = ''; // Limpia el campo de entrada
-        return;
-      }
+    <div class="flex-row-dc">
+        <button class="frame-5">
+            <a href="GestionProductos.php?idUsuario=<?php echo $idUsuario; ?>" class="return">Regresar</a>
+        </button>
+        <button type="submit" class="frame-6">
+            <span class="save" id="guardar-button">Guardar</span>
+        </button>
+    </div>
 
-      readURL(this);
+</div>
+</form>
+<script>
+    document.getElementById('switchDisplay').addEventListener('change', function() {
+        var switchValue = this.checked ? 1 : 0;
+        console.log("Valor del interruptor:", switchValue);
     });
 
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                document.getElementById('preview').src = e.target.result;
+                document.getElementById('preview').style.display = 'block'; // Mostrar la imagen previa
+            }
+
+            reader.readAsDataURL(input.files[0]); // convertir a base64
+        }
+    }
 
     document.getElementById('uploadBtn').addEventListener('change', function() {
-      readURL(this);
+        var file = this.files[0];
+        var fileType = file['type'];
+        var validImageTypes = ['image/gif', 'image/jpeg', 'image/png', 'image/webp'];
+
+        if (!validImageTypes.includes(fileType)) {
+            alert("Solo se permiten archivos de tipo imagen (JPG, PNG, GIF, WEBP).");
+            this.value = ''; // Limpia el campo de entrada
+            return;
+        }
+
+        readURL(this);
+    });
+
+    document.getElementById('uploadBtn').addEventListener('change', function() {
+        readURL(this);
     });
 
     function checkLength(textarea) {
-            var warningMessage = document.getElementById("warningMessage");
-            if (textarea.value.length >= 100) {
-                textarea.value = textarea.value.substring(0, 100); // Trim the text to 100 characters
-                warningMessage.style.display = "block"; // Show the warning message
-            } else {
-                warningMessage.style.display = "none"; // Hide the warning message if characters are within limit
-            }
+        var warningMessage = document.getElementById("warningMessage");
+        if (textarea.value.length >= 100) {
+            textarea.value = textarea.value.substring(0, 100); // Trim the text to 100 characters
+            warningMessage.style.display = "block"; // Show the warning message
+        } else {
+            warningMessage.style.display = "none"; // Hide the warning message if characters are within limit
         }
+    }
 
-        // Add event listener to trigger checkLength() function when textarea content changes
-        document.getElementById('descripcion').addEventListener('input', function() {
-            checkLength(this);
-        });
+    // Add event listener to trigger checkLength() function when textarea content changes
+    document.getElementById('descripcion').addEventListener('input', function() {
+        checkLength(this);
+    });
 
-        function checkLength(textarea) {
-            var warningMessage = document.getElementById("warningMessage");
-            if (textarea.value.length >= 100) {
-                textarea.value = textarea.value.substring(0, 100); // Trim the text to 100 characters
-                warningMessage.style.display = "block"; // Show the warning message
-            } else {
-                warningMessage.style.display = "none"; // Hide the warning message if characters are within limit
-            }
-        }
+    document.getElementById('precioInput').addEventListener('input', function(event) {
+        // Eliminar cualquier carácter que no sea un número entero
+        let value = event.target.value;
+        event.target.value = value.replace(/[^0-9]/g, '');
+    });
 
-        // Add event listener to trigger checkLength() function when textarea content changes
-        document.getElementById('descripcion').addEventListener('input', function() {
-            checkLength(this);
-        });
-
-        document.getElementById('precioInput').addEventListener('input', function (event) {
-            // Eliminar cualquier carácter que no sea un número entero
-            let value = event.target.value;
-            event.target.value = value.replace(/[^0-9]/g, '');
-        });
-
-    </script>
+</script>
 </body>
 
 </html>

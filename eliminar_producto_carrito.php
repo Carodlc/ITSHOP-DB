@@ -7,7 +7,7 @@ if (isset($_POST['idUsuario']) && isset($_POST['idProducto'])) {
 
     try {
         // Establecer conexión a la base de datos y eliminar el producto del carrito
-        $query = "DELETE FROM CARRITO WHERE ID_USUARIO = :idUsuario AND ID_PRODUCTO = :idProducto";
+        $query = "DELETE FROM carrito WHERE id_usuario = :idUsuario AND id_producto = :idProducto";
         $stmt = $dbh->prepare($query);
         $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
         $stmt->bindParam(':idProducto', $idProducto, PDO::PARAM_INT);

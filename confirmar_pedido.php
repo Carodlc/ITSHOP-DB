@@ -5,7 +5,7 @@ if (isset($_GET['idProducto'])) {
   include 'conexion.php';
   $idProducto = $_GET['idProducto'];
 
-  $query = "UPDATE PEDIDO SET ESTADO = 1 WHERE IDPEDIDO = ?";
+  $query = "UPDATE pedido SET estado = 1 WHERE idpedido = ?";
   $stmt = $dbh->prepare($query);
   $stmt->execute([$idProducto]);
 

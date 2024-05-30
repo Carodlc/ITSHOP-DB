@@ -835,7 +835,6 @@
     }
   </style>
 </head>
-
 <body>
   <div class="main-container">
     <div class="flex-row-be">
@@ -888,7 +887,7 @@
 
         try {
           // Establecer conexión a la base de datos
-          $query = "SELECT * FROM DATOS_PRODUCTO WHERE DATOS_USUARIO_IDUSUARIO = " . $idUsuario . " AND publicado IN (0, 1) ORDER BY IDPRODUCTO DESC";
+          $query = "select * from datos_producto where datos_usuario_idusuario = " . $idUsuario . " and publicado in (0, 1) order by idproducto desc";
 
           $stmt = $dbh->query($query);
           $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -896,11 +895,11 @@
           // Si hay productos, generar instancias de producto
           if (!empty($productos)) {
             foreach ($productos as $producto) {
-              $idProducto = $producto['IDPRODUCTO'];
-              $stmt = $dbh->prepare("SELECT RUTA_PRODUCTO FROM PRODUCTS_IMG WHERE ID = ?");
+              $idProducto = $producto['idproducto'];
+              $stmt = $dbh->prepare("select ruta_producto from products_img where id = ?");
               $stmt->execute([$idProducto]);
               $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
-              $ruta_imagen = $rol_row['RUTA_PRODUCTO'] ?? '';
+              $ruta_imagen = $rol_row['ruta_producto'] ?? '';
 
               // Obtener el tipo de contenido de la imagen
               $info = getimagesize($ruta_imagen);
@@ -912,20 +911,20 @@
 
               echo "<div class='div-rectangle'>";
               echo "<div class='div-rectangle-d'><img src=" . $imagen_src . " alt='Imagen' class='profile-pic'></div>";
-              echo "<button class='frame-button-e' onclick=\"window.location.href='FormEditar_producto.php?idProducto=" . $producto['IDPRODUCTO'] . "&idUsuario=" . $idUsuario . "'\">";
+              echo "<button class='frame-button-e' onclick=\"window.location.href='FormEditar_producto.php?idProducto=" . $producto['idproducto'] . "&idUsuario=" . $idUsuario . "'\">";
               echo "<span class='span-editar'>Editar</span></button>";
-              echo "<span class='span-botellas-agua'>" . $producto['NOMBRE'] . "</span>";
-              echo "<span class='mx-15'>MX$ " . $producto['PRECIO'] . "</span>";
+              echo "<span class='span-botellas-agua'>" . $producto['nombre'] . "</span>";
+              echo "<span class='mx-15'>MX$ " . $producto['precio'] . "</span>";
               echo "<button class='frame-f' onclick=\"borrarProducto($idProducto)\">";
               echo "<span class='borrar'>Borrar</span>";
               echo "</button>";
         
 
-              echo "<span class='stock'>Stock:  " . $producto['STOCK'] . "</span>";
+              echo "<span class='stock'>Stock:  " . $producto['stock'] . "</span>";
               echo "<div class='descripcion'>";
               echo "<span class='descripcion-10'>Descripción</span><span class='colon'>:</span>";
               echo "</div>";
-              echo "<span class='botella-agua'>" . $producto['DESCRIPCION'] . "</span>";
+              echo "<span class='botella-agua'>" . $producto['descripcion'] . "</span>";
               echo "</div>";
             }
           } else {

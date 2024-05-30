@@ -341,7 +341,6 @@ button {
             <tbody>
             <?php
 // Tu código de conexión y funciones existentes
-
 try {
     // Establecer conexión a la base de datos
     $dbh = new PDO($dsn, $username, $password);
@@ -372,7 +371,7 @@ try {
           </table>
           <div class="wrapper-4">
             <button class="add-button box"><span class="text-6">Agregar</span></button>
-            <div class="box cancel-button"><span class="text-6"><a href="Perfil_admi.php">Cancelar</span></div></a>
+            <div class="box cancel-button"><span class="text-6"><a href="perfil_admi.php">Cancelar</span></div></a>
             <div class="box-2"><span class="text-7">Borrar</span></div>
           </div>
   
@@ -383,47 +382,47 @@ try {
     const deleteButton = document.querySelector('.box-2');
 
     // Función para agregar un nuevo rol
-    addButton.addEventListener('click', () => {
-        const roleName = roleInput.value.trim();
+addButton.addEventListener('click', () => {
+    const roleName = roleInput.value.trim();
 
-        if (roleName) {
-            // Realizar una solicitud AJAX para insertar el nuevo rol en la base de datos
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'FormGestionarRoles_insertar.php');
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    // Si la inserción es exitosa, actualizar la tabla
-                    rolesTableBody.innerHTML = xhr.responseText;
-                } else {
-                    console.error('Error al insertar el rol');
-                }
-            };
-            xhr.send(`role=${roleName}`);
-            roleInput.value = '';
-        }
-    });
-
-    // Función para eliminar roles seleccionados
-    deleteButton.addEventListener('click', () => {
-        const checkboxes = document.querySelectorAll('.roles-table tbody input[type="checkbox"]:checked');
-        const rolesToDelete = Array.from(checkboxes).map(checkbox => checkbox.value);
-
-        // Realizar una solicitud AJAX para eliminar los roles seleccionados de la base de datos
+    if (roleName) {
+        // Realizar una solicitud AJAX para insertar el nuevo rol en la base de datos
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'FormGestionarRoles_borrar.php');
+        xhr.open('POST', 'form_gestionar_roles_insertar.php');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.onload = function () {
             if (xhr.status === 200) {
-                // Si la eliminación es exitosa, actualizar la tabla
+                // Si la inserción es exitosa, actualizar la tabla
                 rolesTableBody.innerHTML = xhr.responseText;
             } else {
-                console.error('Error al borrar los roles');
+                console.error('Error al insertar el rol');
             }
         };
-        xhr.send(`roles=${JSON.stringify(rolesToDelete)}`);
-    });
+        xhr.send(`role=${roleName}`);
+        roleInput.value = '';
+    }
+});
 
-    </script>
-  </body>
-  </html>
+// Función para eliminar roles seleccionados
+deleteButton.addEventListener('click', () => {
+    const checkboxes = document.querySelectorAll('.roles-table tbody input[type="checkbox"]:checked');
+    const rolesToDelete = Array.from(checkboxes).map(checkbox => checkbox.value);
+
+    // Realizar una solicitud AJAX para eliminar los roles seleccionados de la base de datos
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'form_gestionar_roles_borrar.php');
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            // Si la eliminación es exitosa, actualizar la tabla
+            rolesTableBody.innerHTML = xhr.responseText;
+        } else {
+            console.error('Error al borrar los roles');
+        }
+    };
+    xhr.send(`roles=${JSON.stringify(rolesToDelete)}`);
+});
+
+</script>
+</body>
+</html>

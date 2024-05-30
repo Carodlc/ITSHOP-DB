@@ -34,11 +34,11 @@ class PDF extends FPDF
     {
         // Datos del pedido
         $this->SetFont('Arial', '', 12);
-        $this->Cell(0, 10, 'ID del Pedido: ' . $pedido['IDPEDIDO'], 0, 1, 'L');
-        $this->Cell(0, 10, 'Vendedor: ' . $pedido['VENDEDOR'], 0, 1, 'L');
-        $this->Cell(0, 10, 'Comprador: ' . $pedido['COMPRADOR'], 0, 1, 'L');
-        $this->Cell(0, 10, 'Fecha del Pedido: ' . $pedido['FECHA'], 0, 1, 'L');
-        $this->Cell(0, 10, 'Total del Pedido: MX$' . number_format($pedido['TOTALPRECIO'], 2), 0, 1, 'R'); // Justificado a la derecha
+        $this->Cell(0, 10, 'ID del Pedido: ' . $pedido['idpedido'], 0, 1, 'L');
+        $this->Cell(0, 10, 'Vendedor: ' . $pedido['vendedor'], 0, 1, 'L');
+        $this->Cell(0, 10, 'Comprador: ' . $pedido['comprador'], 0, 1, 'L');
+        $this->Cell(0, 10, 'Fecha del Pedido: ' . $pedido['fecha'], 0, 1, 'L');
+        $this->Cell(0, 10, 'Total del Pedido: MX$' . number_format($pedido['totalprecio'], 2), 0, 1, 'R'); // Justificado a la derecha
         $this->Ln(10);
 
         // Cabecera de la tabla
@@ -51,9 +51,9 @@ class PDF extends FPDF
         // Datos de los productos
         $this->SetFont('Arial', '', 12);
         foreach ($productos as $producto) {
-            $this->Cell(60, 10, $producto['NOMBRE'], 1);
-            $this->Cell(40, 10, $producto['CANTIDAD'], 1);
-            $this->Cell(40, 10, 'MX$' . number_format($producto['IMPORTE'], 2), 1, 0, 'R'); // Justificado a la derecha
+            $this->Cell(60, 10, $producto['nombre'], 1);
+            $this->Cell(40, 10, $producto['cantidad'], 1);
+            $this->Cell(40, 10, 'MX$' . number_format($producto['importe'], 2), 1, 0, 'R'); // Justificado a la derecha
             $this->Ln();
         }
     }
@@ -62,28 +62,28 @@ class PDF extends FPDF
 // Verificar si idUsuario está presente
 if (isset($_GET['idUsuario']) && isset($_GET['idPedido'])) {
     $idUsuario = $_GET['idUsuario'];
-    $IDPEDIDO = $_GET['idPedido'];
+    $idPedido = $_GET['idPedido'];
 
     try {
         // Establecer conexión a la base de datos
-        $query = "SELECT p.IDPEDIDO, TO_CHAR(p.FECHA, 'DD/MM/YYYY') AS FECHA, p.TOTALPRECIO, 
-                         v.NOMBRE_USUARIO AS VENDEDOR, c.NOMBRE_USUARIO AS COMPRADOR 
-                  FROM PEDIDO p
-                  JOIN DATOS_USUARIO v ON p.IDUSUARIOVENDEDOR = v.IDUSUARIO
-                  JOIN DATOS_USUARIO c ON p.IDUSUARIOCLIENTE = c.IDUSUARIO
-                  WHERE p.IDPEDIDO = :idPedido";
+        $query = "SELECT p.idpedido, TO_CHAR(p.fecha, 'DD/MM/YYYY') AS fecha, p.totalprecio, 
+                         v.nombre_usuario AS vendedor, c.nombre_usuario AS comprador 
+                  FROM pedido p
+                  JOIN datos_usuario v ON p.idusuariovendedor = v.idusuario
+                  JOIN datos_usuario c ON p.idusuariocliente = c.idusuario
+                  WHERE p.idpedido = :idPedido";
         $stmt = $dbh->prepare($query);
-        $stmt->bindParam(':idPedido', $IDPEDIDO, PDO::PARAM_INT);
+        $stmt->bindParam(':idPedido', $idPedido, PDO::PARAM_INT);
         $stmt->execute();
         $pedido = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $query = "SELECT p.NOMBRE, dp.CANTIDAD, dp.IMPORTE 
-                  FROM DETALLE_PEDIDO dp 
-                  JOIN DATOS_PRODUCTO p ON dp.DATOS_PRODUCTO_IDPRODUCTO = p.IDPRODUCTO 
-                  WHERE dp.PEDIDO_IDPEDIDO = :idPedido 
-                  ORDER BY p.IDPRODUCTO ASC";
+        $query = "SELECT p.nombre, dp.cantidad, dp.importe 
+                  FROM detalle_pedido dp 
+                  JOIN datos_producto p ON dp.datos_producto_idproducto = p.idproducto 
+                  WHERE dp.pedido_idpedido = :idPedido 
+                  ORDER BY p.idproducto ASC";
         $stmt = $dbh->prepare($query);
-        $stmt->bindParam(':idPedido', $IDPEDIDO, PDO::PARAM_INT);
+        $stmt->bindParam(':idPedido', $idPedido, PDO::PARAM_INT);
         $stmt->execute();
         $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

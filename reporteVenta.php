@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" />
     <link rel="stylesheet" href="ReporteVenta.css" />
 </head>
-
 <body>
     <div class="main-container">
         <div class="flex-row-d">
@@ -71,8 +70,8 @@
                         if (!empty($ventas)) {
                             // Ahora, puedes iterar sobre los resultados y generar los elementos HTML para cada venta
                             foreach ($ventas as $venta) {
-                                $numeroPedido = $venta['IDPEDIDO'];
-                                $fechaPedido = $venta['FECHA'];
+                                $numeroPedido = $venta['idpedido'];
+                                $fechaPedido = $venta['fecha'];
                                 echo $numeroPedido;
 
 

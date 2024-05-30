@@ -6,17 +6,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombre = $_POST["nombre"] ?? '';
     $precio = $_POST["precio"] ?? '';
     $stock = 0;
-    $CATEGORIA_NOMBRE = $_POST["categoria"] ?? '';
+    $categoria_nombre = $_POST["categoria"] ?? '';
     $descripcion = $_POST["descripcion"] ?? '';
     $publicado = ($_POST["switchDisplay"] == "on") ? 1 : 0;
-    $ID_USUARIO = $_POST['idUsuario'] ?? '';
+    $id_usuario = $_POST['idUsuario'] ?? '';
 
     
 
     function insertImage($dbh, $productId, $imageName, $newColumnValue)
     {
         try {
-            // Prepare the query to insert into PRODUCTS_IMG
+            // Preparar la consulta para insertar en PRODUCTS_IMG
             $query = "
                 DECLARE 
                     V_TEMP BLOB;
@@ -34,21 +34,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 END;
             ";
 
-            // Prepare the statement
+            // Preparar la declaración
             $stmt = $dbh->prepare($query);
 
-            // Bind parameters
+            // Vincular parámetros
             $stmt->bindParam(':productId', $productId, PDO::PARAM_INT);
             $stmt->bindParam(':imageName', $imageName, PDO::PARAM_STR);
-            $stmt->bindParam(':newColumnValue', $newColumnValue, PDO::PARAM_STR); // Assuming the type of NEW_COLUMN is string, adjust if needed
+            $stmt->bindParam(':newColumnValue', $newColumnValue, PDO::PARAM_STR); // Suponiendo que el tipo de NEW_COLUMN es string, ajustar si es necesario
 
-            // Execute the statement
+            // Ejecutar la declaración
             $stmt->execute();
 
-            // Return success
+            // Devolver éxito
             return true;
         } catch (PDOException $e) {
-            // If an error occurs, rollback the transaction and return false
+            // Si ocurre un error, hacer rollback de la transacción y devolver falso
             echo "Error: " . $e->getMessage();
             return false;
         }
@@ -57,30 +57,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Preparar la consulta SQL para la inserción
     try {
 
-        // Consultar el ID de la especialidad
-        $stmt_especialidad = $dbh->prepare("SELECT IDCATEGORIAS FROM CATEGORIAS WHERE NOMBRE_CATEGORIA = ?");
-        $stmt_especialidad->execute([$CATEGORIA_NOMBRE]);
-        $categorias = $stmt_especialidad->fetch(PDO::FETCH_ASSOC);
-        $IDCATEGORIA = $categorias['IDCATEGORIAS'] ?? null;
+        // Consultar el ID de la categoría
+        $stmt_categoria = $dbh->prepare("SELECT idcategorias FROM categorias WHERE nombre_categoria = ?");
+        $stmt_categoria->execute([$categoria_nombre]);
+        $categorias = $stmt_categoria->fetch(PDO::FETCH_ASSOC);
+        $idcategoria = $categorias['idcategorias'] ?? null;
 
        
         // Obtener el último ID insertado
         // Obtener el último ID insertado
             // Obtener el último ID de usuario de la base de datos
-            $query = "SELECT MAX(IDPRODUCTO) FROM DATOS_PRODUCTO";
+            $query = "SELECT MAX(idproducto) FROM datos_producto";
             $stmt = $dbh->query($query);
             $maxRow = $stmt->fetch(PDO::FETCH_ASSOC);
-            $lastID = $maxRow['MAX(IDPRODUCTO)'] ?? 0;
+            $lastID = $maxRow['max(idproducto)'] ?? 0;
 
             // Generar el nuevo ID sumando 1 al último ID
             $newID = $lastID + 1;
 
             // Verificar si el nuevo ID ya existe en la base de datos
-            $query_check = "SELECT COUNT(IDPRODUCTO) FROM DATOS_PRODUCTO WHERE IDPRODUCTO = ?";
+            $query_check = "SELECT COUNT(idproducto) FROM datos_producto WHERE idproducto = ?";
             $stmt_check = $dbh->prepare($query_check);
             $stmt_check->execute([$newID]);
             $countRow = $stmt_check->fetch(PDO::FETCH_ASSOC);
-            $count = $countRow['COUNT(IDPRODUCTO)'] ?? 0;
+            $count = $countRow['count(idproducto)'] ?? 0;
 
             // Si el nuevo ID ya existe, seguir incrementando hasta encontrar un ID único
             while ($count > 0) {
@@ -91,10 +91,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             // El nuevo ID es único y seguro para usar
-            $IDPRODUCTO = $newID;
+            $idproducto = $newID;
        
         // Insertar datos en la tabla de usuarios
-        $rowCount = insertData($dbh, 'DATOS_PRODUCTO', ['IDPRODUCTO','DATOS_USUARIO_IDUSUARIO', 'CATEGORIAS_IDCATEGORIAS', 'STOCK', 'PRECIO', 'DESCRIPCION', 'NOMBRE', 'PUBLICADO',], [$IDPRODUCTO, $ID_USUARIO, $IDCATEGORIA, $stock, $precio, $descripcion, $nombre, $publicado]);
+        $rowCount = insertData($dbh, 'datos_producto', ['idproducto','datos_usuario_idusuario', 'categorias_idcategorias', 'stock', 'precio', 'descripcion', 'nombre', 'publicado',], [$idproducto, $id_usuario, $idcategoria, $stock, $precio, $descripcion, $nombre, $publicado]);
 
         // Verificar si la inserción fue exitosa
         if ($rowCount > 0) {
@@ -112,14 +112,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if (move_uploaded_file($nombreTempArchivo, $directorioDestino . $nombreArchivo,)) {
 
                         // Después de la inserción de la imagen en la carpeta local, inserta la información en la base de datos
-                        insertImage($dbh, $IDPRODUCTO, $nombreArchivo, $directorioDestino . $nombreArchivo);
+                        insertImage($dbh, $idproducto, $nombreArchivo, $directorioDestino . $nombreArchivo);
                     } else {
                         echo 'Error al subir la imagen.';
                     }
                 }
-                echo "<script>alert('Producto registrado exitosamente!'); window.location.href = 'GestionProductos.php?idUsuario=$ID_USUARIO';</script>";
+                echo "<script>alert('Producto registrado exitosamente!'); window.location.href = 'GestionProductos.php?idUsuario=$id_usuario';</script>";
             } else {
-                echo "<script>alert('Hubo un problema al registrar el producto.'); window.location.href='AgregarProducto.php?idUsuario=$ID_USUARIO';</script>";
+                echo "<script>alert('Hubo un problema al registrar el producto.'); window.location.href='AgregarProducto.php?idUsuario=$id_usuario';</script>";
             }
     } catch (PDOException $e) {
         // Mostrar mensaje de error si ocurre una excepción

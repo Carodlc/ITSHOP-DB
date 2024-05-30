@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     function insertImage($dbh, $productId, $imageName, $newColumnValue)
     {
         try {
-            // Prepare the query to insert into PRODUCTS_IMG
+            // Prepare the query to insert into products_img
             $query = "
             DECLARE 
             V_TEMP BLOB;
@@ -26,10 +26,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             V_NOMBRE_FOTO VARCHAR2(100);
         BEGIN 
             -- Actualizar la columna FOTO y RUTA_USUARIO con nuevos valores para el usuario con el ID especificado
-            UPDATE USUARIOS_IMG
-            SET FOTO = EMPTY_BLOB(),
+            update usuarios_img
+            set FOTO = EMPTY_BLOB(),
                 RUTA_USUARIO = :newColumnValue
-            WHERE ID = :productId
+            where ID = :productId
             RETURNING FOTO INTO V_TEMP;
             
             -- Cargar la nueva imagen desde el archivo en la columna FOTO
@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // Consultar si el correo electrónico ya existe en la base de datos excluyendo el correo del usuario actual
-        $stmt_check_email = $dbh->prepare("SELECT COUNT(*) FROM DATOS_USUARIO WHERE CORREO = ? AND IDUSUARIO != ?");
+        $stmt_check_email = $dbh->prepare("select count(*) from datos_usuario where correo = ? and idusuario != ?");
         $stmt_check_email->execute([$CORREO, $ID_USUARIO]);
         $email_exists = $stmt_check_email->fetchColumn();
 
@@ -77,13 +77,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit; // Salir del script PHP para evitar que se imprima más contenido HTML
         } else {
             // Consultar el ID de la especialidad
-            $stmt_especialidad = $dbh->prepare("SELECT IDESPECIALIDAD FROM ESPECIALIDADES WHERE NOMBREESPECIALIDAD = ?");
+            $stmt_especialidad = $dbh->prepare("select idespecialidad from especialidades where nombreespecialidad = ?");
             $stmt_especialidad->execute([$ESPECIALIDAD_NOMBRE]);
             $especialidad_row = $stmt_especialidad->fetch(PDO::FETCH_ASSOC);
-            $ESPECIALIDADES_IDESPECIALIDAD = $especialidad_row['IDESPECIALIDAD'] ?? null;
+            $ESPECIALIDADES_IDESPECIALIDAD = $especialidad_row['idespecialidad'] ?? null;
 
             // Modificar la consulta para realizar un UPDATE en lugar de un INSERT
-            $query_update = "UPDATE DATOS_USUARIO SET NOMBRE_USUARIO = ?, ESPECIALIDADES_IDESPECIALIDAD = ? , FECHA_NACIMIENTO = ?, CORREO = ?, CONTRASENA = ? WHERE IDUSUARIO = ?";
+            $query_update = "update datos_usuario set nombre_usuario = ?, especialidades_idespecialidad = ? , fecha_nacimiento = ?, correo = ?, contrasena = ? where idusuario = ?";
             $stmt_update = $dbh->prepare($query_update);
             $stmt_update->execute([$NOMBRE_USUARIO, $ESPECIALIDADES_IDESPECIALIDAD,  $fecha_formateada, $CORREO, $CONTRASENA_ENCRYPTADA, $ID_USUARIO]);
 
@@ -120,3 +120,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error al actualizar el usuario: " . $e->getMessage();
     }
 }
+?>

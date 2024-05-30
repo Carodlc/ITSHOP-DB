@@ -6,11 +6,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombre = $_POST["nombre"] ?? '';
     $precio = $_POST["precio"] ?? '';
 
-    $CATEGORIA_NOMBRE = $_POST["categoria"] ?? '';
+    $categoria_nombre = $_POST["categoria"] ?? '';
     $descripcion = $_POST["descripcion"] ?? '';
     $publicado = ($_POST["switchDisplay"] == "on") ? 1 : 0;
-    $ID_USUARIO = $_POST['idUsuario'] ?? '';
-    $IDPRODUCTO = $_POST['idProducto'] ?? '';
+    $id_usuario = $_POST['idUsuario'] ?? '';
+    $idproducto = $_POST['idProducto'] ?? '';
 
 
     function insertImage($dbh, $productId, $imageName, $newColumnValue)
@@ -66,15 +66,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Consultar el ID de la especialidad
         $stmt_especialidad = $dbh->prepare("SELECT IDCATEGORIAS FROM CATEGORIAS WHERE NOMBRE_CATEGORIA = ?");
-        $stmt_especialidad->execute([$CATEGORIA_NOMBRE]);
+        $stmt_especialidad->execute([$categoria_nombre]);
         $categorias = $stmt_especialidad->fetch(PDO::FETCH_ASSOC);
-        $IDCATEGORIA = $categorias['IDCATEGORIAS'] ?? null;
+        $idcategoria = $categorias['IDCATEGORIAS'] ?? null;
 
 
         // Insertar datos en la tabla de usuarios
         $query_update = "UPDATE DATOS_PRODUCTO SET CATEGORIAS_IDCATEGORIAS = ?, PRECIO = ?, DESCRIPCION = ?, NOMBRE = ?, PUBLICADO = ? WHERE IDPRODUCTO = ?";
         $stmt_update = $dbh->prepare($query_update);
-        $stmt_update->execute([$IDCATEGORIA,$precio, $descripcion, $nombre, $publicado,$IDPRODUCTO]);
+        $stmt_update->execute([$idcategoria,$precio, $descripcion, $nombre, $publicado,$idproducto]);
 
 
         // Verificar si la inserción fue exitosa
@@ -93,17 +93,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if (move_uploaded_file($nombreTempArchivo, $directorioDestino . $nombreArchivo,)) {
 
                     // Después de la inserción de la imagen en la carpeta local, inserta la información en la base de datos
-                    insertImage($dbh, $IDPRODUCTO, $nombreArchivo, $directorioDestino . $nombreArchivo);
+                    insertImage($dbh, $idproducto, $nombreArchivo, $directorioDestino . $nombreArchivo);
                 } else {
                     echo 'Error al subir la imagen.';
                 }
             }
-            echo "<script>alert('Producto actualizado exitosamente!'); window.location.href = 'GestionProductos.php?idUsuario=$ID_USUARIO';</script>";
+            echo "<script>alert('Producto actualizado exitosamente!'); window.location.href = 'GestionProductos.php?idUsuario=$id_usuario';</script>";
         } else {
-            echo "<script>alert('Hubo un problema al actualizar el producto.'); window.location.href='FormEditar_producto.php?idUsuario=$ID_USUARIO&idProducto=$IDPRODUCTO';</script>";
+            echo "<script>alert('Hubo un problema al actualizar el producto.'); window.location.href='FormEditar_producto.php?idUsuario=$id_usuario&idProducto=$idproducto';</script>";
         }
     } catch (PDOException $e) {
         // Mostrar mensaje de error si ocurre una excepción
         echo "Error al actualizar el producto" . $e->getMessage();
     }
 }
+?>

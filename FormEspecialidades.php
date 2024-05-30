@@ -406,6 +406,7 @@
         ?>
       </tbody>
     </table>
+
     <div class="wrapper-4">
       <button class="add-button box"><span class="text-6">Agregar</span></button>
       <div class="box cancel-button"><span class="text-6"><a href="Perfil_admi.php">Cancelar</span></div></a>
@@ -414,51 +415,51 @@
 
     <script>
       const addButton = document.querySelector('.add-button');
-      const roleInput = document.querySelector('.role-input');
-      const rolesTableBody = document.querySelector('.roles-table tbody');
-      const deleteButton = document.querySelector('.box-2');
+const roleInput = document.querySelector('.role-input');
+const rolesTableBody = document.querySelector('.roles-table tbody');
+const deleteButton = document.querySelector('.box-2');
 
-      // Función para agregar un nuevo rol
-      addButton.addEventListener('click', () => {
-        const roleName = roleInput.value.trim();
+// Función para agregar una nueva especialidad
+addButton.addEventListener('click', () => {
+    const roleName = roleInput.value.trim();
 
-        if (roleName) {
-          // Realizar una solicitud AJAX para insertar el nuevo rol en la base de datos
-          const xhr = new XMLHttpRequest();
-          xhr.open('POST', 'FormEspecialidades_insertar.php');
-          xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-          xhr.onload = function() {
-            if (xhr.status === 200) {
-              // Si la inserción es exitosa, actualizar la tabla
-              rolesTableBody.innerHTML = xhr.responseText;
-            } else {
-              console.error('Error al insertar el rol');
-            }
-          };
-          xhr.send(`especialidad=${roleName}`);
-          roleInput.value = '';
-        }
-      });
-
-      // Función para eliminar roles seleccionados
-      deleteButton.addEventListener('click', () => {
-        const checkboxes = document.querySelectorAll('.roles-table tbody input[type="checkbox"]:checked');
-        const rolesToDelete = Array.from(checkboxes).map(checkbox => checkbox.value);
-
-        // Realizar una solicitud AJAX para eliminar los roles seleccionados de la base de datos
+    if (roleName) {
+        // Realizar una solicitud AJAX para insertar la nueva especialidad en la base de datos
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'FormEspecialidades_borrar.php');
+        xhr.open('POST', 'form_especialidades_insertar.php');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.onload = function() {
-          if (xhr.status === 200) {
+            if (xhr.status === 200) {
+                // Si la inserción es exitosa, actualizar la tabla
+                rolesTableBody.innerHTML = xhr.responseText;
+            } else {
+                console.error('Error al insertar la especialidad');
+            }
+        };
+        xhr.send(`especialidad=${roleName}`);
+        roleInput.value = '';
+    }
+});
+
+// Función para eliminar especialidades seleccionadas
+deleteButton.addEventListener('click', () => {
+    const checkboxes = document.querySelectorAll('.roles-table tbody input[type="checkbox"]:checked');
+    const rolesToDelete = Array.from(checkboxes).map(checkbox => checkbox.value);
+
+    // Realizar una solicitud AJAX para eliminar las especialidades seleccionadas de la base de datos
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'form_especialidades_borrar.php');
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.onload = function() {
+        if (xhr.status === 200) {
             // Si la eliminación es exitosa, actualizar la tabla
             rolesTableBody.innerHTML = xhr.responseText;
-          } else {
-            console.error('Error al borrar los roles');
-          }
-        };
-        xhr.send(`especialidades=${JSON.stringify(rolesToDelete)}`);
-      });
+        } else {
+            console.error('Error al borrar las especialidades');
+        }
+    };
+    xhr.send(`especialidades=${JSON.stringify(rolesToDelete)}`);
+});
     </script>
 </body>
 

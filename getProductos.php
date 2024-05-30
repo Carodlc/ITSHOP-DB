@@ -8,21 +8,21 @@ if (isset($_GET['idPedido']) && isset($_GET['idUsuario'])) {
 
     try {
         // Establecer conexión a la base de datos
-        $stmt = $dbh->prepare("SELECT DATOS_PRODUCTO_IDPRODUCTO FROM DETALLE_PEDIDO WHERE PEDIDO_IDPEDIDO = ?");
+        $stmt = $dbh->prepare("SELECT datos_producto_idproducto FROM detalle_pedido WHERE pedido_idpedido = ?");
         $stmt->execute([$idPedido]);
         $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         // Crear un array de productos con la información necesaria
         $productosArray = [];
         foreach ($productos as $producto) {
-            $idproducto = $producto['DATOS_PRODUCTO_IDPRODUCTO'];
-            $stmt_1 = $dbh->prepare("SELECT NOMBRE FROM DATOS_PRODUCTO WHERE IDPRODUCTO = ?");
+            $idproducto = $producto['datos_producto_idproducto'];
+            $stmt_1 = $dbh->prepare("SELECT nombre FROM datos_producto WHERE idproducto = ?");
             $stmt_1->execute([$idproducto]);
             $detalle = $stmt_1->fetch(PDO::FETCH_ASSOC);
 
             $productosArray[] = [
-                'id' => $producto['DATOS_PRODUCTO_IDPRODUCTO'],
-                'nombre' => $detalle['NOMBRE']
+                'id' => $producto['datos_producto_idproducto'],
+                'nombre' => $detalle['nombre']
             ];
         }
 

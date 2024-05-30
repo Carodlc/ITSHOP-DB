@@ -455,29 +455,28 @@ if (isset($_GET['idProducto']) && isset($_GET['idUsuario'])) {
     $idProducto = $_GET['idProducto'];
     $idUsuario = $_GET['idUsuario'];
 
-    $stmt = $dbh->prepare("SELECT * FROM DATOS_USUARIO WHERE IDUSUARIO = ?");
+    $stmt = $dbh->prepare("SELECT * FROM datos_usuario WHERE idusuario = ?");
     $stmt->execute([$idUsuario]);
     $datosUsuario = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $stmt = $dbh->prepare("SELECT * FROM DATOS_PRODUCTO WHERE IDPRODUCTO = ?");
+    $stmt = $dbh->prepare("SELECT * FROM datos_producto WHERE idproducto = ?");
     $stmt->execute([$idProducto]);
     $datos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $DATA = $dbh->query("SELECT SYSDATE FROM DUAL");
+    $data = $dbh->query("SELECT SYSDATE FROM DUAL");
 
     // Obtener la fecha actual
-    $fecha_actual = $DATA->fetchColumn();
+    $fecha_actual = $data->fetchColumn();
 } else {
     echo 'No se han especificado los parámetros necesarios.';
 }
 ?>
-
 <body>
     <div class="main-container">
         <span class="text">Comentario</span>
-        <span class="text-2">Producto: <?php echo $datos[0]['NOMBRE'] ?></span>
+        <span class="text-2">Producto: <?php echo $datos[0]['nombre'] ?></span>
         <span class="text-3">Fecha: <?php echo $fecha_actual ?></span>
-        <span class="text-4">Usuario: <?php echo $datosUsuario[0]['NOMBRE_USUARIO'] ?></span>
+        <span class="text-4">Usuario: <?php echo $datosUsuario[0]['nombre_usuario'] ?></span>
         
         <div class="rectangle-2" style="margin-top: 10px;">
             <input type="text" id="comentario" name="comentario" class="espe-input" placeholder="Escribe tu comentario aqui... " />
@@ -503,59 +502,58 @@ if (isset($_GET['idProducto']) && isset($_GET['idUsuario'])) {
             </div>
         </div>
     </div>
-    
     <script>
-        const idProducto = <?php echo $idProducto; ?>;
-        const idUsuario = <?php echo $idUsuario; ?>;
-        let currentRating = 0;
+    const idProducto = <?php echo $idProducto; ?>;
+    const idUsuario = <?php echo $idUsuario; ?>;
+    let currentRating = 0;
 
-        document.getElementById("regresarButton").addEventListener("click", function() {
-            window.location.href = "Comentarios.html";
+    document.getElementById("regresarButton").addEventListener("click", function() {
+        window.location.href = "Comentarios.html";
+    });
+
+    document.getElementById("guardarButton").addEventListener("click", function() {
+        const comentario = document.getElementById('comentario').value;
+
+        const data = {
+            idProducto: idProducto,
+            idUsuario: idUsuario,
+            comentario: comentario,
+            rating: currentRating
+        };
+
+        fetch('guardarcomentario.php', { // Cambiado a minúsculas
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            window.location.href = "Comentarios.php?idproducto=<?php echo $idProducto ?>&idusuario=<?php echo $idUsuario ?>"; // Cambiado a minúsculas y corregido nombre de archivo
+        })
+        .catch((error) => {
+            console.error('Error:', error);
         });
+    });
 
-        document.getElementById("guardarButton").addEventListener("click", function() {
-            const comentario = document.getElementById('comentario').value;
+    function rateProduct(rating) {
+        currentRating = rating;
+        highlightStars(rating);
+    }
 
-            const data = {
-                idProducto: idProducto,
-                idUsuario: idUsuario,
-                comentario: comentario,
-                rating: currentRating
-            };
-
-            fetch('guardarComentario.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                window.location.href = "Comentarios.php?idProducto=<?php echo $idProducto ?>&idUsuario=<?php echo $idUsuario ?>"; // Redirige al archivo "Comentarios.html"
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+    function highlightStars(rating) {
+        const stars = document.querySelectorAll('#rating img');
+        stars.forEach((star, index) => {
+            if (index < rating) {
+                star.src = 'assets/Star1.png'; // Cambia la imagen a dorada
+            } else {
+                star.src = 'assets/Star_gray.png'; // Cambia la imagen a gris
+            }
         });
-
-        function rateProduct(rating) {
-            currentRating = rating;
-            highlightStars(rating);
-        }
-
-        function highlightStars(rating) {
-            const stars = document.querySelectorAll('#rating img');
-            stars.forEach((star, index) => {
-                if (index < rating) {
-                    star.src = 'assets/Star1.png'; // Cambia la imagen a dorada
-                } else {
-                    star.src = 'assets/Star_gray.png'; // Cambia la imagen a gris
-                }
-            });
-        }
-    </script>
+    }
+</script>
 </body>
 
 </html>

@@ -64,11 +64,11 @@ if (isset($_GET['idUsuario']) && isset($_GET['fechaDesde']) && isset($_GET['fech
 
     try {
         // Establecer conexión a la base de datos
-        $query = "SELECT IDPEDIDO, TO_CHAR(FECHA, 'DD/MM/YY') AS FECHA, TOTALPRECIO 
-                  FROM PEDIDO 
-                  WHERE IDUSUARIOVENDEDOR = :idUsuario 
-                    AND TO_DATE(FECHA, 'DD/MM/YY') BETWEEN TO_DATE(:fechaDesde, 'DD/MM/YY') AND TO_DATE(:fechaHasta, 'DD/MM/YY') 
-                  ORDER BY ESTADO ASC";
+        $query = "SELECT idpedido, TO_CHAR(fecha, 'DD/MM/YY') AS fecha, totalprecio 
+                  FROM pedido 
+                  WHERE idusuariovendedor = :idUsuario 
+                    AND TO_DATE(fecha, 'DD/MM/YY') BETWEEN TO_DATE(:fechaDesde, 'DD/MM/YY') AND TO_DATE(:fechaHasta, 'DD/MM/YY') 
+                  ORDER BY estado ASC";
         $stmt = $dbh->prepare($query);
         $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
         $stmt->bindParam(':fechaDesde', $fechaDesde, PDO::PARAM_STR);
@@ -95,9 +95,9 @@ if (isset($_GET['idUsuario']) && isset($_GET['fechaDesde']) && isset($_GET['fech
         if (!empty($ventas)) {
             foreach ($ventas as $venta) {
                 // Convertir fecha de DD/MM/YY a DD/MM/YYYY para la salida
-                $fecha = DateTime::createFromFormat('d/m/y', $venta['FECHA'])->format('d/m/Y');
-                $data[] = array($venta['IDPEDIDO'], $fecha, $venta['TOTALPRECIO']);
-                $totalGanado += $venta['TOTALPRECIO'];
+                $fecha = DateTime::createFromFormat('d/m/y', $venta['fecha'])->format('d/m/Y');
+                $data[] = array($venta['idpedido'], $fecha, $venta['totalprecio']);
+                $totalGanado += $venta['totalprecio'];
             }
         }
 
@@ -121,11 +121,11 @@ if (isset($_GET['idUsuario']) && isset($_GET['fechaDesde']) && isset($_GET['fech
 
 // Función para obtener el nombre del vendedor
 function obtenerNombreVendedor($idUsuario, $dbh) {
-    $query = "SELECT NOMBRE_USUARIO FROM DATOS_USUARIO WHERE IDUSUARIO = :idUsuario";
+    $query = "SELECT nombre_usuario FROM datos_usuario WHERE idusuario = :idUsuario";
     $stmt = $dbh->prepare($query);
     $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
     $stmt->execute();
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $usuario ? $usuario['NOMBRE_USUARIO'] : 'Desconocido';
+    return $usuario ? $usuario['nombre_usuario'] : 'Desconocido';
 }
 ?>

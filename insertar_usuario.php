@@ -1,7 +1,5 @@
 <?php
 require_once 'conexion.php';
-
-// Función para subir imagen a GitHub
 function uploadToGithub($filePath, $repo, $branch, $token) {
     $fileName = basename($filePath);
     $content = file_get_contents($filePath);
@@ -26,9 +24,12 @@ function uploadToGithub($filePath, $repo, $branch, $token) {
     ]);
 
     $response = curl_exec($ch);
+    if ($response === false) {
+        echo 'Error en la solicitud cURL: ' . curl_error($ch);
+    } else {
+        echo 'Respuesta de GitHub: ' . $response;
+    }
     curl_close($ch);
-
-    return json_decode($response, true);
 }
 
 // Verificar si se recibieron datos del formulario

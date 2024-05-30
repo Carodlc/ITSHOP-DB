@@ -106,16 +106,16 @@ if (isset($_GET['idUsuario'])) {
         
 
         if (!empty($categoria)) {
-          $stmt_especialidad = $dbh->prepare("SELECT IDCATEGORIAS FROM CATEGORIAS WHERE LOWER(NOMBRE_CATEGORIA) = LOWER(?)");
+          $stmt_especialidad = $dbh->prepare("SELECT idcategorias FROM categorias WHERE LOWER(nombre_categoria) = LOWER(?)");
           $stmt_especialidad->execute([$categoria]);
           $categorias = $stmt_especialidad->fetch(PDO::FETCH_ASSOC);
-          $IDCATEGORIA = $categorias['IDCATEGORIAS'] ?? null;
+          $IDCATEGORIA = $categorias['idcategorias'] ?? null;
 
-          $query = "SELECT NOMBRE, PRECIO, IDPRODUCTO, DESCRIPCION,DATOS_USUARIO_IDUSUARIO FROM DATOS_PRODUCTO WHERE PUBLICADO = 1 AND CATEGORIAS_IDCATEGORIAS = ? AND LOWER(DESCRIPCION) LIKE LOWER(?) ORDER BY IDPRODUCTO DESC";
+          $query = "SELECT nombre, precio, idproducto, descripcion,datos_usuario_idusuario FROM DATOS_PRODUCTO WHERE PUBLICADO = 1 AND categorias_idcategorias = ? AND LOWER(descripcion) LIKE LOWER(?) ORDER BY idproducto DESC";
           $stmt_check = $dbh->prepare($query);
           $stmt_check->execute([$IDCATEGORIA, '%' . $busqueda . '%']);
         } else {
-          $query = "SELECT NOMBRE, PRECIO, IDPRODUCTO, DESCRIPCION,DATOS_USUARIO_IDUSUARIO FROM DATOS_PRODUCTO WHERE PUBLICADO = 1 AND LOWER(DESCRIPCION) LIKE LOWER(?) ORDER BY IDPRODUCTO DESC";
+          $query = "SELECT nombre, precio, idproducto, descripcion,datos_usuario_idusuario FROM DATOS_PRODUCTO WHERE PUBLICADO = 1 AND LOWER(descripcion) LIKE LOWER(?) ORDER BY idproducto DESC";
           $stmt_check = $dbh->prepare($query);
           $stmt_check->execute(['%' . $busqueda . '%']);
         }
@@ -124,17 +124,17 @@ if (isset($_GET['idUsuario'])) {
 
         if (!empty($productos)) {
           foreach ($productos as $producto) {
-            $idProducto = $producto['IDPRODUCTO'];
-            $idVendedor = $producto['DATOS_USUARIO_IDUSUARIO'];
-            $stmt = $dbh->prepare("SELECT NOMBRE_TIENDA FROM DATOS_USUARIO WHERE IDUSUARIO = ?");
+            $idProducto = $producto['idproducto'];
+            $idVendedor = $producto['datos_usuario_idusuario'];
+            $stmt = $dbh->prepare("SELECT nombre_tienda FROM datos_usuario WHERE idusuario = ?");
             $stmt->execute([$idVendedor]);
             $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
-            $nombre_tienda = $rol_row['NOMBRE_TIENDA'] ?? '';
+            $nombre_tienda = $rol_row['nombre_TIENDA'] ?? '';
 
-            $stmt = $dbh->prepare("SELECT RUTA_PRODUCTO FROM PRODUCTS_IMG WHERE ID = ?");
+            $stmt = $dbh->prepare("SELECT ruta_producto FROM PRODUCTS_IMG WHERE id = ?");
             $stmt->execute([$idProducto]);
             $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
-            $ruta_imagen = $rol_row['RUTA_PRODUCTO'] ?? '';
+            $ruta_imagen = $rol_row['ruta_producto'] ?? '';
 
             // Obtener el tipo de contenido de la imagen
             $info = getimagesize($ruta_imagen);
@@ -144,10 +144,10 @@ if (isset($_GET['idUsuario'])) {
             $imagen_codificada = base64_encode(file_get_contents($ruta_imagen));
             $imagen_src = 'data:' . $tipo_contenido . ';base64,' . $imagen_codificada;
             echo "<div class='producto'>";
-            echo "<img src=" . $imagen_src . " alt='Imagen' class='rectangle-6' onclick=\"window.location.href='Comentarios.php?idProducto=" . $producto['IDPRODUCTO'] . "&idUsuario=" . $idUsuario . "'\">";
+            echo "<img src=" . $imagen_src . " alt='Imagen' class='rectangle-6' onclick=\"window.location.href='Comentarios.php?idProducto=" . $producto['idproducto'] . "&idUsuario=" . $idUsuario . "'\">";
             echo "<div class='descripcion'>";
-            echo "<span class='cinturon-unisex-moda'>" . $producto['NOMBRE'] . "</span>";
-            echo "<span class='mx-150'> MX$" . $producto['PRECIO'] . "</span>";
+            echo "<span class='cinturon-unisex-moda'>" . $producto['nombre'] . "</span>";
+            echo "<span class='mx-150'> MX$" . $producto['precio'] . "</span>";
             echo "</div>";
             echo "<span class='reviews'>" . $nombre_tienda . "</span>";
             echo "</div>";

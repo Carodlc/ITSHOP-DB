@@ -939,7 +939,7 @@
         echo "No se ha especificado un ID de usuario.";
     }
 
-    $data = $dbh->query("SELECT SYSDATE FROM DUAL");
+    $data = $dbh->query("SELECT CURDATE()");
 
     // Obtener la fecha actual
     $fecha_actual = $data->fetchColumn();

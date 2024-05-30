@@ -1,16 +1,23 @@
 <?php
-// Oracle database connection parameters
-$hostname = 'itshopp.azurewebsites.net'; // Replace with your Oracle database hostname
-$username = 'admindba'; // Replace with your Oracle database username
-$password = 'ITSHOP$24'; // Replace with your Oracle database password
-$dbname = "ITSHOP";
+// MySQL database connection parameters
+$host = 'itshop.mysql.database.azure.com'; // Replace with your MySQL database hostname
+$port = '3306'; // Replace with your MySQL port if different
+$user = 'Admin2'; // Replace with your MySQL database username with the full username including domain
+$password = 'ITSHOP$24'; // Replace with your MySQL database password
+$dbname = 'itshop'; // Replace with your MySQL database name
 
-// Construct the data source name (DSN) for PDO
-$dsn = "mysql:host=$hostname;dbname=$dbname;charset=utf8";
+// Construct the data source name (DSN) for PDO with SSL options
+$dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8;sslmode=require";
+
+// SSL options
+$ssl_options = [
+    PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false, // Disable server certificate verification
+    PDO::MYSQL_ATTR_SSL_CA => '/path/to/ca.pem', // Replace with the path to your CA certificate file
+];
 
 try {
-    // Establish a connection to the MySQL database using PDO
-    $dbh = new PDO($dsn, $username, $password);
+    // Establish a connection to the MySQL database using PDO with SSL options
+    $dbh = new PDO($dsn, $user, $password, $ssl_options);
 
     // Set PDO error mode to exception
     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -21,6 +28,7 @@ try {
     // Connection failed, display an error message
     echo "Connection failed: " . $e->getMessage();
 }
+
 
 // Function to insert data into a table
 function insertData($dbh, $table, $columns, $values) {

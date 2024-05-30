@@ -1,4 +1,9 @@
 <?php
+// Mostrar todos los errores
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Incluir el archivo de conexión
 include 'conexion.php';
 
@@ -20,9 +25,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (password_verify($password, $user['contrasena'])) {
                 $idusuario = $user['idusuario'];
                 $rolUsuario = $user['rol_idrol'];
-
-                // Alerta de inicio de sesión exitoso
-                echo "<script>alert('Inicio de sesión exitoso');</script>";
 
                 // Redirigir a otra página donde se establecerá el ID del usuario
                 header("Location: establecer_id_usuario.php?idUsuario=$idusuario&rolUsuario=$rolUsuario");

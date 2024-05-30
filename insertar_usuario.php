@@ -1,6 +1,37 @@
 <?php
 require_once 'conexion.php';
 
+// Función para subir imagen a GitHub
+function uploadToGithub($filePath, $repo, $branch, $token)
+{
+    $fileName = basename($filePath);
+    $content = file_get_contents($filePath);
+    $contentEncoded = base64_encode($content);
+
+    $url = "https://api.github.com/repos/$repo/ImagenesPrueba/$fileName";
+
+    $data = json_encode([
+        'message' => "Upload $fileName",
+        'content' => $contentEncoded,
+        'branch'  => $branch
+    ]);
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Authorization: token ' . $token,
+        'User-Agent: PHP'
+    ]);
+
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    return json_decode($response, true);
+}
+
 // Verificar si se recibieron datos del formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -12,53 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $CONTRASENA_ENCRYPTADA = password_hash($CONTRASENA, PASSWORD_DEFAULT); // Cifrar la contraseña
     $ROL_NOMBRE = $_POST['roles'] ?? ''; // Convertir a minúsculas antes de comparar
     $FECHA_NACIMIENTO = $_POST['fecha-nacimiento'] ?? '';
-    $fecha_formateada = date('d-m-y', strtotime(str_replace('/', '-', $FECHA_NACIMIENTO)));
-    // Manejar la carga de la imagen
-
-    function insertImage($dbh, $productId, $imageName, $newColumnValue)
-    {
-        try {
-            // Prepare the query to insert into PRODUCTS_IMG
-            $query = "
-                DECLARE 
-                    V_TEMP BLOB;
-                    V_BFILE BFILE;
-                    V_NOMBRE_FOTO VARCHAR2(100);
-                BEGIN 
-                    INSERT INTO USUARIOS_IMG (ID, FOTO, RUTA_USUARIO) VALUES (:productId, EMPTY_BLOB(), :newColumnValue) RETURNING FOTO INTO V_TEMP;
-                    
-                    V_NOMBRE_FOTO := :imageName;
-                    V_BFILE := BFILENAME('OBJETOS_LOB', V_NOMBRE_FOTO);
-                    DBMS_LOB.OPEN(V_BFILE, DBMS_LOB.LOB_READONLY);
-                    DBMS_LOB.LOADFROMFILE(V_TEMP, V_BFILE, DBMS_LOB.GETLENGTH(V_BFILE));
-                    DBMS_LOB.CLOSE(V_BFILE);
-                    COMMIT;
-                END;
-            ";
-
-            // Prepare the statement
-            $stmt = $dbh->prepare($query);
-
-            // Bind parameters
-            $stmt->bindParam(':productId', $productId, PDO::PARAM_INT);
-            $stmt->bindParam(':imageName', $imageName, PDO::PARAM_STR);
-            $stmt->bindParam(':newColumnValue', $newColumnValue, PDO::PARAM_STR); // Assuming the type of NEW_COLUMN is string, adjust if needed
-
-            // Execute the statement
-            $stmt->execute();
-
-            // Return success
-            return true;
-        } catch (PDOException $e) {
-            // If an error occurs, rollback the transaction and return false
-            echo "Error: " . $e->getMessage();
-            return false;
-        }
-    }
-
-
-    // Ruta de la carpeta donde se guardarán las imágenes
-
+    $fecha_formateada = date('Y-m-d', strtotime($FECHA_NACIMIENTO)); // Corregido el formato de la fecha
 
     try {
         // Verificar si el correo electrónico ya existe en la base de datos
@@ -85,52 +70,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $ROL_IDROL = $rol_row['IDROL'] ?? '';
 
             // Obtener el último ID insertado
-            // Obtener el último ID de usuario de la base de datos
             $query = "SELECT MAX(IDUSUARIO) FROM DATOS_USUARIO";
             $stmt = $dbh->query($query);
             $maxRow = $stmt->fetch(PDO::FETCH_ASSOC);
             $lastID = $maxRow['MAX(IDUSUARIO)'] ?? 0;
 
             // Generar el nuevo ID sumando 1 al último ID
-            $newID = $lastID + 1;
+            $IDUSUARIO = $lastID + 1;
 
-            // Verificar si el nuevo ID ya existe en la base de datos
-            $query_check = "SELECT COUNT(IDUSUARIO) FROM DATOS_USUARIO WHERE IDUSUARIO = ?";
-            $stmt_check = $dbh->prepare($query_check);
-            $stmt_check->execute([$newID]);
-            $countRow = $stmt_check->fetch(PDO::FETCH_ASSOC);
-            $count = $countRow['COUNT(IDUSUARIO)'] ?? 0;
-
-            // Si el nuevo ID ya existe, seguir incrementando hasta encontrar un ID único
-            while ($count > 0) {
-                $newID++;
-                $stmt_check->execute([$newID]);
-                $countRow = $stmt_check->fetch(PDO::FETCH_ASSOC);
-                $count = $countRow['count'] ?? 0;
-            }
-
-            // El nuevo ID es único y seguro para usar
-            $IDUSUARIO = $newID;
-
-
-
-
-            // Asignar el valor del campo "Nombre Tienda" solo si el rol del usuario es "vendedor"
+            // Asignar el valor del campo "Nombre Tienda" y "Teléfono" solo si el rol del usuario es "vendedor"
             $NOMBRE_TIENDA = null; // Valor predeterminado
             $TELEFONO = null;
             if ($ROL_NOMBRE === "vendedor") {
                 $NOMBRE_TIENDA = $_POST['tienda-name'] ?? null;
                 $TELEFONO = $_POST['telefono'] ?? null;
-
             }
 
             // Insertar datos en la tabla de usuarios
-            $rowCount = insertData($dbh, 'DATOS_USUARIO', ['IDUSUARIO', 'NOMBRE_USUARIO', 'ESPECIALIDADES_IDESPECIALIDAD', 'ROL_IDROL', 'NOMBRE_TIENDA', 'FECHA_NACIMIENTO', 'CORREO', 'CONTRASENA','TELEFONO'], [$IDUSUARIO , $NOMBRE_USUARIO, $ESPECIALIDADES_IDESPECIALIDAD, $ROL_IDROL,  $NOMBRE_TIENDA, $fecha_formateada, $CORREO, $CONTRASENA_ENCRYPTADA,$TELEFONO]);
+            $stmt_insert = $dbh->prepare("INSERT INTO DATOS_USUARIO (IDUSUARIO, NOMBRE_USUARIO, ESPECIALIDADES_IDESPECIALIDAD, ROL_IDROL, NOMBRE_TIENDA, FECHA_NACIMIENTO, CORREO, CONTRASENA, TELEFONO) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $rowCount = $stmt_insert->execute([$IDUSUARIO, $NOMBRE_USUARIO, $ESPECIALIDADES_IDESPECIALIDAD, $ROL_IDROL, $NOMBRE_TIENDA, $fecha_formateada, $CORREO, $CONTRASENA_ENCRYPTADA, $TELEFONO]);
 
             // Verificar si la inserción fue exitosa
             if ($rowCount > 0) {
-                $directorioDestino = 'D:/8tavo/INGENIERIA DE SOFTWARE/ITSHOP DB/ImagenesPrueba/';
-
                 // Verifica si se ha enviado un archivo
                 if (isset($_FILES['imagen'])) {
                     $archivo = $_FILES['imagen'];
@@ -139,16 +100,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $nombreArchivo = $archivo['name'];
                     $nombreTempArchivo = $archivo['tmp_name'];
 
-                    // Mueve el archivo a la carpeta destino
-                    if (move_uploaded_file($nombreTempArchivo, $directorioDestino . $nombreArchivo,)) {
+                    // Ruta temporal para
+                    // Ruta temporal para almacenar la imagen antes de subirla a GitHub
+                    $directorioTemporal = sys_get_temp_dir();
+                    $rutaTemporal = $directorioTemporal . '/' . $nombreArchivo;
 
-                        // Después de la inserción de la imagen en la carpeta local, inserta la información en la base de datos
-                        insertImage($dbh, $IDUSUARIO, $nombreArchivo, $directorioDestino . $nombreArchivo);
+                    // Mueve el archivo a la carpeta temporal
+                    // Mueve el archivo a la carpeta temporal
+                    if (move_uploaded_file($nombreTempArchivo, $rutaTemporal)) {
+                        // Obtener el token de GitHub desde la variable de entorno
+                        $token = $_ENV['TOKEN'] ?? '';
+
+                        // Verificar si se ha proporcionado un token
+                        if (empty($token)) {
+                            echo 'Error: No se ha proporcionado un token de GitHub.';
+                            exit; // Salir del script si no hay token
+                        }
+
+                        $repo = 'Carodlc/ITSHOP-DB'; // Reemplaza con tu usuario y repositorio
+                        $branch = 'main'; // Reemplaza con la rama en la que quieres subir el archivo
+
+                        // Subir el archivo a GitHub
+                        $response = uploadToGithub($rutaTemporal, $repo, $branch, $token);
+
+                        if (isset($response['content']['download_url'])) {
+                            $urlGitHub = $response['content']['download_url'];
+
+                            // Después de la inserción de la imagen en GitHub, insertar la información en la base de datos
+                            $stmt_insert_image = $dbh->prepare("INSERT INTO USUARIOS_IMG (ID, FOTO, RUTA_USUARIO) VALUES (?, ?, ?)");
+                            $stmt_insert_image->execute([$IDUSUARIO, $nombreArchivo, $urlGitHub]);
+
+                            echo "<script>alert('Usuario registrado exitosamente!'); window.location.href = 'inicio_sesion.html';</script>";
+                        } else {
+                            echo 'Error al subir la imagen a GitHub.';
+                        }
                     } else {
-                        echo 'Error al subir la imagen.';
+                        echo 'Error al mover la imagen a la carpeta temporal.';
                     }
+                } else {
+                    echo "<script>alert('Usuario registrado exitosamente!'); window.location.href = 'inicio_sesion.html';</script>";
                 }
-                echo "<script>alert('Usuario registrado exitosamente!'); window.location.href = 'inicio_sesion.html';</script>";
             } else {
                 echo "<script>alert('Hubo un problema al registrar el usuario.'); window.location.href='registrarse.php';</script>";
             }

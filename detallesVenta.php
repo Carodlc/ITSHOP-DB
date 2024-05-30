@@ -364,111 +364,117 @@
     z-index: 9;
   }
 </style>
-
 <body>
-
-  <body>
     <div class="main-container">
-      <div class="flex-row-ed">
-        <span class="venta">Venta</span><span class="venta-1">Venta</span><span class="fecha-venta">Fecha de
-          venta:</span>
-      </div>
-      <span class="numero-venta">Numero de venta</span>
-      
-      <div class="flex-row-da">
-        <span class="nombre-productos">Nombre producto(s):<br /></span><span class="cantidad">Cantidad:</span><span class="subtotal">Subtotal:</span>
-      </div>
-      <div class="flex-row">
-        <div class="rectangle">
-          <table>
-
-            <tbody>
-            <?php
-// Tu código de conexión y funciones existentes
-
-try {
-    // Establecer conexión a la base de datos
-    $dbh = new PDO($dsn, $username, $password);
-    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    // Obtener roles desde la base de datos
-    $stmt_especialidad = $dbh->prepare("select idespecialidad from especialidades where nombreespecialidad = ?");
-    $stmt_especialidad->execute([$especialidad_nombre]);
-    $especialidad_row = $stmt_especialidad->fetch(PDO::FETCH_ASSOC);
-    $especialidades_idespecialidad = $especialidad_row['idespecialidad'] ?? null;
-
-    // Si hay roles, generar filas para la tabla
-    if (!empty($roles)) {
-        foreach ($roles as $rol) {
-            echo "<tr>";
-            echo "<td><input type='checkbox' name='roles[]' value='$rol'></td>"; // Columna de checkboxes
-            echo "<td>$rol</td>"; // Columna de rol
-            echo "</tr>";
-        }
-    } else {
-        echo "<tr><td colspan='2'>No se encontraron roles</td></tr>";
-    }
-} catch (PDOException $e) {
-    // Mostrar mensaje de error si la conexión falla
-    echo "Error: " . $e->getMessage();
-}
-?>
-
-
-            </tbody>
-          </table>
+        <div class="flex-row-ed">
+            <span class="venta">Venta</span>
+            <span class="venta-1">Venta</span>
+            <span class="fecha-venta">Fecha de venta:</span>
         </div>
-        <div class="rectangle-2">
-          <table>
-            <thead>
-              <tr>
-                <th>Cantidad</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Aquí se rellenará con información de la base de datos -->
-            </tbody>
-          </table>
-          <div class="iconixto-linear-arrow-down">
-            <div class="icon"></div>
-          </div>
+        <span class="numero-venta">Número de venta</span>
+        
+        <div class="flex-row-da">
+            <span class="nombre-productos">Nombre producto(s):<br /></span>
+            <span class="cantidad">Cantidad:</span>
+            <span class="subtotal">Subtotal:</span>
         </div>
-        <div class="rectangle-3">
-          <table>
-            <tbody>
-            <?php
-// Tu código de conexión y funciones existentes
+        
+        <div class="flex-row">
+            <div class="rectangle">
+                <table>
+                    <tbody>
+                    <?php
+                    include 'conexion.php';
 
-try {
-    // Establecer conexión a la base de datos
-    $dbh = new PDO($dsn, $username, $password);
-    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    try {
+                        // Establecer conexión a la base de datos
+                        $dbh = new PDO($dsn, $username, $password);
+                        $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Obtener roles desde la base de datos
-    $roles = getRoles($dbh);
+                        // Obtener información de productos desde la base de datos
+                        $stmt_productos = $dbh->prepare("SELECT nombre, cantidad, importe FROM detalle_pedido WHERE pedido_idpedido = :idPedido ORDER BY nombre ASC");
+                        $stmt_productos->bindParam(':idPedido', $_GET['idPedido'], PDO::PARAM_INT);
+                        $stmt_productos->execute();
+                        $productos = $stmt_productos->fetchAll(PDO::FETCH_ASSOC);
 
-    // Si hay roles, generar filas para la tabla
-    if (!empty($roles)) {
-        foreach ($roles as $rol) {
-            echo "<tr>";
-            echo "<td><input type='checkbox' name='roles[]' value='$rol'></td>"; // Columna de checkboxes
-            echo "<td>$rol</td>"; // Columna de rol
-            echo "</tr>";
+                        if (!empty($productos)) {
+                            foreach ($productos as $producto) {
+                                echo "<tr>";
+                                echo "<td>" . htmlspecialchars($producto['nombre']) . "</td>";
+                                echo "<td>" . htmlspecialchars($producto['cantidad']) . "</td>";
+                                echo "<td>MX$" . number_format($producto['importe'], 2) . "</td>";
+                                echo "</tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='3'>No se encontraron productos</td></tr>";
+                        }
+                    } catch (PDOException $e) {
+                        echo "Error: " . $e->getMessage();
+                    }
+                    ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="rectangle-2">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                    // Asumiendo que $productos ya contiene la información necesaria
+                    if (!empty($productos)) {
+                        foreach ($productos as $producto) {
+                            echo "<tr>";
+                            echo "<td>" . htmlspecialchars($producto['cantidad']) . "</td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td>No se encontraron productos</td></tr>";
+                    }
+                    ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="rectangle-3">
+                <table>
+                    <tbody>
+                    <?php
+                    // Asumiendo que $productos ya contiene la información necesaria
+                    if (!empty($productos)) {
+                        foreach ($productos as $producto) {
+                            echo "<tr>";
+                            echo "<td>MX$" . number_format($producto['importe'], 2) . "</td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td>No se encontraron productos</td></tr>";
+                    }
+                    ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <span class="total-mx">TOTAL MX$
+        <?php
+        // Calcular el total de la venta
+        $total = 0;
+        if (!empty($productos)) {
+            foreach ($productos as $producto) {
+                $total += $producto['importe'];
+            }
         }
-    } else {
-        echo "<tr><td colspan='2'>No se encontraron roles</td></tr>";
-    }
-} catch (PDOException $e) {
-    // Mostrar mensaje de error si la conexión falla
-    echo "Error: " . $e->getMessage();
-}
-?>
-</tbody>
-</table>
-</div>
-</div>
-<span class="total-mx">TOTAL MX$</span><button class="frame"><span class="return">Regresar</span></button>
-</div>
+        echo number_format($total, 2);
+        ?>
+        </span>
+        <button class="frame" onclick="history.back(); return false;">
+            <span class="return">Regresar</span>
+        </button>
+    </div>
 </body>
-
 </html>

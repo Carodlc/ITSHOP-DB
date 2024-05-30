@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // Consultar si el correo electrónico ya existe en la base de datos excluyendo el correo del usuario actual
-        $stmt_check_email = $dbh->prepare("SELECT COUNT(*) FROM DATOS_USUARIO WHERE CORREO = ? AND IDUSUARIO != ?");
+        $stmt_check_email = $dbh->prepare("SELECT COUNT(*) FROM datos_usuario WHERE correo = ? AND idusuario != ?");
         $stmt_check_email->execute([$CORREO, $ID_USUARIO]);
         $email_exists = $stmt_check_email->fetchColumn();
 
@@ -78,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit; // Salir del script PHP para evitar que se imprima más contenido HTML
         } else {
             // Consultar el ID de la especialidad
-            $stmt_especialidad = $dbh->prepare("SELECT IDESPECIALIDAD FROM ESPECIALIDADES WHERE NOMBREESPECIALIDAD = ?");
+            $stmt_especialidad = $dbh->prepare("SELECT idespecialidad FROM especialidades WHERE nombreespecialidad = ?");
             $stmt_especialidad->execute([$ESPECIALIDAD_NOMBRE]);
             $especialidad_row = $stmt_especialidad->fetch(PDO::FETCH_ASSOC);
             $ESPECIALIDADES_IDESPECIALIDAD = $especialidad_row['IDESPECIALIDAD'] ?? null;

@@ -23,7 +23,6 @@ try {
     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Connection successful, display a message
-    echo "Connection successful!";
 } catch (PDOException $e) {
     // Connection failed, display an error message
     echo "Connection failed: " . $e->getMessage();

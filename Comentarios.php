@@ -1485,221 +1485,190 @@
             <span class="text">ITSHOP</span><span class="text-2">ITSHOP</span>
 
         </div>
-
         <div class="box-4">
-
-
-            <form id="form" action="Mandar_Carrito.php" method="post" enctype="multipart/form-data">
-                <div class="wrapper-4" id="tablaWrapper">
-                    <?php
-                    include 'conexion.php';
-                    if (isset($_GET['idProducto'])) {
-                        // Obtener el valor de 'idProducto'
-                        $idProducto = $_GET['idProducto'];
-
-                        if (isset($_GET['idUsuario'])) {
-                            // Obtener el valor de 'idProducto'
-                            $idUsuario = $_GET['idUsuario'];
-
-
-                            $DATA = $dbh->query("SELECT SYSDATE FROM DUAL");
-
-                            // Obtener la fecha actual
-                            $fecha_actual = $DATA->fetchColumn();
-
-
-                            try {
-                                // Establecer conexión a la base de datos
-                                $query = "SELECT * FROM DATOS_PRODUCTO WHERE IDPRODUCTO = " . $idProducto . " ORDER BY IDPRODUCTO DESC";
-
-                                $stmt = $dbh->query($query);
-                                $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                                // Si hay productos, generar instancias de producto
-                                if (!empty($productos)) {
-                                    foreach ($productos as $producto) {
-
-                                        $idProducto = $producto['IDPRODUCTO'];
-                                        $stmt = $dbh->prepare("SELECT RUTA_PRODUCTO FROM PRODUCTS_IMG WHERE ID = ?");
-                                        $stmt->execute([$idProducto]);
-                                        $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
-                                        $ruta_imagen = $rol_row['RUTA_PRODUCTO'] ?? '';
-
-                                        // Obtener el tipo de contenido de la imagen
-                                        $info = getimagesize($ruta_imagen);
-                                        $tipo_contenido = $info['mime'];
-
-                                        // Obtener el contenido de la imagen como base64
-                                        $imagen_codificada = base64_encode(file_get_contents($ruta_imagen));
-                                        $imagen_src = 'data:' . $tipo_contenido . ';base64,' . $imagen_codificada;
-
-                                        echo "<div class='div-rectangle-d'><img src=" . $imagen_src . " alt='Imagen' class='profile-pic'></div>";
-                                    }
-                                } else {
-                                    echo "<div class='div-rectangle-d'>";
-                                }
-                            } catch (PDOException $e) {
-                                // Mostrar mensaje de error si la conexión falla
-                                echo "Error: " . $e->getMessage();
-                            }
-                        } else {
-                            // Si no se pasó el parámetro 'idUsuario' en la URL
-                            $DATA = $dbh->query("SELECT SYSDATE FROM DUAL");
-
-                            // Obtener la fecha actual
-                            $fecha_actual = $DATA->fetchColumn();
-
-
-                            try {
-                                // Establecer conexión a la base de datos
-                                $query = "SELECT * FROM DATOS_PRODUCTO WHERE IDPRODUCTO = " . $idProducto . " ORDER BY IDPRODUCTO DESC";
-
-                                $stmt = $dbh->query($query);
-                                $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                                // Si hay productos, generar instancias de producto
-                                if (!empty($productos)) {
-                                    foreach ($productos as $producto) {
-
-                                        $idProducto = $producto['IDPRODUCTO'];
-                                        $stmt = $dbh->prepare("SELECT RUTA_PRODUCTO FROM PRODUCTS_IMG WHERE ID = ?");
-                                        $stmt->execute([$idProducto]);
-                                        $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
-                                        $ruta_imagen = $rol_row['RUTA_PRODUCTO'] ?? '';
-
-                                        // Obtener el tipo de contenido de la imagen
-                                        $info = getimagesize($ruta_imagen);
-                                        $tipo_contenido = $info['mime'];
-
-                                        // Obtener el contenido de la imagen como base64
-                                        $imagen_codificada = base64_encode(file_get_contents($ruta_imagen));
-                                        $imagen_src = 'data:' . $tipo_contenido . ';base64,' . $imagen_codificada;
-
-                                        echo "<div class='div-rectangle-d'><img src=" . $imagen_src . " alt='Imagen' class='profile-pic'></div>";
-                                    }
-                                } else {
-                                    echo "<div class='div-rectangle-d'>";
-                                }
-                            } catch (PDOException $e) {
-                                // Mostrar mensaje de error si la conexión falla
-                                echo "Error: " . $e->getMessage();
-                            }
-                        }
-
-                        // Ahora puedes utilizar la variable $idProducto como quieras en esta página
-                    } else {
-                        // Si no se pasó el parámetro 'idProducto' en la URL
-                        echo "No se ha especificado un ID de producto.";
-                    }
-
-
-
-                    ?>
-
-                    <input type="hidden" value="<?php echo $idProducto; ?>" name="idProducto" required>
-                    <input type="hidden" value="<?php echo $idUsuario; ?>" name="idUsuario" required>
-
-
-                    <div class="product-quantity">
-                        <span class="title">Cantidad de producto:</span>
-                        <div class="input-container">
-                            <input type="number" name="cantidad" class="quantity" value="0" min="0" required>
-                        </div>
-                    </div>
-                    <div class="section-9">
-                        <button type="submit" id="editarPerfilButton" class="text-10">Agregar al carrito</button>
-                    </div>
-                    <span class="nombre"><?php echo $productos[0]['NOMBRE']; ?></span>
-                    
-                    <span class="text-stock">Stock: <?php echo $productos[0]['STOCK']; ?></span>
-
-                    <span class="text-8">Descripcion:</span>
-                    <div class="group-5">
-                        <textarea class="section-8" readonly><?php echo $productos[0]['DESCRIPCION']; ?></textarea>
-                    </div>
-
-            </form>
-
-
-            <div class="section-7" id="commentSection">
-                <span class="text-7">Comentarios:</span>
-
+        <form id="form" action="Mandar_Carrito.php" method="post" enctype="multipart/form-data">
+            <div class="wrapper-4" id="tablaWrapper">
                 <?php
+                include 'conexion.php';
                 if (isset($_GET['idProducto'])) {
-                    // Obtener el valor de 'idUsuario'
+                    // Obtener el valor de 'idProducto'
                     $idProducto = $_GET['idProducto'];
 
-                    // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
-                } else {
-                    // Si no se pasó el parámetro 'idUsuario' en la URL
-                    echo "No se ha especificado un ID de usuario.";
-                }
+                    if (isset($_GET['idUsuario'])) {
+                        // Obtener el valor de 'idProducto'
+                        $idUsuario = $_GET['idUsuario'];
 
+                        $DATA = $dbh->query("SELECT SYSDATE FROM dual");
 
-                try {
-                    // Establecer conexión a la base de datos
-                    $query = "SELECT * FROM COMENTARIO WHERE IDPRODUCTO = " . $idProducto . " ORDER BY IDCOMENTARIO ASC";
+                        // Obtener la fecha actual
+                        $fecha_actual = $DATA->fetchColumn();
 
-                    $stmt = $dbh->query($query);
-                    $comentarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                    // Si hay comentarios, generar instancias de producto
-                    if (!empty($comentarios)) {
-                        foreach ($comentarios as $comentario) {
-                            $idcomentario = $comentario['IDCOMENTARIO'];
-                            $idUsuarioComentario = $comentario['IDUSUARIO'];
-                            $query = "SELECT NOMBRE_USUARIO FROM DATOS_USUARIO WHERE IDUSUARIO = " . $idUsuarioComentario . "";
+                        try {
+                            // Establecer conexión a la base de datos
+                            $query = "SELECT * FROM datos_producto WHERE idproducto = " . $idProducto . " ORDER BY idproducto DESC";
 
                             $stmt = $dbh->query($query);
-                            $USUARIOcomentario = $stmt->fetch(PDO::FETCH_ASSOC);
-                            $valoracion = $comentario['VALORACION']; // Asumiendo que la columna se llama 'VALORACION'
-                            $valoracionPorcentaje = ($valoracion / 5) * 100; // Calcula el ancho de las estrellas llenas
+                            $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+                            // Si hay productos, generar instancias de producto
+                            if (!empty($productos)) {
+                                foreach ($productos as $producto) {
+                                    $idProducto = $producto['idproducto'];
+                                    $stmt = $dbh->prepare("SELECT ruta_producto FROM products_img WHERE id = ?");
+                                    $stmt->execute([$idProducto]);
+                                    $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
+                                    $ruta_imagen = $rol_row['ruta_producto'] ?? '';
 
+                                    // Obtener el tipo de contenido de la imagen
+                                    $info = getimagesize($ruta_imagen);
+                                    $tipo_contenido = $info['mime'];
 
+                                    // Obtener el contenido de la imagen como base64
+                                    $imagen_codificada = base64_encode(file_get_contents($ruta_imagen));
+                                    $imagen_src = 'data:' . $tipo_contenido . ';base64,' . $imagen_codificada;
 
-                            echo '<div class="comment">';
-                            echo '<div class="comment-info user-name">Usuario: ' . $USUARIOcomentario['NOMBRE_USUARIO'] . '</div>';
-                            echo '<div class="comment-info date">Fecha: ' . $comentario['FECHA'] . '</div>';
-                            echo '<div class="comment-info">Comentario:</div>';
-                            echo '<div style="font-family: Outfit, var(--default-font-family); font-size: 16px;">' . $comentario['COMENTARIO'] . '</div>';
-                    
-                            // Mostrar las estrellas
-                            echo '<div class="comment-info">Valoración:</div>';
-                            echo '<div class="stars-outer">';
-                            echo '<div class="stars-inner" style="width: ' . $valoracionPorcentaje . '%;"></div>';
-                            echo '</div>';
-                    
-                            echo '</div>';
+                                    echo "<div class='div-rectangle-d'><img src=" . $imagen_src . " alt='Imagen' class='profile-pic'></div>";
+                                }
+                            } else {
+                                echo "<div class='div-rectangle-d'>";
+                            }
+                        } catch (PDOException $e) {
+                            // Mostrar mensaje de error si la conexión falla
+                            echo "Error: " . $e->getMessage();
                         }
                     } else {
+                        // Si no se pasó el parámetro 'idUsuario' en la URL
+                        $DATA = $dbh->query("SELECT SYSDATE FROM dual");
+
+                        // Obtener la fecha actual
+                        $fecha_actual = $DATA->fetchColumn();
+
+                        try {
+                            // Establecer conexión a la base de datos
+                            $query = "SELECT * FROM datos_producto WHERE idproducto = " . $idProducto . " ORDER BY idproducto DESC";
+
+                            $stmt = $dbh->query($query);
+                            $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                            // Si hay productos, generar instancias de producto
+                            if (!empty($productos)) {
+                                foreach ($productos as $producto) {
+                                    $idProducto = $producto['idproducto'];
+                                    $stmt = $dbh->prepare("SELECT ruta_producto FROM products_img WHERE id = ?");
+                                    $stmt->execute([$idProducto]);
+                                    $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
+                                    $ruta_imagen = $rol_row['ruta_producto'] ?? '';
+
+                                    // Obtener el tipo de contenido de la imagen
+                                    $info = getimagesize($ruta_imagen);
+                                    $tipo_contenido = $info['mime'];
+
+                                    // Obtener el contenido de la imagen como base64
+                                    $imagen_codificada = base64_encode(file_get_contents($ruta_imagen));
+                                    $imagen_src = 'data:' . $tipo_contenido . ';base64,' . $imagen_codificada;
+
+                                    echo "<div class='div-rectangle-d'><img src=" . $imagen_src . " alt='Imagen' class='profile-pic'></div>";
+                                }
+                            } else {
+                                echo "<div class='div-rectangle-d'>";
+                            }
+                        } catch (PDOException $e) {
+                            // Mostrar mensaje de error si la conexión falla
+                            echo "Error: " . $e->getMessage();
+                        }
+                    }
+
+                    // Ahora puedes utilizar la variable $idProducto como quieras en esta página
+                } else {
+                    // Si no se pasó el parámetro 'idProducto' en la URL
+                    echo "No se ha especificado un ID de producto.";
+                }
+                ?>
+
+                <input type="hidden" value="<?php echo $idProducto; ?>" name="idProducto" required>
+                <input type="hidden" value="<?php echo $idUsuario; ?>" name="idUsuario" required>
+
+                <div class="product-quantity">
+                    <span class="title">Cantidad de producto:</span>
+                    <div class="input-container">
+                        <input type="number" name="cantidad" class="quantity" value="0" min="0" required>
+                    </div>
+                </div>
+                <div class="section-9">
+                    <button type="submit" id="editarPerfilButton" class="text-10">Agregar al carrito</button>
+                </div>
+                <span class="nombre"><?php echo $productos[0]['nombre']; ?></span>
+                
+                <span class="text-stock">Stock: <?php echo $productos[0]['stock']; ?></span>
+
+                <span class="text-8">Descripcion:</span>
+                <div class="group-5">
+                    <textarea class="section-8" readonly><?php echo $productos[0]['descripcion']; ?></textarea>
+                </div>
+        </form>
+
+        <div class="section-7" id="commentSection">
+            <span class="text-7">Comentarios:</span>
+
+            <?php
+            if (isset($_GET['idProducto'])) {
+                // Obtener el valor de 'idProducto'
+                $idProducto = $_GET['idProducto'];
+
+                // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
+            } else {
+                // Si no se pasó el parámetro 'idUsuario' en la URL
+                echo "No se ha especificado un ID de usuario.";
+            }
+
+            try {
+                // Establecer conexión a la base de datos
+                $query = "SELECT * FROM comentario WHERE idproducto = " . $idProducto . " ORDER BY idcomentario ASC";
+
+                $stmt = $dbh->query($query);
+                $comentarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                // Si hay comentarios, generar instancias de producto
+                if (!empty($comentarios)) {
+                    foreach ($comentarios as $comentario) {
+                        $idcomentario = $comentario['idcomentario'];
+                        $idUsuarioComentario = $comentario['idusuario'];
+                        $query = "SELECT nombre_usuario FROM datos_usuario WHERE idusuario = " . $idUsuarioComentario . "";
+
+                        $stmt = $dbh->query($query);
+                        $USUARIOcomentario = $stmt->fetch(PDO::FETCH_ASSOC);
+                        $valoracion = $comentario['valoracion']; // Asumiendo que la columna se llama 'VALORACION'
+                        $valoracionPorcentaje = ($valoracion / 5) * 100; // Calcula el ancho de las estrellas llenas
+
                         echo '<div class="comment">';
-                        echo '<div class="comment-info user-name">No existen comentarios para este producto</div>';
+                        echo '<div class="comment-info user-name">Usuario: ' . $USUARIOcomentario['nombre_usuario'] . '</div>';
+                        echo '<div class="comment-info date">Fecha: ' . $comentario['fecha'] . '</div>';
+                        echo '<div class="comment-info">Comentario:</div>';
+                        echo '<div style="font-family: Outfit, var(--default-font-family); font-size: 16px;">' . $comentario['comentario'] . '</div>';
+                
+                        // Mostrar las estrellas
+                        echo '<div class="comment-info">Valoración:</div>';
+                        echo '<div class="stars-outer">';
+                        echo '<div class="stars-inner" style="width: ' . $valoracionPorcentaje . '%;"></div>';
+                        echo '</div>';
+                
                         echo '</div>';
                     }
-                } catch (PDOException $e) {
-                    // Mostrar mensaje de error si la conexión falla
-                    echo "Error: " . $e->getMessage();
+                } else {
+                    echo '<div class="comment">';
+                    echo '<div class="comment-info user-name">No existen comentarios para este producto</div>';
+                    echo '</div>';
                 }
-
-                ?>
-            </div>
-
-
-
+            } catch (PDOException $e) {
+                // Mostrar mensaje de error si la conexión falla
+                echo "Error: " . $e->getMessage();
+            }
+            ?>
         </div>
-        <div class="section-10">
-            <button id="regresarButton" onclick="window.location.href = '<?php echo isset($idUsuario) ? 'index.php?idUsuario=' . $idUsuario : 'index.php'; ?>'" class="text-9">Regresar</button>
-        </div>
-
     </div>
-
-
+    <div class="section-10">
+        <button id="regresarButton" onclick="window.location.href = '<?php echo isset($idUsuario) ? 'index.php?idUsuario=' . $idUsuario : 'index.php'; ?>'" class="text-9">Regresar</button>
     </div>
-
-    <script>
-        
-    </script>
 </body>
 
 </html>

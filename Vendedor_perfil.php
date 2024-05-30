@@ -1428,86 +1428,100 @@
                 </div>
             </div>
             <div class="group-3"></div>
-<span onclick="window.location.href = 'index.php?idUsuario=<?php echo $idUsuario = $_GET['idUsuario']; ?>'" class="text-2">ITSHOP</span>
-<div class="section-4">
-    <span class="text-3">Inicio > </span><span class="text-4">Mi Cuenta </span>
-</div>
-<div class="box-4">
-    <div class="flex-row-d">
-        <div class="rectangle-4">
-            <span class="mi-cuenta-5">mi cuenta</span>
-            <div class="rectangle-6">
-                <div class="rectangle-7"></div>
-                <span class="productos">General</span>
+            <span onclick="window.location.href = 'index.php?idUsuario=<?php echo $idUsuario = $_GET['idUsuario']; ?>'" class="text-2">ITSHOP</span>
+            <div class="section-4">
+                <span class="text-3">Inicio > </span><span class="text-4">Mi Cuenta </span>
             </div>
-            <span onclick="window.location.href = 'GestionProductos.php?idUsuario=<?php echo $idUsuario; ?>'" class="general">Productos</span>
-
-            <span onclick="window.location.href = 'FormInventario.php?idUsuario=<?php echo $idUsuario; ?>'" class="inventario">Inventario</span><span onclick="window.location.href = 'FormVentas.php?idUsuario=<?php echo $idUsuario; ?>'" class="ventas">Ventas</span><span onclick="window.location.href = 'Ajustes_vendedor.php?idUsuario=<?php echo $idUsuario; ?>'" class="ajustes">Ajustes</span>
         </div>
-        <div class="wrapper-4" id="tablaWrapper">
-            <div class="section-6">
-                <span class="text-c">perfil de vendedor</span>
-                <div>
-                    <table id="tablaContenido"></table>
+        <div class="box-4">
+            <div class="flex-row-d">
+                <div class="rectangle-4">
+                    <span class="mi-cuenta-5">mi cuenta</span>
+                    <div class="rectangle-6">
+                        <div class="rectangle-7"></div>
+                        <span class="productos">General</span>
+                    </div>
+                    <span onclick="window.location.href = 'GestionProductos.php?idUsuario=<?php echo $idUsuario; ?>'"  class="general">Productos</span>
+                    <span onclick="window.location.href = 'FormInventario.php?idUsuario=<?php echo $idUsuario; ?>'" class="inventario">Inventario</span><span onclick="window.location.href = 'FormVentas.php?idUsuario=<?php echo $idUsuario; ?>'" class="ventas">Ventas</span><span onclick="window.location.href = 'Ajustes_vendedor.php?idUsuario=<?php echo $idUsuario; ?>'" class="ajustes">Ajustes</span>
                 </div>
-            </div>
-            <div class="group-5">
-                <div class="section-8">
-                    <div class="pic-4">
-                        <?php
-                        include 'conexion.php';
-                        if (isset($_GET['idUsuario'])) {
-                            // Obtener el valor de 'idUsuario'
-                            $idUsuario = $_GET['idUsuario'];
+                <div class="wrapper-4" id="tablaWrapper">
+                    <div class="section-6">
+                        <span class="text-c">perfil de vendedor</span>
+                        <div>
+                          
+                          <table id=" tablaContenido">
 
-                            // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
-                        } else {
-                            // Si no se pasó el parámetro 'idUsuario' en la URL
-                            echo "No se ha especificado un ID de usuario.";
-                        }
+                            </table>
+                        </div>
 
-                        $stmt = $dbh->prepare("SELECT ruta_usuario FROM usuarios_img WHERE id = ?");
-                        $stmt->execute([$idUsuario]);
-                        $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
-                        $ruta_imagen = $rol_row['ruta_usuario'] ?? '';
+                    </div>
+                    <div class="group-5">
+                        <div class="section-8">
+                            <div class="pic-4">
+                                <?php
+                                include 'conexion.php';
+                                if (isset($_GET['idUsuario'])) {
+                                    // Obtener el valor de 'idUsuario'
+                                    $idUsuario = $_GET['idUsuario'];
 
-                        // Obtener el tipo de contenido de la imagen
-                        $info = getimagesize($ruta_imagen);
-                        $tipo_contenido = $info['mime'];
+                                    // Ahora puedes utilizar la variable $idUsuario como quieras en esta página
+                                } else {
+                                    // Si no se pasó el parámetro 'idUsuario' en la URL
+                                    echo "No se ha especificado un ID de usuario.";
+                                }
 
-                        // Obtener el contenido de la imagen como base64
-                        $imagen_codificada = base64_encode(file_get_contents($ruta_imagen));
-                        $imagen_src = 'data:' . $tipo_contenido . ';base64,' . $imagen_codificada;
-                        ?>
-                        <img src="<?php echo $imagen_src; ?>" alt="Imagen" class="profile-pic">
+
+
+                                $stmt = $dbh->prepare("SELECT ruta_usuario FROM usuarios_img WHERE id = ?");
+                                $stmt->execute([$idUsuario]);
+                                $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
+                                $ruta_imagen = $rol_row['ruta_usuario'] ?? '';
+
+                                // Obtener el tipo de contenido de la imagen
+                                $info = getimagesize($ruta_imagen);
+                                $tipo_contenido = $info['mime'];
+
+                                // Obtener el contenido de la imagen como base64
+                                $imagen_codificada = base64_encode(file_get_contents($ruta_imagen));
+                                $imagen_src = 'data:' . $tipo_contenido . ';base64,' . $imagen_codificada;
+
+                                ?>
+                                <img src="<?php echo $imagen_src; ?>" alt="Imagen" class="profile-pic">
+
+                            </div>
+
+                            <?php
+
+                            $stmt_rol = $dbh->prepare("SELECT nombre_usuario FROM datos_usuario WHERE idusuario = ?");
+                            $stmt_rol->execute([$idUsuario]);
+                            $rol_row = $stmt_rol->fetch(PDO::FETCH_ASSOC);
+                            $NOMBREUSUARIO = $rol_row['nombre_usuario'] ?? '';
+                            echo  "<span class='text-NOMBRE'>", $NOMBREUSUARIO, "</span>";
+
+
+                            ?>
+                            <div class="section-9">
+                                <button onclick="window.location.href = 'FormEditarPerfilVendedor.php?idUsuario=<?php echo $idUsuario; ?>'" id="editarPerfilButton" class="text-10">Editar</button>
+                            </div>
+
+                        </div>
                     </div>
 
-                    <?php
-                    $stmt_rol = $dbh->prepare("SELECT nombre_usuario FROM datos_usuario WHERE idusuario = ?");
-                    $stmt_rol->execute([$idUsuario]);
-                    $rol_row = $stmt_rol->fetch(PDO::FETCH_ASSOC);
-                    $nombre_usuario = $rol_row['nombre_usuario'] ?? '';
-                    echo "<span class='text-NOMBRE'>", $nombre_usuario, "</span>";
-                    ?>
-                    <div class="section-9">
-                        <button onclick="window.location.href = 'FormEditarPerfilVendedor.php?idUsuario=<?php echo $idUsuario; ?>'" id="editarPerfilButton" class="text-10">Editar</button>
-                    </div>
-                </div>
-            </div>
 
-            <script>
-                document.getElementById("gestionarUsuariosButton").addEventListener("click", function() {
-                    window.location.href = "FormGestionarUsuarios.html";
-                });
 
-                document.getElementById("editarPerfilButton").addEventListener("click", function() {
-                    window.location.href = "FormEditarPerfilVendedor.php";
-                });
 
-                // Cargar el contenido de FormGestionarRoles.html
-            </script>
+                    <script>
+                        document.getElementById("gestionarUsuariosButton").addEventListener("click", function() {
+                            window.location.href = "FormGestionarUsuarios.html";
+                        });
 
-            <!-- Generated by Codia AI - https://codia.ai/ -->
-        </div>
-    </div>
-</div>
+                        document.getElementById("editarPerfilButton").addEventListener("click", function() {
+                            window.location.href = "FormEditarPerfilVendedor.php";
+                        });
+   // Cargar el contenido de FormGestionarRoles.html
+   </script>
+
+<!-- Generated by Codia AI - https://codia.ai/ -->
+</body>
+
+</html>

@@ -10,43 +10,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // Consultar la base de datos para verificar las credenciales
-
-        $stmt = $dbh->prepare("SELECT COUNT(*) FROM datos_usuario WHERE correo = ?");
-        $stmt->execute([$email]); // Pasar los parámetros en un solo array
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $checar = $result['COUNT(*)'];
+        $stmt = $dbh->prepare("SELECT contrasena, idusuario, rol_idrol FROM datos_usuario WHERE correo = ?");
+        $stmt->execute([$email]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // Verificar si se encontró un usuario con las credenciales proporcionadas
-        if ($checar > 0) {
-            // Inicio de sesión exitoso
-            $stmt_rol = $dbh->prepare("SELECT contrasena FROM datos_usuario WHERE correo = ?");
-            $stmt_rol->execute([$email]);
-            $rol_row = $stmt_rol->fetch(PDO::FETCH_ASSOC);
-            $contrasena_en_bd = $rol_row['contrasena'] ?? '';
-            echo $contrasena_en_bd;
-
-            if (password_verify($password, $contrasena_en_bd)) {
-                $stmt_rol = $dbh->prepare("SELECT idusuario FROM datos_usuario WHERE correo = ?");
-                $stmt_rol->execute([$email]);
-                $rol_row = $stmt_rol->fetch(PDO::FETCH_ASSOC);
-                $idusuario = $rol_row['idusuario'] ?? '';
+        if ($user) {
+            // Verificar la contraseña
+            if (password_verify($password, $user['contrasena'])) {
+                $idusuario = $user['idusuario'];
+                $rolUsuario = $user['rol_idrol'];
 
                 // Alerta de inicio de sesión exitoso
                 echo "<script>alert('Inicio de sesión exitoso');</script>";
 
-                $query = $dbh->prepare("SELECT rol_idrol FROM datos_usuario WHERE idusuario = ?");
-                $query->execute([$idusuario]);
-                $rol = $query->fetch(PDO::FETCH_ASSOC);
-                $rolUsuario = $rol['rol_idrol'] ?? '';
-                echo "Rol del usuario: " . $rolUsuario;
-
                 // Redirigir a otra página donde se establecerá el ID del usuario
                 header("Location: establecer_id_usuario.php?idUsuario=$idusuario&rolUsuario=$rolUsuario");
-
                 exit; // Detener la ejecución del script después del redireccionamiento
-
             } else {
-                echo "<script>alert('La contraseña no coincide');</script>";
+                echo "<script>alert('La contraseña no coincide'); window.location.href='inicio_sesion.html';</script>";
                 exit; // Salir del script PHP para evitar que se imprima más contenido HTML
             }
         } else {

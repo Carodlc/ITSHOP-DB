@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         // Consultar la base de datos para verificar las credenciales
 
-        $stmt = $dbh->prepare("SELECT COUNT(*) FROM DATOS_USUARIO WHERE correo = ?");
+        $stmt = $dbh->prepare("SELECT COUNT(*) FROM datos_usuario WHERE correo = ?");
         $stmt->execute([$email]); // Pasar los parámetros en un solo array
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $checar = $result['COUNT(*)'];
@@ -19,28 +19,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Verificar si se encontró un usuario con las credenciales proporcionadas
         if ($checar > 0) {
             // Inicio de sesión exitoso
-            $stmt_rol = $dbh->prepare("SELECT contrasena FROM DATOS_USUARIO WHERE correo = ?");
+            $stmt_rol = $dbh->prepare("SELECT contrasena FROM datos_usuario WHERE correo = ?");
             $stmt_rol->execute([$email]);
             $rol_row = $stmt_rol->fetch(PDO::FETCH_ASSOC);
-            $contrasena_en_bd = $rol_row['CONTRASENA'] ?? '';
+            $contrasena_en_bd = $rol_row['contrasena'] ?? '';
 
             if (password_verify($password, $contrasena_en_bd)) {
-                $stmt_rol = $dbh->prepare("SELECT IDUSUARIO FROM DATOS_USUARIO WHERE CORREO = ?");
+                $stmt_rol = $dbh->prepare("SELECT idusuario FROM datos_usuario WHERE correo = ?");
                 $stmt_rol->execute([$email]);
                 $rol_row = $stmt_rol->fetch(PDO::FETCH_ASSOC);
-                $IDUSUARIO = $rol_row['IDUSUARIO'] ?? '';
+                $idusuario = $rol_row['idusuario'] ?? '';
 
                 // Alerta de inicio de sesión exitoso
                 echo "<script>alert('Inicio de sesión exitoso');</script>";
 
-                $query = $dbh->prepare("SELECT ROL_IDROL FROM DATOS_USUARIO WHERE IDUSUARIO = ?");
-                $query->execute([$IDUSUARIO]);
+                $query = $dbh->prepare("SELECT rol_idrol FROM datos_usuario WHERE idusuario = ?");
+                $query->execute([$idusuario]);
                 $rol = $query->fetch(PDO::FETCH_ASSOC);
-                $rolUsuario = $rol['ROL_IDROL'] ?? '';
+                $rolUsuario = $rol['rol_idrol'] ?? '';
                 echo "Rol del usuario: " . $rolUsuario;
 
                 // Redirigir a otra página donde se establecerá el ID del usuario
-                header("Location: establecer_id_usuario.php?idUsuario=$IDUSUARIO&rolUsuario=$rolUsuario");
+                header("Location: establecer_id_usuario.php?idUsuario=$idusuario&rolUsuario=$rolUsuario");
 
                 exit; // Detener la ejecución del script después del redireccionamiento
 
@@ -59,3 +59,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error: " . $e->getMessage();
     }
 }
+?>

@@ -96,72 +96,63 @@ if (isset($_GET['idUsuario'])) {
   </div>
   </div>
   <div class="flex-row-ef">
-    <?php
-    if (isset($_GET['idUsuario'])) {
-      $idUsuario = $_GET['idUsuario'];
-      $busqueda = isset($_GET['busqueda']) ? $_GET['busqueda'] : '';
-      $categoria = isset($_GET['categoriasSelect']) ? $_GET['categoriasSelect'] : '';
+    <?phpif (isset($_GET['idUsuario'])) {
+    $idUsuario = $_GET['idUsuario'];
+    $busqueda = isset($_GET['busqueda']) ? $_GET['busqueda'] : '';
+    $categoria = isset($_GET['categoriasSelect']) ? $_GET['categoriasSelect'] : '';
 
-      try {
-        
-
+    try {
         if (!empty($categoria)) {
-          $stmt_especialidad = $dbh->prepare("SELECT idcategorias FROM categorias WHERE LOWER(nombre_categoria) = LOWER(?)");
-          $stmt_especialidad->execute([$categoria]);
-          $categorias = $stmt_especialidad->fetch(PDO::FETCH_ASSOC);
-          $IDCATEGORIA = $categorias['idcategorias'] ?? null;
+            $stmt_especialidad = $dbh->prepare("SELECT idcategorias FROM categorias WHERE LOWER(nombre_categoria) = LOWER(?)");
+            $stmt_especialidad->execute([$categoria]);
+            $categorias = $stmt_especialidad->fetch(PDO::FETCH_ASSOC);
+            $IDCATEGORIA = $categorias['idcategorias'] ?? null;
 
-          $query = "SELECT nombre, precio, idproducto, descripcion,datos_usuario_idusuario FROM DATOS_PRODUCTO WHERE PUBLICADO = 1 AND categorias_idcategorias = ? AND LOWER(descripcion) LIKE LOWER(?) ORDER BY idproducto DESC";
-          $stmt_check = $dbh->prepare($query);
-          $stmt_check->execute([$IDCATEGORIA, '%' . $busqueda . '%']);
+            $query = "SELECT nombre, precio, idproducto, descripcion,datos_usuario_idusuario FROM DATOS_PRODUCTO WHERE PUBLICADO = 1 AND categorias_idcategorias = ? AND LOWER(descripcion) LIKE LOWER(?) ORDER BY idproducto DESC";
+            $stmt_check = $dbh->prepare($query);
+            $stmt_check->execute([$IDCATEGORIA, '%' . $busqueda . '%']);
         } else {
-          $query = "SELECT nombre, precio, idproducto, descripcion,datos_usuario_idusuario FROM DATOS_PRODUCTO WHERE PUBLICADO = 1 AND LOWER(descripcion) LIKE LOWER(?) ORDER BY idproducto DESC";
-          $stmt_check = $dbh->prepare($query);
-          $stmt_check->execute(['%' . $busqueda . '%']);
+            $query = "SELECT nombre, precio, idproducto, descripcion,datos_usuario_idusuario FROM DATOS_PRODUCTO WHERE PUBLICADO = 1 AND LOWER(descripcion) LIKE LOWER(?) ORDER BY idproducto DESC";
+            $stmt_check = $dbh->prepare($query);
+            $stmt_check->execute(['%' . $busqueda . '%']);
         }
 
         $productos = $stmt_check->fetchAll(PDO::FETCH_ASSOC);
 
         if (!empty($productos)) {
-          foreach ($productos as $producto) {
-            $idProducto = $producto['idproducto'];
-            $idVendedor = $producto['datos_usuario_idusuario'];
-            $stmt = $dbh->prepare("SELECT nombre_tienda FROM datos_usuario WHERE idusuario = ?");
-            $stmt->execute([$idVendedor]);
-            $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
-            $nombre_tienda = $rol_row['nombre_TIENDA'] ?? '';
+            foreach ($productos as $producto) {
+                $idProducto = $producto['idproducto'];
+                $idVendedor = $producto['datos_usuario_idusuario'];
+                $stmt = $dbh->prepare("SELECT nombre_tienda FROM datos_usuario WHERE idusuario = ?");
+                $stmt->execute([$idVendedor]);
+                $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
+                $nombre_tienda = $rol_row['nombre_tienda'] ?? '';
 
-            $stmt = $dbh->prepare("SELECT ruta_producto FROM PRODUCTS_IMG WHERE id = ?");
-            $stmt->execute([$idProducto]);
-            $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
-            $ruta_imagen = $rol_row['ruta_producto'] ?? '';
+                $stmt = $dbh->prepare("SELECT ruta_producto FROM PRODUCTS_IMG WHERE id = ?");
+                $stmt->execute([$idProducto]);
+                $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
+                $ruta_imagen = $rol_row['ruta_producto'] ?? '';
 
-            // Obtener el tipo de contenido de la imagen
-            $info = getimagesize($ruta_imagen);
-            $tipo_contenido = $info['mime'];
-
-            // Obtener el contenido de la imagen como base64
-            $imagen_codificada = base64_encode(file_get_contents($ruta_imagen));
-            $imagen_src = 'data:' . $tipo_contenido . ';base64,' . $imagen_codificada;
-            echo "<div class='producto'>";
-            echo "<img src=" . $imagen_src . " alt='Imagen' class='rectangle-6' onclick=\"window.location.href='Comentarios.php?idProducto=" . $producto['idproducto'] . "&idUsuario=" . $idUsuario . "'\">";
-            echo "<div class='descripcion'>";
-            echo "<span class='cinturon-unisex-moda'>" . $producto['nombre'] . "</span>";
-            echo "<span class='mx-150'> MX$" . $producto['precio'] . "</span>";
-            echo "</div>";
-            echo "<span class='reviews'>" . $nombre_tienda . "</span>";
-            echo "</div>";
-          }
+                // Mostrar la imagen directamente desde la URL de GitHub
+                echo "<div class='producto'>";
+                echo "<img src='" . htmlspecialchars($ruta_imagen, ENT_QUOTES, 'UTF-8') . "' alt='Imagen' class='rectangle-6' onclick=\"window.location.href='Comentarios.php?idProducto=" . $producto['idproducto'] . "&idUsuario=" . $idUsuario . "'\">";
+                echo "<div class='descripcion'>";
+                echo "<span class='cinturon-unisex-moda'>" . htmlspecialchars($producto['nombre'], ENT_QUOTES, 'UTF-8') . "</span>";
+                echo "<span class='mx-150'> MX$" . htmlspecialchars($producto['precio'], ENT_QUOTES, 'UTF-8') . "</span>";
+                echo "</div>";
+                echo "<span class='reviews'>" . htmlspecialchars($nombre_tienda, ENT_QUOTES, 'UTF-8') . "</span>";
+                echo "</div>";
+            }
         } else {
-          echo "No se encontraron productos";
+            echo "No se encontraron productos";
         }
-      } catch (PDOException $e) {
+    } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
-      }
-    } else {
-      echo "<span class='cinturon-unisex-moda'>Inicia Sesión para ver los productos</span>";
     }
-    ?>
+} else {
+    echo "<span class='cinturon-unisex-moda'>Inicia Sesión para ver los productos</span>";
+}
+?>
 
 
   </div>

@@ -1473,7 +1473,7 @@
 
 
 
-                                $stmt = $dbh->prepare("SELECT RUTA_USUARIO FROM USUARIOS_IMG WHERE ID = ?");
+                                $stmt = $dbh->prepare("SELECT ruta_usuario FROM usuarios_img WHERE id = ?");
                                 $stmt->execute([$idUsuario]);
                                 $rol_row = $stmt->fetch(PDO::FETCH_ASSOC);
                                 $ruta_imagen = $rol_row['RUTA_USUARIO'] ?? '';
@@ -1493,7 +1493,7 @@
 
                             <?php
 
-                            $stmt_rol = $dbh->prepare("SELECT NOMBRE_USUARIO FROM DATOS_USUARIO WHERE IDUSUARIO = ?");
+                            $stmt_rol = $dbh->prepare("SELECT nombre_usuario FROM datos_usuario WHERE idusuario = ?");
                             $stmt_rol->execute([$idUsuario]);
                             $rol_row = $stmt_rol->fetch(PDO::FETCH_ASSOC);
                             $NOMBREUSUARIO = $rol_row['NOMBRE_USUARIO'] ?? '';

@@ -23,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt_rol->execute([$email]);
             $rol_row = $stmt_rol->fetch(PDO::FETCH_ASSOC);
             $contrasena_en_bd = $rol_row['contrasena'] ?? '';
+            echo $contrasena_en_bd;
 
             if (password_verify($password, $contrasena_en_bd)) {
                 $stmt_rol = $dbh->prepare("SELECT idusuario FROM datos_usuario WHERE correo = ?");
@@ -46,7 +47,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             } else {
                 echo "<script>alert('La contraseña no coincide');</script>";
-                echo "<script>history.back();</script>";
                 exit; // Salir del script PHP para evitar que se imprima más contenido HTML
             }
         } else {

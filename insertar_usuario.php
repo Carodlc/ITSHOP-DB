@@ -2,13 +2,12 @@
 require_once 'conexion.php';
 
 // Función para subir imagen a GitHub
-function uploadToGithub($filePath, $repo, $branch, $token)
-{
+function uploadToGithub($filePath, $repo, $branch, $token) {
     $fileName = basename($filePath);
     $content = file_get_contents($filePath);
     $contentEncoded = base64_encode($content);
 
-    $url = "https://api.github.com/repos/$repo/ImagenesPrueba/$fileName";
+    $url = "https://api.github.com/repos/$repo/contents/ImagenesPrueba/$fileName";
 
     $data = json_encode([
         'message' => "Upload $fileName",
@@ -100,29 +99,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $nombreArchivo = $archivo['name'];
                     $nombreTempArchivo = $archivo['tmp_name'];
 
-                    // Ruta temporal para
                     // Ruta temporal para almacenar la imagen antes de subirla a GitHub
                     $directorioTemporal = sys_get_temp_dir();
                     $rutaTemporal = $directorioTemporal . '/' . $nombreArchivo;
 
                     // Mueve el archivo a la carpeta temporal
-                    // Mueve el archivo a la carpeta temporal
-                    // Mueve el archivo a la carpeta temporal
                     if (move_uploaded_file($nombreTempArchivo, $rutaTemporal)) {
-                        // Obtener el token de GitHub desde la variable de entorno
-                        $token = getenv('TOKEN');
-
-                        // Reemplaza 'Carodlc/ITSHOP-DB' con tu usuario y repositorio
-                        $repo = 'Carodlc/ITSHOP-DB';
+                        // Datos para la API de GitHub
+                        $token = 'YOUR_GITHUB_TOKEN'; // Reemplaza con tu token de acceso personal de GitHub
+                        $repo = 'Carodlc/ITSHOP-DB'; // Reemplaza con tu usuario y repositorio
                         $branch = 'main'; // Reemplaza con la rama en la que quieres subir el archivo
 
-                        // Subir el archivo a GitHub
+                        // Sube el archivo a GitHub
                         $response = uploadToGithub($rutaTemporal, $repo, $branch, $token);
 
                         if (isset($response['content']['download_url'])) {
                             $urlGitHub = $response['content']['download_url'];
 
-                            // Después de la inserción de la imagen en GitHub, insertar la información en la base de datos
+                            // Después de la inserción de la imagen en GitHub, inserta la información en la base de datos
                             $stmt_insert_image = $dbh->prepare("INSERT INTO USUARIOS_IMG (ID, FOTO, RUTA_USUARIO) VALUES (?, ?, ?)");
                             $stmt_insert_image->execute([$IDUSUARIO, $nombreArchivo, $urlGitHub]);
 
@@ -145,3 +139,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error al registrar el usuario: " . $e->getMessage();
     }
 }
+?>

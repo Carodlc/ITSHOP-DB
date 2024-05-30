@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $ESTADO = 0;
         $contador = 0;
 
-        $DATA = $dbh->query("SELECT SYSDATE FROM DUAL");
+        $DATA = $dbh->query("SELECT CURDATE()");
 
         // Obtener la fecha actual
         $fecha_actual = $DATA->fetchColumn();
